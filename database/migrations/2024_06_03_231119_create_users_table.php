@@ -18,15 +18,17 @@ return new class extends Migration
             $table->string('apellido_materno');
             $table->string('telefono');
             $table->bigInteger('codigo')->nullable();
-            $table->string('email')->unique();
+            $table->string('email');
+            //->unique();
             $table->string('ciudad');
             $table->string('colonia');
             $table->string('calle');
             $table->string('numero');
             $table->string('codigo_postal');
             $table->string('estado');
+            $table->boolean('activo');
             $table->foreignId('role_id')->constrained('roles');
-
+            $table->timestamp(('verification_code_sent_at'))->nullable();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->rememberToken();
@@ -34,7 +36,6 @@ return new class extends Migration
         });
 
         Schema::create('password_reset_tokens', function (Blueprint $table) {
-            $table->string('email')->primary();
             $table->string('token');
             $table->timestamp('created_at')->nullable();
         });
