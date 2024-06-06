@@ -108,13 +108,13 @@ class UserController extends Controller
 
             if($user && Hash::check($request->password, $user->password))
             {
-                if($user->status == 0)
+                if($user->activo == 0)
                 {
                     return response()->json('Usuario no verificado', 400);
                 }
                 else
                 {
-                    $token = $user->createToken($user->email)->plainTextToken;
+                    $token = $user->createToken('token')->plainTextToken;
                     return response()->json(['token' => $token], 200);
                 }
             }
@@ -200,6 +200,40 @@ class UserController extends Controller
 
     }
 
+    public function restablecerContraseña(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'email' => 'required|string|email|max:255',
+            'password' => 'required|string|min:8',
+        ],
+        [
+            'email.required' => 'El email es requerido',
+            'password.required' => 'La contraseña es requerida',
+            'email.email' => 'El email no es válido',
+            'password.min' => 'La contraseña debe tener al menos 8 caracteres',
+            
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json($validator->errors(), 400);
+        }
+
+        $user = User::where('email', $request->email)->first();
+
+        if($user)
+        {
+            $user->password = Hash::make($request->password);
+            $user->save();
+
+            return response()->json('Contraseña restablecida', 200);
+        }
+        else
+        {
+            return response()->json('Usuario no encontrado', 400);
+        }
+
+
+    }
 
     //RUTAS FIRMADAS - SERVICIOS
     public function enviarSMS(Request $request)
