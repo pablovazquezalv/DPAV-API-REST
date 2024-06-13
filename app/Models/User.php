@@ -18,20 +18,19 @@ class User extends Authenticatable
      * @var array<int, string>
      */
     protected $fillable = [
-        'name',
+        'nombre',
         'apellido_paterno',
         'apellido_materno',
-        'role_id',
         'telefono',
         'codigo',
         'email',
+        'direccion',
         'ciudad',
-        'colonia',
-        'calle',
-        'activo',
-        'numero',
-        'codigo_postal',
         'estado',
+        'codigo_postal',
+        'activo',
+        'role_id',
+        'estado_id', // 'estado_id' es la llave foránea de la tabla 'estados
         'verification_code_sent_at',
         'email_verified_at',
         'password',

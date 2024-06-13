@@ -4,62 +4,142 @@ namespace App\Http\Controllers;
 
 use App\Models\Raza;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
 class RazaController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
+   
+    //MOSTRAR TODAS LAS RAZAS
+    public function mostrarRazas()
     {
-        //
+        $raza = Raza::all();
+
+        return response()->json($raza);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
+    //MOSTRAR RAZA POR ID
+    public function mostrarRaza($id)
     {
-        //
+        $raza = Raza::find($id);
+
+        if($raza == null)
+        {
+            return response()->json(['message' => 'No se encontro la raza'], 404);
+        }
+
+        return response()->json($raza, 200);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
+    
+    //CREAR RAZA
+    public function crearRaza(Request $request)
     {
-        //
+        $validate = Validator::make($request->all(), [
+            'nombre' => 'required|string|max:255',
+        ],[
+            'nombre.required' => 'El nombre es requerido',
+        ]);
+
+        if ($validate->fails()) {
+            return response()->json($validate->errors(), 400);
+        }
+
+        $raza = Raza::create(
+            [
+                'nombre' => $request->nombre,
+            ]
+        );
+
+        $raza->save();
+
+        if($raza->save())
+        {
+            return response()->json($raza, 201);
+        }
+        else
+        {
+            return response()->json($raza, 400);
+        }
+    
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(Raza $raza)
+    //ACTUALIZAR RAZA
+    public function actualizarRaza(Request $request,$id)
     {
-        //
+        $raza = Raza::find($id);
+
+        if($raza == null)
+        {
+            return response()->json(['message' => 'No se encontro la raza'], 404);
+        }
+
+        $validate = Validator::make($request->all(), [
+            'nombre' => 'required|string|max:255',
+        ],[
+            'nombre.required' => 'El nombre es requerido',
+        ]);
+
+        if ($validate->fails()) {
+            return response()->json($validate->errors(), 400);
+        }
+
+        $raza->nombre = $request->nombre;
+        $raza->save();
+
+        if($raza->save())
+        {
+            return response()->json($raza, 200);
+        }
+        else
+        {
+            return response()->json($raza, 400);
+        }
+
+    }
+    
+    //ELIMINAR RAZA
+    public function inahabilitarRaza($id)
+    {
+        $raza = Raza::find($id);
+
+        if($raza == null)
+        {
+            return response()->json(['message' => 'No se encontro la raza'], 404);
+        }
+
+        $raza->estado = 0;
+        $raza->save();
+
+        return response()->json($raza, 200);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Raza $raza)
+    //HABILITAR RAZA
+    public function habilitarRaza($id)
     {
-        //
+        $raza = Raza::find($id);
+
+        if($raza == null)
+        {
+            return response()->json(['message' => 'No se encontro la raza'], 404);
+        }
+
+        $raza->estado = 1;
+        $raza->save();
+
+        return response()->json($raza, 200);
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, Raza $raza)
+    public function mostrarRazasHabilitadas()
     {
-        //
+        $raza = Raza::where('estado',1)->get();
+
+        return response()->json($raza);
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(Raza $raza)
+    public function mostrarRazasInhabilitadas()
     {
-        //
+        $raza = Raza::where('estado',0)->get();
+
+        return response()->json($raza);
     }
 }

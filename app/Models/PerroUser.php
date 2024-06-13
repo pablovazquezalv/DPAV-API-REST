@@ -5,12 +5,14 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Raza extends Model
+class PerroUser extends Model
 {
     use HasFactory;
 
+    protected $table = 'perros_usuarios';
+
     protected $fillable = [
-        'nombre',
-        'estado'
+        'perro_id',
+        'user_id',
     ];
 }
