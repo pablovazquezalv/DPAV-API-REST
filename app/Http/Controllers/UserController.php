@@ -122,12 +122,16 @@ class UserController extends Controller
             {
                 if($user->activo == 0)
                 {
-                    return response()->json('Usuario no verificado', 400);
+                    return response()->json('Usuario inactivo', 400);
                 }
                 else
                 {
                     $token = $user->createToken('token')->plainTextToken;
-                    return response()->json(['token' => $token], 200);
+                    return response()->json([
+                        'message' => 'Usuario autenticado',
+                        'user' => $user,
+                        'token' => $token
+                    ]);
                 }
             }
             else
@@ -165,7 +169,7 @@ class UserController extends Controller
             
             if($user->codigo == $request->codigo)
             {
-                $user->codigo = null;
+               # $user->codigo = null;
                 $user->activo = 1;
                 $user->save();
 
