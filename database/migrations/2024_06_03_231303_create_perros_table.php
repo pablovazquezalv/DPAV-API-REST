@@ -14,23 +14,22 @@ return new class extends Migration
         Schema::create('perros', function (Blueprint $table) {
             $table->id();
             $table->string('nombre',50);
-            $table->string('raza',50);
             $table->string('color',50);
             $table->string('edad',50);
-            $table->string('sexo',50);
+            $table->enum('sexo',['masculino','femenino']);
             $table->string('peso',50);
             $table->string('tamaño',50);
             $table->string('altura',50);
-            $table->enum('estatus',['activo','inactivo']);
+            $table->boolean('estatus');
             $table->string('esterilizado',50);
             $table->date('fecha_nacimiento');
-            $table->string('imagen');
-            $table->string('chip',50);
+            $table->string('imagen',500)->nullable();
+            $table->string('chip',50)->nullable();
             $table->enum('tipo',['cria','reproductor','venta']);
             $table->foreignId('id_raza')->constrained('razas');
-            $table->foreignId(('user_id'))->constrained('users');
-            $table->foreignId('padre_id')->constrained('perros');
-            $table->foreignId('madre_id')->constrained('perros');
+            $table->foreignId('padre_id')->nullable()->constrained('perros');
+            $table->foreignId('madre_id')->nullable()->constrained('perros');
+            $table->foreignId('user_id')->constrained('users');
            
             $table->timestamps();
         });

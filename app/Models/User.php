@@ -6,10 +6,11 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Laravel\Sanctum\HasApiTokens;
 
 class User extends Authenticatable
 {
-    use HasFactory, Notifiable;
+    use HasFactory, Notifiable, HasApiTokens;
 
     /**
      * The attributes that are mass assignable.
@@ -17,20 +18,19 @@ class User extends Authenticatable
      * @var array<int, string>
      */
     protected $fillable = [
-        'name',
+        'nombre',
         'apellido_paterno',
         'apellido_materno',
-        'role_id',
         'telefono',
         'codigo',
         'email',
+        'direccion',
         'ciudad',
-        'colonia',
-        'calle',
-        'activo',
-        'numero',
-        'codigo_postal',
         'estado',
+        'codigo_postal',
+        'activo',
+        'role_id',
+        'estado_id', // 'estado_id' es la llave foránea de la tabla 'estados
         'verification_code_sent_at',
         'email_verified_at',
         'password',
@@ -59,4 +59,6 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+
+
 }

@@ -17,49 +17,61 @@ class UserController extends Controller
     public function registrarUsuario(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'name' => 'required|string|max:255',
+            'nombre' => 'required|string|max:255',
             'apellido_paterno' => 'required|string|max:255',
             'apellido_materno' => 'required|string|max:255',
             'telefono' => 'required|string|max:10',
-            'ciudad' => 'required|string|max:255',
-            'colonia' => 'required|string|max:255',
-            'calle' => 'required|string|max:255',
-            'numero' => 'required|string|max:255',
-            'codigo_postal' => 'required|string|max:25',
-            'estado' => 'required|string|max:255',
+            'direccion' => 'required|string|max:255',
+            //ciudad  estado codigo postal
+            'ciudad' => 'required|string|max:255',  
+            'estado_id' => 'required|integer',
+            'codigo_postal' => 'required|string|max:5',
             'email' => 'required|string|email|max:255|unique:users',
             'password' => 'required|string|min:8',
+
         ],
         [
-            'name.required' => 'El nombre es requerido',
+            'nombre.required' => 'El nombre es requerido',
             'email.required' => 'El email es requerido',
             'password.required' => 'La contraseña es requerida',
-        //  'email.email' => 'El email no es válido',
-        //  'email.unique' => 'El email ya está en uso',
+            'email.email' => 'El email no es válido',
+            'email.unique' => 'El email ya está en uso',
             'password.min' => 'La contraseña debe tener al menos 8 caracteres',
+            'telefono.required' => 'El teléfono es requerido',
+            'telefono.max' => 'El teléfono debe tener 10 dígitos',
+            'direccion.required' => 'La dirección es requerida',
+            'ciudad.required' => 'La ciudad es requerida',
+            'estado_id.required' => 'El estado es requerido',
+            'codigo_postal.required' => 'El código postal es requerido',
+            'codigo_postal.max' => 'El código postal debe tener 5 dígitos',
+            'apellido_paterno.required' => 'El apellido paterno es requerido',
+            'apellido_materno.required' => 'El apellido materno es requerido',
             
+
         ]);
 
         if ($validator->fails()) {
             return response()->json($validator->errors(), 400);
         }
 
+
+
         $user = User::create([
-            'name' => $request->name,
+            'nombre' => $request->nombre,
             'apellido_paterno' => $request->apellido_paterno,
             'apellido_materno' => $request->apellido_materno,
             'telefono' => $request->telefono,
+            'email' => $request->email,
+            'direccion' => $request->direccion,
             'ciudad' => $request->ciudad,
-            'colonia' => $request->colonia,
-            'calle' => $request->calle,
+            'codigo_postal' => $request->codigo_postal,
+            'estado_id' => $request->estado_id,
+            'password' => Hash::make($request->password),
             'activo' => 0, // '0' es el estado 'inactivo
             'role_id' => 3, // '1' es el id del rol 'user
             'numero' => $request->numero,
             'codigo'=> rand(100000, 999999), //genera un código aleatorio de 6 dígitos (opcional
-            'codigo_postal' => $request->codigo_postal,
-            'estado' => $request->estado,
-            'email' => $request->email,
-            'password' => Hash::make($request->password),
+           
         ]);
 
         $user->save();
@@ -108,14 +120,18 @@ class UserController extends Controller
 
             if($user && Hash::check($request->password, $user->password))
             {
-                if($user->status == 0)
+                if($user->activo == 0)
                 {
-                    return response()->json('Usuario no verificado', 400);
+                    return response()->json('Usuario inactivo', 400);
                 }
                 else
                 {
-                    $token = $user->createToken($user->email)->plainTextToken;
-                    return response()->json(['token' => $token], 200);
+                    $token = $user->createToken('token')->plainTextToken;
+                    return response()->json([
+                        'message' => 'Usuario autenticado',
+                        'user' => $user,
+                        'token' => $token
+                    ]);
                 }
             }
             else
@@ -153,7 +169,7 @@ class UserController extends Controller
             
             if($user->codigo == $request->codigo)
             {
-                $user->codigo = null;
+               # $user->codigo = null;
                 $user->activo = 1;
                 $user->save();
 
@@ -183,7 +199,7 @@ class UserController extends Controller
 
         if($user)
         {
-            $url = URL::temporarySignedRoute('olvideContraseña', now()->addMinutes(5), ['id' => $user->id]);
+            $url = URL::temporarySignedRoute('restablecerContraseña', now()->addMinutes(5), ['id' => $user->id]);
 
             Mail::to($user->email)->send(new OlvideContraseña($user, $url));
 
@@ -200,6 +216,40 @@ class UserController extends Controller
 
     }
 
+    public function restablecerContraseña(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'email' => 'required|string|email|max:255',
+            'password' => 'required|string|min:8',
+        ],
+        [
+            'email.required' => 'El email es requerido',
+            'email.email' => 'El email no es válido',
+            'password.required' => 'La contraseña es requerida',
+            'password.min' => 'La contraseña debe tener al menos 8 caracteres',
+            
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json($validator->errors(), 400);
+        }
+
+        $user = User::where('email', $request->email)->first();
+
+        if($user)
+        {
+            $user->password = Hash::make($request->password);
+            $user->save();
+
+            return response()->json('Contraseña restablecida', 200);
+        }
+        else
+        {
+            return response()->json('Usuario no encontrado', 400);
+        }
+
+
+    }
 
     //RUTAS FIRMADAS - SERVICIOS
     public function enviarSMS(Request $request)
