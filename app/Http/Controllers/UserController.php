@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Mail;
 use App\Mail\RegisterMail;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\URL;
+use Illuminate\Support\Facades\Crypt;
 
 class UserController extends Controller
 {
@@ -22,7 +23,6 @@ class UserController extends Controller
             'apellido_materno' => 'required|string|max:255',
             'telefono' => 'required|string|max:10',
             'direccion' => 'required|string|max:255',
-            //ciudad  estado codigo postal
             'ciudad' => 'required|string|max:255',  
             'estado_id' => 'required|integer',
             'codigo_postal' => 'required|string|max:5',
@@ -58,6 +58,7 @@ class UserController extends Controller
 
         $user = User::create([
             'nombre' => $request->nombre,
+            'usuario' => explode('@', $request->email)[0], 
             'apellido_paterno' => $request->apellido_paterno,
             'apellido_materno' => $request->apellido_materno,
             'telefono' => $request->telefono,
