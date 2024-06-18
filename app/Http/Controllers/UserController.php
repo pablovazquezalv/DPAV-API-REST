@@ -28,7 +28,6 @@ class UserController extends Controller
             'codigo_postal' => 'required|string|max:5',
             'email' => 'required|string|email|max:255|unique:users',
             'password' => 'required|string|min:8',
-
         ],
         [
             'nombre.required' => 'El nombre es requerido',
@@ -46,15 +45,12 @@ class UserController extends Controller
             'codigo_postal.max' => 'El código postal debe tener 5 dígitos',
             'apellido_paterno.required' => 'El apellido paterno es requerido',
             'apellido_materno.required' => 'El apellido materno es requerido',
-            
-
         ]);
 
-        if ($validator->fails()) {
+        if ($validator->fails()) 
+        {
             return response()->json($validator->errors(), 400);
         }
-
-
 
         $user = User::create([
             'nombre' => $request->nombre,
@@ -83,8 +79,7 @@ class UserController extends Controller
             $url = URL::temporarySignedRoute('enviarSMS', now()->addMinutes(5), ['id' => $user->id]);
 
             Mail::to($user->email)->send(new RegisterMail($user, $url));
-
-
+            
             return response()->json([
                 'message' => 'Usuario registrado',
                 'user' => $user,
