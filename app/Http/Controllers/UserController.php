@@ -22,10 +22,6 @@ class UserController extends Controller
             'apellido_paterno' => 'required|string|max:255',
             'apellido_materno' => 'required|string|max:255',
             'telefono' => 'required|string|max:10',
-            'direccion' => 'required|string|max:255',
-            'ciudad' => 'required|string|max:255',  
-            'estado_id' => 'required|integer',
-            'codigo_postal' => 'required|string|max:5',
             'email' => 'required|string|email|max:255|unique:users',
             'password' => 'required|string|min:8',
         ],
@@ -38,11 +34,7 @@ class UserController extends Controller
             'password.min' => 'La contraseña debe tener al menos 8 caracteres',
             'telefono.required' => 'El teléfono es requerido',
             'telefono.max' => 'El teléfono debe tener 10 dígitos',
-            'direccion.required' => 'La dirección es requerida',
-            'ciudad.required' => 'La ciudad es requerida',
-            'estado_id.required' => 'El estado es requerido',
-            'codigo_postal.required' => 'El código postal es requerido',
-            'codigo_postal.max' => 'El código postal debe tener 5 dígitos',
+          
             'apellido_paterno.required' => 'El apellido paterno es requerido',
             'apellido_materno.required' => 'El apellido materno es requerido',
         ]);
@@ -59,10 +51,7 @@ class UserController extends Controller
             'apellido_materno' => $request->apellido_materno,
             'telefono' => $request->telefono,
             'email' => $request->email,
-            'direccion' => $request->direccion,
-            'ciudad' => $request->ciudad,
-            'codigo_postal' => $request->codigo_postal,
-            'estado_id' => $request->estado_id,
+            
             'password' => Hash::make($request->password),
             'activo' => 0, // '0' es el estado 'inactivo
             'role_id' => 3, // '1' es el id del rol 'user

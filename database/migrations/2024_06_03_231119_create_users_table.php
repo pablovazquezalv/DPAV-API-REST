@@ -20,11 +20,11 @@ return new class extends Migration
             $table->string('telefono');
             $table->bigInteger('codigo')->nullable();
             $table->string('email');
-            $table->string('direccion');
-            $table->string('ciudad');
-            $table->string('codigo_postal');
+            $table->string('direccion')->nullable();
+            $table->string('ciudad')->nullable();
+            $table->string('codigo_postal')->nullable();
             $table->boolean('activo');
-            $table->foreignId('estado_id')->constrained('estados');
+            $table->foreignId('estado_id')->nullable()->constrained('estados');
             $table->foreignId('role_id')->constrained('roles');
             $table->timestamp(('verification_code_sent_at'))->nullable();
             $table->timestamp('email_verified_at')->nullable();
