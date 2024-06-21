@@ -99,13 +99,17 @@ class UserController extends Controller
             }
 
             $user = User::where('email', $request->email)->first();
-
+            
 
             if($user && Hash::check($request->password, $user->password))
             {
                 if($user->activo == 0)
                 {
-                    return response()->json('Usuario inactivo', 400);
+                    return response()->json([
+                        'message' => 'Usuario inactivo',
+                        'user' => $user
+                    
+                    ], 400);
                 }
                 else
                 {
