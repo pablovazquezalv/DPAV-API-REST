@@ -16,7 +16,6 @@ return new class extends Migration
             $table->string('nombre');
             $table->string('usuario');
             $table->string('apellido_paterno');
-            $table->string('apellido_materno');
             $table->string('telefono');
             $table->bigInteger('codigo')->nullable();
             $table->string('email');

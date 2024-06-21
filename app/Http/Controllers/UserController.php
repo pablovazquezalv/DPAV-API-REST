@@ -20,7 +20,6 @@ class UserController extends Controller
         $validator = Validator::make($request->all(), [
             'nombre' => 'required|string|max:255',
             'apellido_paterno' => 'required|string|max:255',
-            'apellido_materno' => 'required|string|max:255',
             'telefono' => 'required|string|max:10',
             'email' => 'required|string|email|max:255|unique:users',
             'password' => 'required|string|min:8',
@@ -48,7 +47,6 @@ class UserController extends Controller
             'nombre' => $request->nombre,
             'usuario' => explode('@', $request->email)[0], 
             'apellido_paterno' => $request->apellido_paterno,
-            'apellido_materno' => $request->apellido_materno,
             'telefono' => $request->telefono,
             'email' => $request->email,
             
