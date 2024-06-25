@@ -280,5 +280,24 @@ class PerroController extends Controller
         }
     }
 
+    public function mostrarPerrosEnVenta()
+    {
+        $perros = Perro::where('tipo','venta')->get();
+
+        if($perros)
+        {
+            return response()->json([
+                'message' => 'Perros en venta encontrados',
+                'perros' => $perros
+            ], 200);
+        }
+        else
+        {
+            return response()->json([
+                'message' => 'Perros en venta no encontrados'
+            ], 404);
+        }
+    }
+
 
 }

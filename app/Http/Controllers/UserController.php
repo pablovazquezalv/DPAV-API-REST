@@ -18,8 +18,8 @@ class UserController extends Controller
     public function registrarUsuario(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'nombre' => 'required|string|max:255',
-            'apellido_paterno' => 'required|string|max:255',
+            'nombre' => 'required|string|max:50|min:2',
+            'apellido_paterno' => 'required|string|max:50',
             'telefono' => 'required|string|max:10',
             'email' => 'required|string|email|max:255|unique:users',
             'password' => 'required|string|min:8',
