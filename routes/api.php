@@ -20,21 +20,21 @@ Route::post('/verificarCodigo', [UserController::class, 'verificarCodigo'])->nam
 Route::post('/enviarCodigoCuenta', [UserController::class, 'enviarCodigoCuenta'])->name('enviarCodigoCuenta');
 
 //Perros
-Route::post('crearPerro', [PerroController::class, 'crearPerro'])->middleware('auth:sanctum');
-Route::get('mostrarPerro/{id}', [PerroController::class, 'mostrarPerro'])->middleware('auth:sanctum');
-Route::get('mostrarPerros', [PerroController::class, 'mostrarPerros'])->middleware('auth:sanctum');
-Route::put('inhabilitarPerro/{id}', [PerroController::class, 'inhabilitarPerro'])->middleware('auth:sanctum');
+Route::post('/crearPerro', [PerroController::class, 'crearPerro'])->middleware('auth:sanctum');
+Route::get('/mostrarPerro/{id}', [PerroController::class, 'mostrarPerro'])->middleware('auth:sanctum');
+Route::get('/mostrarPerros', [PerroController::class, 'mostrarPerros'])->middleware('auth:sanctum');
+Route::put('/inhabilitarPerro/{id}', [PerroController::class, 'inhabilitarPerro'])->middleware('auth:sanctum');
 Route::put('habilitarPerro/{id}', [PerroController::class, 'habilitarPerro'])->middleware('auth:sanctum');
 Route::put('actualizarPerro/{id}', [PerroController::class, 'actualizarPerro']);
 Route::get('mostrarPerrosEnVenta', [PerroController::class, 'mostrarPerrosEnVenta']);
 //Razas
-Route::post('crearRaza', [RazaController::class, 'crearRaza']);
-Route::get('mostrarRaza/{id}', [RazaController::class, 'mostrarRaza']);
-Route::get('mostrarRazas', [RazaController::class, 'mostrarRazas']);
-Route::get('mostrarRazasInhabilitadas', [RazaController::class, 'mostrarRazasInhabilitadas']);
-Route::get('mostarRazasHabilitadas', [RazaController::class, 'mostrarRazasHabilitadas']);
-Route::put('actualizarRaza/{id}', [RazaController::class, 'actualizarRaza']);
-Route::put('eliminarRaza/{id}', [RazaController::class, 'inahabilitarRaza']);
-Route::put('habilitarRaza/{id}', [RazaController::class, 'habilitarRaza']);
+Route::post('/crearRaza', [RazaController::class, 'crearRaza']);
+Route::get('/mostrarRaza/{id}', [RazaController::class, 'mostrarRaza']);
+Route::get('/mostrarRazas', [RazaController::class, 'mostrarRazas']);
+Route::get('/mostrarRazasInhabilitadas', [RazaController::class, 'mostrarRazasInhabilitadas']);
+Route::get('/mostarRazasHabilitadas', [RazaController::class, 'mostrarRazasHabilitadas']);
+Route::put('/actualizarRaza/{id}', [RazaController::class, 'actualizarRaza']);
+Route::put('/eliminarRaza/{id}', [RazaController::class, 'inahabilitarRaza']);
+Route::put('/habilitarRaza/{id}', [RazaController::class, 'habilitarRaza']);
 //Certificados
 Route::post('crearCertificado', [CertificadoController::class, 'crearCertificado']);
