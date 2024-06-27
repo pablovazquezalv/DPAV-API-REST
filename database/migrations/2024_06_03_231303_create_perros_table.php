@@ -15,11 +15,9 @@ return new class extends Migration
             $table->id();
             $table->string('nombre',50);
             $table->string('color',50);
-            $table->string('edad',50);
             $table->enum('sexo',['masculino','femenino']);
             $table->string('peso',50);
             $table->string('tamaño',50);
-            $table->string('altura',50);
             $table->boolean('estatus');
             $table->string('esterilizado',50);
             $table->date('fecha_nacimiento');

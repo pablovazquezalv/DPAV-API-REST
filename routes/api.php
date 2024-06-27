@@ -20,7 +20,7 @@ Route::post('/verificarCodigo', [UserController::class, 'verificarCodigo'])->nam
 Route::post('/enviarCodigoCuenta', [UserController::class, 'enviarCodigoCuenta'])->name('enviarCodigoCuenta');
 
 //Perros
-Route::post('/crearperro', [PerroController::class, 'crearPerro']);#->middleware('auth:sanctum');
+Route::post('/crearPerro', [PerroController::class, 'crearPerro']);#->middleware('auth:sanctum');
 
 
 

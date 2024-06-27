@@ -24,11 +24,9 @@ class PerroController extends Controller
         [
             'nombre' => 'required|string|max:255',
             'color' => 'required|string|max:255',
-            'edad' => 'required|int',
             'sexo' =>  'required|in:masculino,femenino',
             'peso' => 'required',
             'tamaño' =>  Rule::in(['pequeño','mediano','grande'],'required'),           //pequeño, mediano, grande
-            'altura' => 'required',
             'estatus' => 'required', //1 = Activo, 0 = Inactivo
             'esterilizado' => Rule::in(['si','no'],'required'), //si, no
             'fecha_nacimiento' => 'required|date',
@@ -46,7 +44,6 @@ class PerroController extends Controller
             'peso.required' => 'El peso es requerido',
             'tamaño.required' => 'El tamaño es requerido',
 
-            'altura.required' => 'La altura es requerida',
             'estatus.required' => 'El estatus es requerido',
             'esterilizado.required' => 'La esterilización es requerida',
             'fecha_nacimiento.required' => 'La fecha de nacimiento es requerida',
@@ -67,11 +64,8 @@ class PerroController extends Controller
         $perro = Perro::create([
             'nombre' => $request->nombre,
             'color' => $request->color,
-            'edad' => $request->edad,
             'sexo' => $request->sexo,
             'peso' => $request->peso,
-            'tamaño' => $request->tamaño,
-            'altura' => $request->altura,
             'estatus' => $request->estatus,
             'esterilizado' => $request->esterilizado,
             'fecha_nacimiento' => $request->fecha_nacimiento,

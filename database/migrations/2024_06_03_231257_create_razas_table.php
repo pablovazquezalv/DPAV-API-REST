@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('razas', function (Blueprint $table) {
             $table->id();
             $table->string('nombre',50)->unique();
+            $table->string('img',500)->nullable();
             $table->boolean('estado')->default(1);
         
             $table->timestamps();
