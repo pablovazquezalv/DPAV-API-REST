@@ -17,6 +17,7 @@ Route::post('restablecerContraseña', [UserController::class, 'restablecerContra
 
 Route::get('/enviarSMS', [UserController::class, 'enviarSMS'])->name('enviarSMS');
 Route::post('/verificarCodigo', [UserController::class, 'verificarCodigo'])->name('verificarCodigo');
+Route::post('/enviarCodigoCuenta', [UserController::class, 'enviarCodigoCuenta'])->name('enviarCodigoCuenta');
 
 //Perros
 Route::post('crearPerro', [PerroController::class, 'crearPerro'])->middleware('auth:sanctum');

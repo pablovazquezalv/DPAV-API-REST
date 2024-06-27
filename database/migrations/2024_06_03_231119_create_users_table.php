@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string('nombre');
             $table->string('usuario')->nullable();
             $table->string('apellido_paterno');
-            $table->string('telefono');
+            $table->string('telefono')->unique();
             $table->bigInteger('codigo')->nullable();
             $table->string('email');
             $table->string('direccion')->nullable();

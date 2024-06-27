@@ -15,12 +15,14 @@ class OlvideContraseña extends Mailable
     use Queueable, SerializesModels;
 
     private User $user;
+    private string $url;
     /**
      * Create a new message instance.
      */
-    public function __construct(User $user)
+    public function __construct(User $user, string $url)
     {
         $this->user = $user;
+        $this->url = $url;
     }
 
     /**
@@ -42,7 +44,7 @@ class OlvideContraseña extends Mailable
             view: '/email/olvide-contraseña',
             with: [
                 'user' => $this->user,
-                'url' => 'http://localhost:8000/reset-password?token=123456',
+                'url' =>  $this->url,
             ],
         );
     }

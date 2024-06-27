@@ -158,6 +158,7 @@ class UserController extends Controller
             {
                # $user->codigo = null;
                 $user->activo = 1;
+                
                 $user->save();
 
                 return response()->json('Código correcto', 200);
@@ -168,6 +169,8 @@ class UserController extends Controller
             }
     }
 
+
+    //Funcion para enviar correo de restablecimiento de contraseña
     public function olvideContraseña(Request $request)
     {
         $validator = Validator::make($request->all(), [
@@ -186,7 +189,7 @@ class UserController extends Controller
 
         if($user)
         {
-            $url = URL::temporarySignedRoute('restablecerContraseña', now()->addMinutes(5), ['id' => $user->id]);
+            $url = URL::temporarySignedRoute('restablecerContraseñaView', now()->addMinutes(5), ['id' => $user->id]);
 
             Mail::to($user->email)->send(new OlvideContraseña($user, $url));
 
@@ -203,18 +206,82 @@ class UserController extends Controller
 
     }
 
+    //Funcion para restablecer contraseña
     public function restablecerContraseña(Request $request)
     {
+
+        $validator = Validator::make($request->all(), [
+            'password' => 'required|string|min:8|confirmed',
+        ],
+        [
+           
+            'password.required' => 'La contraseña es requerida',
+            'password.min' => 'La contraseña debe tener al menos 8 caracteres',
+            'password.confirmed' => 'Las contraseñas no coinciden',
+
+            
+        ]);
+
+        if ($validator->fails()) {
+            return redirect()->back()->withErrors($validator)->withInput();
+
+        }
+
+        $user = User::where('email', $request->email)->first();
+
+
+        if($user)
+        {
+            $user->password = Hash::make($request->password);
+            $user->save();
+
+            if($user->save())
+            {
+                return response()->view('contraseña-cambiada', ['user' => $user]);
+            }
+            else
+            {
+
+                //regresar la misma  vi,sta en la que se encontraba
+                dd($validator->errors());
+                return redirect()->back()->withErrors($validator)->withInput();
+
+            }
+        }
+        else
+        {
+            return response()->json('Usuario no encontrado', 400);
+        }
+
+    }
+
+    //Funcion para mostrar la vista de restablecer contraseña
+    public function restablecerContraseñaView(Request $request)
+    {
+        $user = User::find($request->id);
+
+
+        return view('restablecer-contraseña', ['user' => $user]);
+    }
+  
+    //Funcion para mostrar la vista de contraseña restablecida
+    public function contraseñaRestablecidaView(Request $request)
+    {
+        $user = User::find($request->id);
+
+        return view('contraseña-cambiada', ['user' => $user]);
+    }
+
+    public function enviarCodigoCuenta(Request $request)
+    {
+
         $validator = Validator::make($request->all(), [
             'email' => 'required|string|email|max:255',
-            'password' => 'required|string|min:8',
         ],
+
         [
             'email.required' => 'El email es requerido',
             'email.email' => 'El email no es válido',
-            'password.required' => 'La contraseña es requerida',
-            'password.min' => 'La contraseña debe tener al menos 8 caracteres',
-            
         ]);
 
         if ($validator->fails()) {
@@ -225,17 +292,26 @@ class UserController extends Controller
 
         if($user)
         {
-            $user->password = Hash::make($request->password);
             $user->save();
 
-            return response()->json('Contraseña restablecida', 200);
+             // Enviar código SMS llamando a la función enviarCodigo
+            $codigoResponse = $this->enviarCodigo(new Request(['id' => $user->id]));
+
+            // Verificar si hubo un error en el envío del código
+            if ($codigoResponse->getStatusCode() == 200) 
+            {
+                return response()->json([
+                    'message' => 'Código enviade'
+                ]);
+            } else 
+            {
+                return $codigoResponse; // Retornar la respuesta del error
+            }
         }
         else
         {
             return response()->json('Usuario no encontrado', 400);
         }
-
-
     }
 
     //RUTAS FIRMADAS - SERVICIOS
@@ -281,6 +357,47 @@ class UserController extends Controller
             return response()->json('Error al enviar SMS', 400);
         }
     }
+
+    public function enviarCodigo(Request $request)
+    {
+        $user = User::find($request->id);
+
+        
+        $response = Http::withHeaders([
+
+            'Authorization' => 'App 16abca2ac5b56ee130ca5c236b16943a-1d3e8a4d-cd81-4bec-96c5-05fb2dbdc14b',
+            'Content-Type' => 'application/json',
+            'Accept' => 'application/json'
+        ])->post('https://2v8jjz.api.infobip.com/sms/2/text/advanced', [
+            'messages' => [
+                [
+                   'destinations' => [
+                       [
+                           'to' => '528718458147'
+                           //'to' => $user->telefono
+                       ]
+                   ],
+                   'from' => 'InfoSMS',
+                   'text' => 'Tu código de verificación es: '.$user->codigo
+                ]
+            ]
+    
+        ]);
+
+        if($response->status() == 200)
+        {
+            $user->verification_code_sent_at = now();
+            $user->email_verified_at = now();
+            $user->save();
+            return response()->view('email/correo-enviado', ['user' => $user]);
+        }
+        else
+        {
+            return response()->json('Error al enviar SMS', 400);
+        }
+    }
+
+
 
     
 }
