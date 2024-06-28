@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string('nombre',50);
             $table->string('color',50);
             $table->enum('sexo',['masculino','femenino']);
-            $table->string('peso',50);
+            $table->double('peso',50);
             $table->string('tamaño',50);
             $table->boolean('estatus');
             $table->string('esterilizado',50);

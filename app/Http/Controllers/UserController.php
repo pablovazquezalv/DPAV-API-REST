@@ -301,7 +301,7 @@ class UserController extends Controller
             if ($codigoResponse->getStatusCode() == 200) 
             {
                 return response()->json([
-                    'message' => 'Código enviade'
+                    'message' => 'Código enviado'
                 ]);
             } else 
             {

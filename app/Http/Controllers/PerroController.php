@@ -293,5 +293,25 @@ class PerroController extends Controller
         }
     }
 
+    #una ruta que solo muestre los perros en venta segun el id
+
+    public function mostrarPerrosEnVentaPorId($id)
+    {
+        $perros = Perro::where('tipo','venta')->where('id',$id)->get();
+
+        if($perros)
+        {
+            return response()->json([
+                'message' => 'Perros en venta encontrados',
+                'perros' => $perros
+            ], 200);
+        }
+        else
+        {
+            return response()->json([
+                'message' => 'Perros en venta no encontrados'
+            ], 404);
+        }
+    }
 
 }
