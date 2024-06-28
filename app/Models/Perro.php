@@ -23,7 +23,7 @@ class Perro extends Model
         'edad',
         'color',
         'altura',
-        'tamaño',
+        'tamano',
         'peso',
 
         'sexo',
