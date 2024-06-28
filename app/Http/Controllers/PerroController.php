@@ -297,7 +297,6 @@ class PerroController extends Controller
 
     public function mostrarPerrosEnVentaPorId($id)
     {
-         dd($id);
         $perros = Perro::where('tipo','venta')->where('id',$id)->get();
 
         if($perros)
