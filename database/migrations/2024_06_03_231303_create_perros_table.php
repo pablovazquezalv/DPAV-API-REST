@@ -17,7 +17,7 @@ return new class extends Migration
             $table->string('distintivo',50)->nullable();
             $table->enum('sexo',['M','F'])->nullable();
             $table->double('peso',50)->nullable();
-            $table->string('tamaño',50)->nullable();
+            $table->string('tamano',50)->nullable();
             $table->boolean('estatus')->default(1);
             $table->string('esterilizado',50)->nullable();
             $table->date('fecha_nacimiento')->nullable();

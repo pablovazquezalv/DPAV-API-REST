@@ -26,7 +26,7 @@ class PerroController extends Controller
             'color' => 'required|string|max:255',
             'sexo' =>  'required|in:masculino,femenino',
             'peso' => 'required',
-            'tamaño' =>  Rule::in(['pequeño','mediano','grande'],'required'),           //pequeño, mediano, grande
+            'tamano' =>  Rule::in(['pequeño','mediano','grande'],'required'),           //pequeño, mediano, grande
             'estatus' => 'required', //1 = Activo, 0 = Inactivo
             'esterilizado' => Rule::in(['si','no'],'required'), //si, no
             'fecha_nacimiento' => 'required|date',
@@ -42,13 +42,13 @@ class PerroController extends Controller
             'edad.required' => 'La edad es requerida',
             'sexo.required' => 'El sexo es requerido',
             'peso.required' => 'El peso es requerido',
-            'tamaño.required' => 'El tamaño es requerido',
+            'tamano.required' => 'El tamano es requerido',
 
             'estatus.required' => 'El estatus es requerido',
             'esterilizado.required' => 'La esterilización es requerida',
             'fecha_nacimiento.required' => 'La fecha de nacimiento es requerida',
             'chip.required' => 'El chip es requerido',
-            'tamaño.invalid' => 'El tamaño no es válido',
+            'tamano.invalid' => 'El tamano no es válido',
 
 
             'tipo.required' => 'El tipo es requerido',
@@ -123,7 +123,7 @@ class PerroController extends Controller
             'edad' => 'sometimes|int',
             'sexo' =>  'sometimes|in:masculino,femenino',
             'peso' => 'sometimes',
-            'tamaño' =>  Rule::in(['pequeño','mediano','grande'],'required'),           //pequeño, mediano, grande
+            'tamano' =>  Rule::in(['pequeño','mediano','grande'],'required'),           //pequeño, mediano, grande
             'altura' => 'sometimes',
             'estatus' => 'sometimes', //1 = Activo, 0 = Inactivo
             'esterilizado' => Rule::in(['si','no'],'required'), //si, no
@@ -140,14 +140,14 @@ class PerroController extends Controller
             'edad.required' => 'La edad es requerida',
             'sexo.required' => 'El sexo es requerido',
             'peso.required' => 'El peso es requerido',
-            'tamaño.required' => 'El tamaño es requerido',
+            'tamano.required' => 'El tamano es requerido',
 
             'altura.required' => 'La altura es requerida',
             'estatus.required' => 'El estatus es requerido',
             'esterilizado.required' => 'La esterilización es requerida',
             'fecha_nacimiento.required' => 'La fecha de nacimiento es requerida',
             'chip.required' => 'El chip es requerido',
-            'tamaño.invalid' => 'El tamaño no es válido',
+            'tamano.invalid' => 'El tamano no es válido',
         ]);
 
         if ($validator->fails()) {
@@ -159,7 +159,7 @@ class PerroController extends Controller
         $perro->edad = $request->edad;
         $perro->sexo = $request->sexo;
         $perro->peso = $request->peso;
-        $perro->tamaño = $request->tamaño;
+        $perro->tamano = $request->tamano;
         $perro->altura = $request->altura;
         $perro->estatus = $request->estatus;
         $perro->esterilizado = $request->esterilizado;
