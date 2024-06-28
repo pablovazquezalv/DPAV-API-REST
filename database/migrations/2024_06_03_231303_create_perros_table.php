@@ -14,13 +14,13 @@ return new class extends Migration
         Schema::create('perros', function (Blueprint $table) {
             $table->id();
             $table->string('nombre',50);
-            $table->string('color',50);
-            $table->enum('sexo',['masculino','femenino']);
-            $table->double('peso',50);
-            $table->string('tamaño',50);
-            $table->boolean('estatus');
-            $table->string('esterilizado',50);
-            $table->date('fecha_nacimiento');
+            $table->string('distintivo',50)->nullable();
+            $table->enum('sexo',['M','F'])->nullable();
+            $table->double('peso',50)->nullable();
+            $table->string('tamaño',50)->nullable();
+            $table->boolean('estatus')->default(1);
+            $table->string('esterilizado',50)->nullable();
+            $table->date('fecha_nacimiento')->nullable();
             $table->string('imagen',500)->nullable();
             $table->string('chip',50)->nullable();
             $table->enum('tipo',['cria','reproductor','venta']);
