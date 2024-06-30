@@ -36,5 +36,5 @@ class ImagenController extends Controller
     }
         // Retornar respuesta
        
-    }
+    
 }
