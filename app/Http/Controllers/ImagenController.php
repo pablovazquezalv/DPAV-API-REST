@@ -17,6 +17,7 @@ class ImagenController extends Controller
             'image' => 'required|image|max:2048', // Puedes ajustar las reglas de validación según tus necesidades
         ]);
 
+        dd($request->image);
         $router = Storage::disk('s3')->put('fotos',$request->image);// Usar el disco 'public' para almacenar las imágenes
 
         $url = Storage::disk('s3')->url($router); // Obtener la URL de la imagen
