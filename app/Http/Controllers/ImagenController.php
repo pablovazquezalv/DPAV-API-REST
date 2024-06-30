@@ -20,15 +20,20 @@ class ImagenController extends Controller
             return response()->json($validator->errors(), 400);
         }
 
-        $ruta = $request->file('image')->store('fotos', 's3');
+        $file = $request->file('image');
+        $fileName = $file->getClientOriginalName(); // Obtener el nombre original del archivo
 
-        $url = Storage::disk('s3')->url($ruta);
+        // Subir la imagen al disco 's3'
+        $filePath = Storage::disk('s3')->putFileAs('fotos', $file, $fileName);
+
+        // Obtener la URL de la imagen en S3
+        $url = Storage::disk('s3')->url($filePath);
 
         return response()->json([
             'message' => 'Imagen subida exitosamente',
             'url' => $url,
         ], 200);
-    
+    }
         // Retornar respuesta
        
     }
