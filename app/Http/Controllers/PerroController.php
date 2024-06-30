@@ -23,8 +23,8 @@ class PerroController extends Controller
         $validator = Validator::make($request->all(),
         [
             'nombre' => 'required|string|max:255',
-            'color' => 'required|string|max:255',
-            'sexo' =>  'required|in:masculino,femenino',
+            'distintivo' => 'string|max:55|nullable',
+            'sexo' =>  'required|in:M,F',
             'peso' => 'required',
             'tamano' =>  Rule::in(['pequeño','mediano','grande'],'required'),           //pequeño, mediano, grande
             'estatus' => 'required', //1 = Activo, 0 = Inactivo
@@ -38,21 +38,18 @@ class PerroController extends Controller
         ],
         [
             'nombre.required' => 'El nombre es requerido',
-            'color.required' => 'El color es requerido',
-            'edad.required' => 'La edad es requerida',
+            'distintivo.required' => 'El distintivo es requerido',
             'sexo.required' => 'El sexo es requerido',
             'peso.required' => 'El peso es requerido',
             'tamano.required' => 'El tamano es requerido',
-
             'estatus.required' => 'El estatus es requerido',
             'esterilizado.required' => 'La esterilización es requerida',
             'fecha_nacimiento.required' => 'La fecha de nacimiento es requerida',
             'chip.required' => 'El chip es requerido',
+            'tipo.required' => 'El tipo es requerido',
+            'id_raza.required' => 'La raza es requerida',
             'tamano.invalid' => 'El tamano no es válido',
 
-
-            'tipo.required' => 'El tipo es requerido',
-            'chip.unique' => 'El chip ya está en uso',
         ]);
 
         if ($validator->fails()) {
@@ -61,11 +58,14 @@ class PerroController extends Controller
 
         $user = request()->user();
 
+        
+
         $perro = Perro::create([
             'nombre' => $request->nombre,
-            'color' => $request->color,
+            'distintivo' => $request->distintivo ? $request->distintivo : "",
             'sexo' => $request->sexo,
             'peso' => $request->peso,
+            'tamano' => $request->tamano,
             'estatus' => $request->estatus,
             'esterilizado' => $request->esterilizado,
             'fecha_nacimiento' => $request->fecha_nacimiento,
