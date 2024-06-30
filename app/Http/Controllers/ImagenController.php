@@ -21,7 +21,6 @@ class ImagenController extends Controller
 
         $url = Storage::disk('s3')->url($router); // Obtener la URL de la imagen
 
-        dd($url);
         return response()->json([
             'message' => 'Imagen subida exitosamente',
             'url' => $url,
