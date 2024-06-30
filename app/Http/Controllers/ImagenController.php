@@ -12,29 +12,29 @@ class ImagenController extends Controller
     {
         // Validar la solicitud
 
-        $validator = Validator::make($request->all(), [
+        $request->validate([
             'image' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ]);
 
-        if ($validator->fails()) {
-            return response()->json($validator->errors(), 400);
-        }
+        // Obtener el archivo de la solicitud
+        $image = $request->file('image');
 
-        $file = $request->file('image');
-        $fileName = $file->getClientOriginalName(); // Obtener el nombre original del archivo
+        // Generar un nombre único para la imagen
+        $imageName = time() . '.' . $image->getClientOriginalExtension();
 
-        // Subir la imagen al disco 's3'
-        $filePath = Storage::disk('s3')->putFileAs('fotos', $file, $fileName);
+        // Subir la imagen a S3
+        $path = Storage::disk('s3')->putFileAs('images', $image, $imageName);
 
-        // Obtener la URL de la imagen en S3
-        $url = Storage::disk('s3')->url($filePath);
+        // Obtener la URL de la imagen
+        $imageUrl = Storage::disk('s3')->url($path);
 
+        // Retornar respuesta
         return response()->json([
             'message' => 'Imagen subida exitosamente',
-            'url' => $url,
+            'url' => $imageUrl
         ], 200);
     }
-        // Retornar respuesta
+    //respuesta
        
     
 }
