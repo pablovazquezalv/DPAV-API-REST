@@ -6,7 +6,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\RazaController;
 use App\Http\Controllers\PerroController;
 use App\Http\Controllers\CertificadoController;
-
+use App\Http\Controllers\ImagenController;
 
 
 Route::post('/registrar', [UserController::class, 'registrarUsuario']);
@@ -40,3 +40,6 @@ Route::put('/eliminarRaza/{id}', [RazaController::class, 'inahabilitarRaza']);
 Route::put('/habilitarRaza/{id}', [RazaController::class, 'habilitarRaza']);
 //Certificados
 Route::post('crearCertificado', [CertificadoController::class, 'crearCertificado']);
+
+//imagenes
+Route::post('/upload', [ImagenController::class, 'upload']);
