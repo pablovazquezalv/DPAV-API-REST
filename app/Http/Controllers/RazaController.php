@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Raza;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Storage;
 
 class RazaController extends Controller
 {
@@ -36,19 +37,35 @@ class RazaController extends Controller
     {
         $validate = Validator::make($request->all(), [
             'nombre' => 'required|string|max:255|min:2',
+            'imagen' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048'
         ],[
             'nombre.required' => 'El nombre es requerido',
+            'nombre.min' => 'El nombre debe tener al menos 2 caracteres',
+            'nombre.max' => 'El nombre debe tener como máximo 255 caracteres',
+            'imagen.image' => 'El archivo debe ser una imagen',
+            'imagen.mimes' => 'El archivo debe ser de tipo: jpeg, png, jpg, gif, svg',
+            'imagen.max' => 'El tamaño máximo de la imagen es de 2MB',
+
         ]);
 
         if ($validate->fails()) {
             return response()->json($validate->errors(), 400);
         }
 
-        $raza = Raza::create(
-            [
-                'nombre' => $request->nombre,
-            ]
-        );
+        
+        // Llamar a la función upload para obtener la URL de la imagen
+    
+        $file = $request->file('imagen');
+        $route = Storage::disk('s3')->put('images', $file);
+        $imageUrl = Storage::disk('s3')->url($route);
+
+        dd($imageUrl);  
+  
+
+    $raza = Raza::create([
+        'nombre' => $request->nombre,
+        'imagen' => $imageUrl,
+    ]);
 
         $raza->save();
 

@@ -7,7 +7,7 @@ use App\Http\Controllers\RazaController;
 use App\Http\Controllers\PerroController;
 use App\Http\Controllers\CertificadoController;
 use App\Http\Controllers\ImagenController;
-
+use Illuminate\Support\Facades\Storage;
 
 Route::post('/registrar', [UserController::class, 'registrarUsuario']);
 Route::post('/login', [UserController::class, 'login']);

@@ -11,6 +11,7 @@ class Raza extends Model
 
     protected $fillable = [
         'nombre',
-        'estado'
+        'estado',
+        'imagen'
     ];
 }
