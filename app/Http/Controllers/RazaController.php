@@ -54,17 +54,23 @@ class RazaController extends Controller
 
         
         // Llamar a la función upload para obtener la URL de la imagen
-    
-        $file = $request->file('imagen');
-        $route = Storage::disk('s3')->put('images', $file);
-        $imageUrl = Storage::disk('s3')->url($route);
+        if($request->hasFile('imagen'))
+        {
 
-        dd($imageUrl);  
+            $file = $request->file('imagen');
+            $route = Storage::disk('s3')->put('images', $file);
+            $imageUrl = Storage::disk('s3')->url($route);
+        }
+        else
+        {
+            $imageUrl = null;
+        }
+
   
 
     $raza = Raza::create([
         'nombre' => $request->nombre,
-        'imagen' => $imageUrl,
+        'imagen' => $imageUrl ? $imageUrl : null,
     ]);
 
         $raza->save();
