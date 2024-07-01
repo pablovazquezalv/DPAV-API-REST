@@ -118,49 +118,52 @@ class PerroController extends Controller
 
         $validator = Validator::make($request->all(),
         [
-            'nombre' => 'sometimes|string|max:255',
-            'color' => 'sometimes|string|max:255',
-            'edad' => 'sometimes|int',
-            'sexo' =>  'sometimes|in:masculino,femenino',
-            'peso' => 'sometimes',
+            'nombre' => 'required|string|max:255',
+           'distintivo' => 'string|max:55|nullable', //distintivo
+            'edad' => 'required',
+            'sexo' =>  'required|in:M,F',
+            'peso' => 'required',
             'tamano' =>  Rule::in(['pequeño','mediano','grande'],'required'),           //pequeño, mediano, grande
-            'altura' => 'sometimes',
-            'estatus' => 'sometimes', //1 = Activo, 0 = Inactivo
+            'altura' => 'required',
+            'estatus' => 'required', //1 = Activo, 0 = Inactivo
             'esterilizado' => Rule::in(['si','no'],'required'), //si, no
-            'fecha_nacimiento' => 'sometimes|date',
-            'chip'=>'sometimes|string|max:50|unique:perros',
-            'tipo' => Rule::in(['cria','reproductor','venta'],'sometimes'), //cria, reproductor, venta
-            'id_raza' => 'sometimes|int',
+            'fecha_nacimiento' => 'required|date',
+            'chip'=>'required|string|max:50|unique:perros',
+            'tipo' => Rule::in(['cria','reproductor','venta'],'required'), //cria, reproductor, venta
+            'id_raza' => 'required|int',
             'padre_id' => 'int|nullable',
             'madre_id' => 'int|nullable',
+            'imagen' => 'string|max:500|nullable',
+        
         ],
         [
             'nombre.required' => 'El nombre es requerido',
-            'color.required' => 'El color es requerido',
-            'edad.required' => 'La edad es requerida',
+            'distintivo.required' => 'El distintivo es requerido',
             'sexo.required' => 'El sexo es requerido',
             'peso.required' => 'El peso es requerido',
             'tamano.required' => 'El tamano es requerido',
-
             'altura.required' => 'La altura es requerida',
             'estatus.required' => 'El estatus es requerido',
             'esterilizado.required' => 'La esterilización es requerida',
             'fecha_nacimiento.required' => 'La fecha de nacimiento es requerida',
             'chip.required' => 'El chip es requerido',
+            'tipo.required' => 'El tipo es requerido',
+            'id_raza.required' => 'La raza es requerida',
             'tamano.invalid' => 'El tamano no es válido',
+            'imagen.required' => 'La imagen es requerida',
         ]);
 
         if ($validator->fails()) {
             return response()->json($validator->errors(), 400);
         }
 
+        $user = request()->user();
+
         $perro->nombre = $request->nombre;
-        $perro->color = $request->color;
-        $perro->edad = $request->edad;
+        $perro->distintivo = $request->distintivo ? $request->distintivo : "";
         $perro->sexo = $request->sexo;
         $perro->peso = $request->peso;
         $perro->tamano = $request->tamano;
-        $perro->altura = $request->altura;
         $perro->estatus = $request->estatus;
         $perro->esterilizado = $request->esterilizado;
         $perro->fecha_nacimiento = $request->fecha_nacimiento;
@@ -170,7 +173,7 @@ class PerroController extends Controller
         $perro->id_raza = $request->id_raza;
         $perro->padre_id = $request->padre_id ? $request->padre_id : null;
         $perro->madre_id = $request->madre_id ? $request->madre_id : null;
-
+        $perro->user_id = $user->id;
 
         $perro->save();
 

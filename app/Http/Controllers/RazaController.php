@@ -60,17 +60,19 @@ class RazaController extends Controller
             $file = $request->file('imagen');
             $route = Storage::disk('s3')->put('images', $file);
             $imageUrl = Storage::disk('s3')->url($route);
+
+            //obtener solo el nombre de la imagen
         }
         else
         {
-            $imageUrl = null;
+            $route = null;
         }
 
   
 
     $raza = Raza::create([
         'nombre' => $request->nombre,
-        'imagen' => $imageUrl ? $imageUrl : null,
+        'imagen' => $route ? $route : null,
     ]);
 
         $raza->save();
@@ -165,4 +167,6 @@ class RazaController extends Controller
 
         return response()->json($raza);
     }
+
+    
 }
