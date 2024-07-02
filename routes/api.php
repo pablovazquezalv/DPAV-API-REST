@@ -26,7 +26,7 @@ Route::get('/mostrarperro/{id}', [PerroController::class, 'mostrarPerro'])->midd
 Route::get('/mostrarPerros', [PerroController::class, 'mostrarPerros'])->middleware('auth:sanctum');
 Route::put('/inhabilitarPerro/{id}', [PerroController::class, 'inhabilitarPerro'])->middleware('auth:sanctum');
 Route::put('habilitarPerro/{id}', [PerroController::class, 'habilitarPerro'])->middleware('auth:sanctum');
-Route::put('actualizarPerro/{id}', [PerroController::class, 'actualizarPerro']);
+Route::put('actualizarPerro/{id}', [PerroController::class, 'actualizarPerro'])->middleware('auth:sanctum');
 Route::get('mostrarPerrosEnVenta', [PerroController::class, 'mostrarPerrosEnVenta']);
 Route::get('mostrarPerrosEnVenta/{id}', [PerroController::class, 'mostrarPerrosEnVentaPorId']);
 //Razas
