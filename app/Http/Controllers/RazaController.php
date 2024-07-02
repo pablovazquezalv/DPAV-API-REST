@@ -36,8 +36,8 @@ class RazaController extends Controller
     public function crearRaza(Request $request)
     {
         $validate = Validator::make($request->all(), [
-            'nombre' => 'required|string|max:255|min:2',
-            'imagen' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048'
+            'nombre' => 'sometimes|string|max:255|min:2',
+            'imagen' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048|sometimes'
         ],[
             'nombre.required' => 'El nombre es requerido',
             'nombre.min' => 'El nombre debe tener al menos 2 caracteres',
