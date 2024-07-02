@@ -120,15 +120,13 @@ class PerroController extends Controller
         [
             'nombre' => 'required|string|max:255',
            'distintivo' => 'string|max:55|nullable', //distintivo
-            'edad' => 'required',
             'sexo' =>  'required|in:M,F',
             'peso' => 'required',
             'tamano' =>  Rule::in(['pequeño','mediano','grande'],'required'),           //pequeño, mediano, grande
-            'altura' => 'required',
             'estatus' => 'required', //1 = Activo, 0 = Inactivo
             'esterilizado' => Rule::in(['si','no'],'required'), //si, no
             'fecha_nacimiento' => 'required|date',
-            'chip'=>'required|string|max:50|unique:perros',
+            'chip'=>'sometimes|string|max:50',
             'tipo' => Rule::in(['cria','reproductor','venta'],'required'), //cria, reproductor, venta
             'id_raza' => 'required|int',
             'padre_id' => 'int|nullable',
