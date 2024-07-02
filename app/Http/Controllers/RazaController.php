@@ -99,16 +99,40 @@ class RazaController extends Controller
         }
 
         $validate = Validator::make($request->all(), [
-            'nombre' => 'required|string|max:255',
+            'nombre' => 'required|string|max:255|min:2',
+            'imagen' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048'
         ],[
             'nombre.required' => 'El nombre es requerido',
+            'nombre.min' => 'El nombre debe tener al menos 2 caracteres',
+            'nombre.max' => 'El nombre debe tener como máximo 255 caracteres',
+            'imagen.image' => 'El archivo debe ser una imagen',
+            'imagen.mimes' => 'El archivo debe ser de tipo: jpeg, png, jpg, gif, svg',
+            'imagen.max' => 'El tamaño máximo de la imagen es de 2MB',
+
         ]);
 
         if ($validate->fails()) {
             return response()->json($validate->errors(), 400);
         }
 
+        // Llamar a la función upload para obtener la URL de la imagen
+        if($request->hasFile('imagen'))
+        {
+
+            $file = $request->file('imagen');
+            $route = Storage::disk('s3')->put('images', $file);
+            $imageUrl = Storage::disk('s3')->url($route);
+
+            //obtener solo el nombre de la imagen
+        }
+        else
+        {
+            $imageUrl = null;
+        }
+
         $raza->nombre = $request->nombre;
+        $raza->imagen = $imageUrl ? $imageUrl : null;
+
         $raza->save();
 
         if($raza->save())
