@@ -123,6 +123,7 @@ class RazaController extends Controller
             $route = Storage::disk('s3')->put('images', $file);
             $imageUrl = Storage::disk('s3')->url($route);
 
+            
             //obtener solo el nombre de la imagen
         }
         else
@@ -139,7 +140,7 @@ class RazaController extends Controller
                 $raza->imagen = $imageUrl ? $imageUrl : null;
             }
 
-            
+
 
         $raza->save();
 

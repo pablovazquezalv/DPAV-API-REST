@@ -107,7 +107,16 @@ class PerroController extends Controller
     public function actualizarPerro(Request $request,$id)
     {
 
+        try
+        {
         $perro = Perro::find($id);
+        }
+        catch(\Exception $e)
+        {
+            return response()->json([
+                'message' => 'Error al buscar el perro'
+            ], 400);
+        }
 
         if(!$perro)
         {
