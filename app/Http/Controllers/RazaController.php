@@ -65,14 +65,14 @@ class RazaController extends Controller
         }
         else
         {
-            $route = null;
+            $imageUrl = null;
         }
 
   
 
     $raza = Raza::create([
         'nombre' => $request->nombre,
-        'imagen' => $route ? $route : null,
+        'imagen' => $imageUrl ? $imageUrl : null,
     ]);
 
         $raza->save();
