@@ -130,8 +130,16 @@ class RazaController extends Controller
             $imageUrl = null;
         }
 
-        $raza->nombre = $request->nombre;
-        $raza->imagen = $imageUrl ? $imageUrl : null;
+       if($request->nombre)
+         {
+              $raza->nombre = $request->nombre;
+            }
+            if($request->imagen)
+            {
+                $raza->imagen = $imageUrl ? $imageUrl : null;
+            }
+
+            
 
         $raza->save();
 
