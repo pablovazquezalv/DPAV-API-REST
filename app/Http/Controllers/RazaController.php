@@ -36,9 +36,10 @@ class RazaController extends Controller
     public function crearRaza(Request $request)
     {
         $validate = Validator::make($request->all(), [
-            'nombre' => 'sometimes|string|max:255|min:2',
-            'imagen' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048|sometimes'
+            'nombre' => 'required|string|max:255|min:2',
+            'imagen' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048'
         ],[
+            'nombre.required' => 'El nombre es requerido',
             'nombre.min' => 'El nombre debe tener al menos 2 caracteres',
             'nombre.max' => 'El nombre debe tener como máximo 255 caracteres',
             'imagen.image' => 'El archivo debe ser una imagen',
@@ -98,7 +99,7 @@ class RazaController extends Controller
         }
 
         $validate = Validator::make($request->all(), [
-            'nombre' => 'required|string|max:255|min:2',
+            'nombre' => 'sometimes|string|max:255|min:2',
             'imagen' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048'
         ],[
             'nombre.required' => 'El nombre es requerido',
