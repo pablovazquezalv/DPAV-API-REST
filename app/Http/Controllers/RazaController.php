@@ -89,70 +89,50 @@ class RazaController extends Controller
     }
 
     //ACTUALIZAR RAZA
-    public function actualizarRaza(Request $request,$id)
+    public function actualizarRaza(Request $request, $id)
     {
         $raza = Raza::find($id);
-
-        if($raza == null)
-        {
-            return response()->json(['message' => 'No se encontro la raza'], 404);
+    
+        if ($raza == null) {
+            return response()->json(['message' => 'No se encontró la raza'], 404);
         }
-
+    
         $validate = Validator::make($request->all(), [
-            'nombre' => 'sometimes|string|max:255|min:2',
+            'nombre' => 'nullable|string|max:255|min:2',
             'imagen' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048'
-        ],[
+        ], [
             'nombre.required' => 'El nombre es requerido',
             'nombre.min' => 'El nombre debe tener al menos 2 caracteres',
             'nombre.max' => 'El nombre debe tener como máximo 255 caracteres',
             'imagen.image' => 'El archivo debe ser una imagen',
             'imagen.mimes' => 'El archivo debe ser de tipo: jpeg, png, jpg, gif, svg',
             'imagen.max' => 'El tamaño máximo de la imagen es de 2MB',
-
         ]);
-
+    
         if ($validate->fails()) {
             return response()->json($validate->errors(), 400);
         }
-
-        // Llamar a la función upload para obtener la URL de la imagen
-        if($request->hasFile('imagen'))
-        {
-
+    
+        $imageUrl = $raza->imagen; // Mantener la URL de la imagen existente
+    
+        if ($request->hasFile('imagen')) {
             $file = $request->file('imagen');
             $route = Storage::disk('s3')->put('images', $file);
             $imageUrl = Storage::disk('s3')->url($route);
-
-            
-            //obtener solo el nombre de la imagen
         }
-        else
-        {
-            $imageUrl = null;
+    
+        // Actualizar los campos solo si están presentes en la solicitud
+        if (isset($request->nombre)) {
+            $raza->nombre = $request->nombre;
         }
-
-       if($request->nombre)
-         {
-              $raza->nombre = $request->nombre;
-            }
-            if($request->imagen)
-            {
-                $raza->imagen = $imageUrl ? $imageUrl : null;
-            }
-
-
-
-        $raza->save();
-
-        if($raza->save())
-        {
+    
+        $raza->imagen = $imageUrl;
+    
+        if ($raza->save()) {
             return response()->json($raza, 200);
+        } else {
+            return response()->json(['message' => 'Error al guardar la raza'], 400);
         }
-        else
-        {
-            return response()->json($raza, 400);
-        }
-
     }
     
     //ELIMINAR RAZA

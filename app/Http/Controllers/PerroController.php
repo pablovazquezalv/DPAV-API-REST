@@ -10,6 +10,11 @@ use Illuminate\Validation\Rule;
 use App\Models\PerroUser;
 use App\Enums\TamañoPerro;
 use App\Enums\SexoPerro;
+use App\Enums\TipoPerro;
+use App\Enums\EstatusPerro;
+use App\Enums\EsterilizadoPerro;
+use App\Enums\TamanoPerro;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rules\Enum;
 
 class PerroController extends Controller
@@ -35,6 +40,7 @@ class PerroController extends Controller
             'id_raza' => 'required|int',
             'padre_id' => 'int|nullable',
             'madre_id' => 'int|nullable',
+            'imagen' => 'string|max:500|nullable',
         ],
         [
             'nombre.required' => 'El nombre es requerido',
@@ -59,6 +65,16 @@ class PerroController extends Controller
         $user = request()->user();
 
         
+        if($request->hasFile('imagen'))
+        {
+            $file = $request->file('imagen');
+            $route = Storage::disk('s3')->put('images', $file);
+            $imageUrl = Storage::disk('s3')->url($route);
+        }
+        else
+        {
+            $imageUrl = "";
+        }
 
         $perro = Perro::create([
             'nombre' => $request->nombre,
@@ -76,6 +92,7 @@ class PerroController extends Controller
             'padre_id' => $request->padre_id ? $request->padre_id : null,
             'madre_id' => $request->madre_id ? $request->madre_id : null,
             'user_id' => $user->id,
+            'imagen' => $imageUrl ? $imageUrl : ''
           
         ]);
 
@@ -159,6 +176,18 @@ class PerroController extends Controller
 
         $user = request()->user();
 
+
+        if($request->hasFile('imagen'))
+        {
+            $file = $request->file('imagen');
+            $route = Storage::disk('s3')->put('images', $file);
+            $imageUrl = Storage::disk('s3')->url($route);
+        }
+        else
+        {
+            $imageUrl = "";
+        }
+
         $perro->nombre = $request->nombre;
         $perro->distintivo = $request->distintivo ? $request->distintivo : "";
         $perro->sexo = $request->sexo;
@@ -174,6 +203,7 @@ class PerroController extends Controller
         $perro->padre_id = $request->padre_id ? $request->padre_id : null;
         $perro->madre_id = $request->madre_id ? $request->madre_id : null;
         $perro->user_id = $user->id;
+        $perro->imagen = $imageUrl ? $imageUrl : '';
 
         $perro->save();
 
