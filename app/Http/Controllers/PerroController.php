@@ -368,19 +368,19 @@ class PerroController extends Controller
 
         $perros = Perro::where('user_id',$user->id)->get();
 
-        if($perros)
-        {
-            return response()->json([
-                'message' => 'Perros encontrados',
-                'perros' => $perros
-            ], 200);
-        }
-        else
-        {
-            return response()->json([
-                'message' => 'Perros no encontrados'
-            ], 404);
-        }
+       if($perros > 0)
+       {
+           return response()->json([
+               'message' => 'Perros encontrados',
+               'perros' => $perros
+           ], 200);
+       }
+       else
+       {
+           return response()->json([
+               'message' => 'Perros no encontrados'
+           ], 404);
+       }
     }
     
 
