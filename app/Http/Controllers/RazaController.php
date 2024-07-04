@@ -109,12 +109,14 @@ class RazaController extends Controller
             'imagen.max' => 'El tamaño máximo de la imagen es de 2MB',
         ]);
     
-        if ($validate->fails()) {
+        if ($validate->fails()) 
+        {
             return response()->json($validate->errors(), 400);
         }
     
         $imageUrl = $raza->imagen; // Mantener la URL de la imagen existente
     
+        // Llamar a la función upload para obtener la URL de la imagen
         if ($request->hasFile('imagen')) {
             $file = $request->file('imagen');
             $route = Storage::disk('s3')->put('images', $file);
@@ -122,7 +124,7 @@ class RazaController extends Controller
         }
     
         // Actualizar los campos solo si están presentes en la solicitud
-       
+        
         $raza->nombre = $request->nombre;
         $raza->imagen = $imageUrl;
     

@@ -88,7 +88,8 @@ class UserController extends Controller
                 return response()->json($validator->errors(), 400);
             }
 
-            $user = User::where('email', $request->email)->first();
+            $user = request()->user();
+            $user = User::where('email', $user->email)->first();
 
             
             if($user->codigo == $request->codigo)
@@ -101,11 +102,17 @@ class UserController extends Controller
              
                 $user->save();
 
-                return response()->json('Código correcto', 200);
+                return response()->json([
+                    'message' => 'Código correcto',
+                    'nuevo telefono' => $request->telefono
+                ]);
             }
             else
             {
-                return response()->json('Código incorrecto', 400);
+                return response()->json([
+                    'message' => 'Código incorrecto',
+                    
+                ], 400);
             }
     }
 

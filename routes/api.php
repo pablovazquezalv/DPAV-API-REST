@@ -23,6 +23,7 @@ Route::post('/enviarCodigoCuenta', [UserController::class, 'enviarCodigoCuenta']
 Route::get('/mostrarUsuario', [UserController::class, 'mostrarUsuario'])->middleware('auth:sanctum');
 Route::get('/mostrarPerroPorUsuario', [PerroController::class, 'mostrarPerrosPorUsuario'])->middleware('auth:sanctum');
 Route::post('/actualizarTelefono', [UserController::class, 'editarTelefonoUsuario'])->middleware('auth:sanctum');
+Route::post('/verificarTelefono ', [UserController::class, 'verificarTelefono'])->middleware('auth:sanctum');
 //Perros
 Route::post('/crearPerro', [PerroController::class, 'crearPerro'])->middleware('auth:sanctum');
 Route::get('/mostrarPerro/{id}', [PerroController::class, 'mostrarPerro'])->middleware('auth:sanctum');
