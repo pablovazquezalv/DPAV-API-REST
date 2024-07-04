@@ -7,6 +7,7 @@ use App\Http\Controllers\RazaController;
 use App\Http\Controllers\PerroController;
 use App\Http\Controllers\CertificadoController;
 use App\Http\Controllers\ImagenController;
+use App\Http\Controllers\CitaController;
 use Illuminate\Support\Facades\Storage;
 
 Route::post('/registrar', [UserController::class, 'registrarUsuario']);
@@ -21,7 +22,6 @@ Route::post('/enviarCodigoCuenta', [UserController::class, 'enviarCodigoCuenta']
 
 //Perros
 Route::post('/crearPerro', [PerroController::class, 'crearPerro'])->middleware('auth:sanctum');
-
 Route::get('/mostrarperro/{id}', [PerroController::class, 'mostrarPerro'])->middleware('auth:sanctum');
 Route::get('/mostrarPerros', [PerroController::class, 'mostrarPerros'])->middleware('auth:sanctum');
 Route::put('/inhabilitarPerro/{id}', [PerroController::class, 'inhabilitarPerro'])->middleware('auth:sanctum');
@@ -41,5 +41,14 @@ Route::put('/habilitarRaza/{id}', [RazaController::class, 'habilitarRaza']);
 //Certificados
 Route::post('crearCertificado', [CertificadoController::class, 'crearCertificado']);
 
+
+//Citas
+Route::post('/crearCita', [CitaController::class, 'crearCita'])->middleware('auth:sanctum');
+Route::put('/cancelarCita/{id}', [CitaController::class, 'cancelarCita'])->middleware('auth:sanctum');
+Route::get('/mostrarCitas', [CitaController::class, 'verMisCitas'])->middleware('auth:sanctum');
+
 //imagenes
 Route::post('/upload', [ImagenController::class, 'upload']);
+
+
+//una que busque por el codigo del chip y te de la info sin token

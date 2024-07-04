@@ -13,8 +13,10 @@ return new class extends Migration
     {
         Schema::create('citas', function (Blueprint $table) {
             $table->id();
-            $table->date('fecha');
-            $table->enum('estado',['pendiente','realizada','cancelada']);
+            $table->dateTime('fecha');
+            //hora
+            $table->time('hora');
+            $table->enum('estado',['pendiente','realizada','cancelada'])->default('pendiente');
             $table->enum('motivo',['cruce','compra','consulta']);
             $table->foreignId('user_id')->constrained('users');
             $table->timestamps();

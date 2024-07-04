@@ -122,14 +122,12 @@ class RazaController extends Controller
         }
     
         // Actualizar los campos solo si están presentes en la solicitud
-        if (isset($request->nombre)) {
-            $raza->nombre = $request->nombre;
-        }
-    
+       
+        $raza->nombre = $request->nombre;
         $raza->imagen = $imageUrl;
     
         if ($raza->save()) {
-            return response()->json($raza, 200);
+            return response()->json('Raza actualizada correctamente', 200); // Mensaje de éxito
         } else {
             return response()->json(['message' => 'Error al guardar la raza'], 400);
         }
