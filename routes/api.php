@@ -1,15 +1,14 @@
 <?php
 
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\RazaController;
 use App\Http\Controllers\PerroController;
 use App\Http\Controllers\CertificadoController;
-use App\Http\Controllers\ImagenController;
 use App\Http\Controllers\CitaController;
-use Illuminate\Support\Facades\Storage;
 
+
+//LOGIN
 Route::post('/registrar', [UserController::class, 'registrarUsuario']);
 Route::post('/login', [UserController::class, 'login']);
 Route::post('/logout', [UserController::class, 'logout']);
@@ -20,15 +19,20 @@ Route::get('/enviarSMS', [UserController::class, 'enviarSMS'])->name('enviarSMS'
 Route::post('/verificarCodigo', [UserController::class, 'verificarCodigo'])->name('verificarCodigo');
 Route::post('/enviarCodigoCuenta', [UserController::class, 'enviarCodigoCuenta'])->name('enviarCodigoCuenta');
 
+//USUARIOS
+Route::get('/mostrarUsuario', [UserController::class, 'mostrarUsuario'])->middleware('auth:sanctum');
+Route::get('/mostrarPerroPorUsuario', [PerroController::class, 'mostrarPerrosPorUsuario'])->middleware('auth:sanctum');
+Route::post('/actualizarTelefono', [UserController::class, 'editarTelefonoUsuario'])->middleware('auth:sanctum');
 //Perros
 Route::post('/crearPerro', [PerroController::class, 'crearPerro'])->middleware('auth:sanctum');
-Route::get('/mostrarperro/{id}', [PerroController::class, 'mostrarPerro'])->middleware('auth:sanctum');
+Route::get('/mostrarPerro/{id}', [PerroController::class, 'mostrarPerro'])->middleware('auth:sanctum');
 Route::get('/mostrarPerros', [PerroController::class, 'mostrarPerros'])->middleware('auth:sanctum');
 Route::put('/inhabilitarPerro/{id}', [PerroController::class, 'inhabilitarPerro'])->middleware('auth:sanctum');
-Route::put('habilitarPerro/{id}', [PerroController::class, 'habilitarPerro'])->middleware('auth:sanctum');
-Route::put('actualizarPerro/{id}', [PerroController::class, 'actualizarPerro'])->middleware('auth:sanctum');
-Route::get('mostrarPerrosEnVenta', [PerroController::class, 'mostrarPerrosEnVenta']);
-Route::get('mostrarPerrosEnVenta/{id}', [PerroController::class, 'mostrarPerrosEnVentaPorId']);
+Route::put('/habilitarPerro/{id}', [PerroController::class, 'habilitarPerro'])->middleware('auth:sanctum');
+Route::put('/actualizarPerro/{id}', [PerroController::class, 'actualizarPerro'])->middleware('auth:sanctum');
+Route::get('/mostrarPerrosEnVenta', [PerroController::class, 'mostrarPerrosEnVenta']);
+Route::get('/mostrarPerrosEnVenta/{id}', [PerroController::class, 'mostrarPerrosEnVentaPorId']);
+Route::get('/buscarPerroPorChip/{id}', [PerroController::class, 'buscarPerroPorChip']);
 //Razas
 Route::post('/crearRaza', [RazaController::class, 'crearRaza']);
 Route::get('/mostrarRaza/{id}', [RazaController::class, 'mostrarRaza']);
@@ -40,15 +44,9 @@ Route::put('/eliminarRaza/{id}', [RazaController::class, 'inahabilitarRaza']);
 Route::put('/habilitarRaza/{id}', [RazaController::class, 'habilitarRaza']);
 //Certificados
 Route::post('crearCertificado', [CertificadoController::class, 'crearCertificado']);
-
-
 //Citas
 Route::post('/crearCita', [CitaController::class, 'crearCita'])->middleware('auth:sanctum');
 Route::put('/cancelarCita/{id}', [CitaController::class, 'cancelarCita'])->middleware('auth:sanctum');
 Route::get('/mostrarCitas', [CitaController::class, 'verMisCitas'])->middleware('auth:sanctum');
 
-//imagenes
-Route::post('/upload', [ImagenController::class, 'upload']);
 
-
-//una que busque por el codigo del chip y te de la info sin token

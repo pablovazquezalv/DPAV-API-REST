@@ -124,9 +124,7 @@ class PerroController extends Controller
     public function actualizarPerro(Request $request,$id)
     {
 
-        
-        $perro = Perro::find($id);
-        
+        $perro = Perro::find($id);        
 
         if(!$perro)
         {
@@ -326,8 +324,6 @@ class PerroController extends Controller
         }
     }
 
-    #una ruta que solo muestre los perros en venta segun el id
-
     public function mostrarPerrosEnVentaPorId($id)
     {
         $perros = Perro::where('tipo','venta')->where('id',$id)->get();
@@ -346,5 +342,47 @@ class PerroController extends Controller
             ], 404);
         }
     }
+
+    public function buscarPerroPorChip($chip)
+    {
+        $perro = Perro::where('chip',$chip)->get();
+
+        if($perro)
+        {
+            return response()->json([
+                'message' => 'Perro encontrado',
+                'perro' => $perro
+            ], 200);
+        }
+        else
+        {
+            return response()->json([
+                'message' => 'Perro no encontrado'
+            ], 404);
+        }
+    }
+
+    public function mostrarPerrosPorUsuario()
+    {
+
+        $user = request()->user();
+
+        $perros = Perro::where('user_id',$user->id)->get();
+
+        if($perros)
+        {
+            return response()->json([
+                'message' => 'Perros encontrados',
+                'perros' => $perros
+            ], 200);
+        }
+        else
+        {
+            return response()->json([
+                'message' => 'Perros no encontrados'
+            ], 404);
+        }
+    }
+    
 
 }

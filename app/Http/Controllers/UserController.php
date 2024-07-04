@@ -15,6 +15,91 @@ use Illuminate\Support\Facades\Crypt;
 
 class UserController extends Controller
 {
+
+
+    //Usuario
+    public function mostrarUsuario()
+    {
+
+        $user = request()->user();
+
+        $user = User::find($user->id);
+
+        if($user)
+        {
+            return response()->json($user, 200);
+        }
+        else
+        {
+            return response()->json('Usuario no encontrado', 400);
+        }
+    }
+
+    public function editarTelefonoUsuario(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'telefono' => 'required|string|max:10',
+        ],
+        [
+            'telefono.required' => 'El teléfono es requerido',
+            'telefono.max' => 'El teléfono debe tener 10 dígitos',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json($validator->errors(), 400);
+        }
+
+        $user = request()->user();
+
+        //enviar codigo de verificación
+        $this->enviarCodigo(new Request(['id' => $user->id]));
+        
+        
+        $user = User::find($user->id);
+
+        if($user)
+        {
+            return response()->json("Código enviado", 200);
+        }
+        else
+        {
+            return response()->json('Usuario no encontrado', 400);
+        }
+
+    }
+
+    public function editarEmailUsuario(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'email' => 'required|string|email|max:255',
+        ],
+        [
+            'email.required' => 'El email es requerido',
+            'email.email' => 'El email no es válido',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json($validator->errors(), 400);
+        }
+
+        $user = request()->user();
+
+        $user = User::find($user->id);
+
+        if($user)
+        {
+            $user->email = $request->email;
+            $user->save();
+
+            return response()->json($user, 200);
+        }
+        else
+        {
+            return response()->json('Usuario no encontrado', 400);
+        }
+    }
+
+
     public function registrarUsuario(Request $request)
     {
         $validator = Validator::make($request->all(), [
@@ -388,6 +473,8 @@ class UserController extends Controller
         {
             $user->verification_code_sent_at = now();
             $user->email_verified_at = now();
+            //generar nuevo codigo
+            $user->codigo = rand(100000, 999999);
             $user->save();
             return response()->view('email/correo-enviado', ['user' => $user]);
         }
@@ -401,3 +488,6 @@ class UserController extends Controller
 
     
 }
+
+
+//darle editar un modal que carg
