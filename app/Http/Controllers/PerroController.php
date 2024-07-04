@@ -222,7 +222,6 @@ class PerroController extends Controller
 
     }
 
-
     public function mostrarPerro($id)
     {
         $perro = Perro::find($id);
@@ -347,7 +346,7 @@ class PerroController extends Controller
     {
         $perro = Perro::where('chip',$chip)->get();
 
-        if($perro)
+        if($perro->count() > 0)
         {
             return response()->json([
                 'message' => 'Perro encontrado',

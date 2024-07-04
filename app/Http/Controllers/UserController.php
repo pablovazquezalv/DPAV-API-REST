@@ -59,13 +59,54 @@ class UserController extends Controller
 
         if($user)
         {
-            return response()->json("Código enviado", 200);
+            return response()->json([
+                'message' => 'Código enviado',
+                'telefono' => $request->telefono
+            ]);
         }
         else
         {
             return response()->json('Usuario no encontrado', 400);
         }
 
+    }
+
+    public function verificarTelefono(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'telefono' => 'required|string|max:10',
+            'codigo' => 'required|string|max:6',
+        ],
+        [
+            'telefono.required' => 'El teléfono es requerido',
+            'codigo.required' => 'El código es requerido',
+            'telefono.max' => 'El teléfono debe tener 10 dígitos',
+            'codigo.max' => 'El código debe tener 6 caracteres',
+        ]);
+
+            if ($validator->fails()) {
+                return response()->json($validator->errors(), 400);
+            }
+
+            $user = User::where('email', $request->email)->first();
+
+            
+            if($user->codigo == $request->codigo)
+            {
+               # $user->codigo = null;
+
+                $user->telefono = $request->telefono;
+                $user->codigo = null;
+
+             
+                $user->save();
+
+                return response()->json('Código correcto', 200);
+            }
+            else
+            {
+                return response()->json('Código incorrecto', 400);
+            }
     }
 
     public function editarEmailUsuario(Request $request)
@@ -253,7 +294,6 @@ class UserController extends Controller
                 return response()->json('Código incorrecto', 400);
             }
     }
-
 
     //Funcion para enviar correo de restablecimiento de contraseña
     public function olvideContraseña(Request $request)
