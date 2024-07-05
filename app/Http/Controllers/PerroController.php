@@ -148,7 +148,7 @@ class PerroController extends Controller
             'id_raza' => 'required|int',
             'padre_id' => 'int|nullable',
             'madre_id' => 'int|nullable',
-            'imagen' => 'string|max:500|nullable',
+            'imagen' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
         
         ],
         [
@@ -191,11 +191,11 @@ class PerroController extends Controller
         $perro->sexo = $request->sexo;
         $perro->peso = $request->peso;
         $perro->tamano = $request->tamano;
-        $perro->estatus = $request->estatus;
+        $perro->estatus = $request->estatus == "1" ? 1 : 0;
         $perro->esterilizado = $request->esterilizado;
         $perro->fecha_nacimiento = $request->fecha_nacimiento;
         $perro->imagen = $request->imagen ? $request->imagen : "";
-        $perro->chip = $request->chip;
+        $perro->chip = $request->chip == null ? $perro->chip : $request->chip;
         $perro->tipo = $request->tipo;
         $perro->id_raza = $request->id_raza;
         $perro->padre_id = $request->padre_id ? $request->padre_id : null;
@@ -351,6 +351,44 @@ class PerroController extends Controller
             return response()->json([
                 'message' => 'Perro encontrado',
                 'perro' => $perro
+            ], 200);
+        }
+        else
+        {
+            return response()->json([
+                'message' => 'Perro no encontrado'
+            ], 404);
+        }
+    }
+
+    public function buscarPerras()
+    {
+        $perras = Perro::where('sexo','F')->get();
+
+        if($perras->count() > 0)
+        {
+            return response()->json([
+                'message' => 'Perro encontrado',
+                'perras' => $perras
+            ], 200);
+        }
+        else
+        {
+            return response()->json([
+                'message' => 'Perro no encontrado'
+            ], 404);
+        }
+    }
+
+    public function buscarPerros()
+    {
+        $perros = Perro::where('sexo','M')->get();
+
+        if($perros->count() > 0)
+        {
+            return response()->json([
+                'message' => 'Perro encontrado',
+                'perros' => $perros
             ], 200);
         }
         else
