@@ -7,7 +7,6 @@ use App\Http\Controllers\PerroController;
 use App\Http\Controllers\CertificadoController;
 use App\Http\Controllers\CitaController;
 
-
 //LOGIN
 Route::post('/registrar', [UserController::class, 'registrarUsuario']);
 Route::post('/login', [UserController::class, 'login']);
@@ -26,8 +25,10 @@ Route::post('/actualizarTelefono', [UserController::class, 'editarTelefonoUsuari
 Route::post('/verificarTelefono ', [UserController::class, 'verificarTelefono'])->middleware('auth:sanctum');
 //Perros
 Route::post('/crearPerro', [PerroController::class, 'crearPerro'])->middleware('auth:sanctum');
-Route::get('/mostrarPerro/{id}', [PerroController::class, 'mostrarPerro'])->middleware('auth:sanctum');
-Route::get('/mostrarPerros', [PerroController::class, 'mostrarPerros'])->middleware('auth:sanctum');
+Route::get('/mostrarPerro/{id}', [PerroController::class, 'mostrarPerro']);
+Route::get('/mostrarPerros', [PerroController::class, 'mostrarPerros']);
+Route::get('/buscarPerros', [PerroController::class, 'buscarPerros']);
+Route::get('/buscarPerras', [PerroController::class, 'buscarPerras']);
 Route::put('/inhabilitarPerro/{id}', [PerroController::class, 'inhabilitarPerro'])->middleware('auth:sanctum');
 Route::put('/habilitarPerro/{id}', [PerroController::class, 'habilitarPerro'])->middleware('auth:sanctum');
 Route::post('/actualizarPerro/{id}', [PerroController::class, 'actualizarPerro'])->middleware('auth:sanctum');
