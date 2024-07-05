@@ -224,7 +224,7 @@ class PerroController extends Controller
 
     public function mostrarPerro($id)
     {
-        $perro = Perro::find($id);
+        $perro = Perro::with('raza')->findOrFail($id);
 
         if($perro)
         {

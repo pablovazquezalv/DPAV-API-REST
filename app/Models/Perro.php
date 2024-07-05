@@ -48,6 +48,11 @@ class Perro extends Model
     }
 
 
+    public function raza()
+    {
+        return $this->belongsTo(Raza::class);
+    }
+
 
     
 }
