@@ -34,6 +34,7 @@ Route::post('/actualizarPerro/{id}', [PerroController::class, 'actualizarPerro']
 Route::get('/mostrarPerrosEnVenta', [PerroController::class, 'mostrarPerrosEnVenta']);
 Route::get('/mostrarPerrosEnVenta/{id}', [PerroController::class, 'mostrarPerrosEnVentaPorId']);
 Route::get('/buscarPerroPorChip/{id}', [PerroController::class, 'buscarPerroPorChip']);
+Route::get('/mostrarPerrosRecientes', [PerroController::class, 'mostrarPerrosRecientes']);
 //Razas
 Route::post('/crearRaza', [RazaController::class, 'crearRaza']);
 Route::get('/mostrarRaza/{id}', [RazaController::class, 'mostrarRaza']);
