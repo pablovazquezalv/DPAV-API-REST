@@ -224,7 +224,7 @@ class PerroController extends Controller
 
     public function mostrarPerro($id)
     {
-        $perro = Perro::find($id);
+        $perro = Perro::with('raza')->findOrFail($id);
 
         if($perro)
         {
@@ -419,6 +419,25 @@ class PerroController extends Controller
                'message' => 'Perros no encontrados'
            ], 404);
        }
+    }
+
+    public function mostrarPerrosRecientes()
+    {
+        $perros = Perro::orderBy('created_at','desc')->take(5)->get();
+
+        if($perros)
+        {
+            return response()->json([
+                'message' => 'Perros encontrados',
+                'perros' => $perros
+            ], 200);
+        }
+        else
+        {
+            return response()->json([
+                'message' => 'Perros no encontrados'
+            ], 404);
+        }
     }
     
 

@@ -35,13 +35,14 @@ Route::post('/actualizarPerro/{id}', [PerroController::class, 'actualizarPerro']
 Route::get('/mostrarPerrosEnVenta', [PerroController::class, 'mostrarPerrosEnVenta']);
 Route::get('/mostrarPerrosEnVenta/{id}', [PerroController::class, 'mostrarPerrosEnVentaPorId']);
 Route::get('/buscarPerroPorChip/{id}', [PerroController::class, 'buscarPerroPorChip']);
+Route::get('/mostrarPerrosRecientes', [PerroController::class, 'mostrarPerrosRecientes']);
 //Razas
 Route::post('/crearRaza', [RazaController::class, 'crearRaza']);
 Route::get('/mostrarRaza/{id}', [RazaController::class, 'mostrarRaza']);
 Route::get('/mostrarRazas', [RazaController::class, 'mostrarRazas']);
 Route::get('/mostrarRazasInhabilitadas', [RazaController::class, 'mostrarRazasInhabilitadas']);
 Route::get('/mostarRazasHabilitadas', [RazaController::class, 'mostrarRazasHabilitadas']);
-Route::put('/actualizarRaza/{id}', [RazaController::class, 'actualizarRaza']);
+Route::post('/actualizarRaza/{id}', [RazaController::class, 'actualizarRaza']);
 Route::put('/eliminarRaza/{id}', [RazaController::class, 'inahabilitarRaza']);
 Route::put('/habilitarRaza/{id}', [RazaController::class, 'habilitarRaza']);
 //Certificados
