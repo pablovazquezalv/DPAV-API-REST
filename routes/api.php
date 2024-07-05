@@ -26,7 +26,7 @@ Route::post('/verificarTelefono ', [UserController::class, 'verificarTelefono'])
 //Perros
 Route::post('/crearPerro', [PerroController::class, 'crearPerro'])->middleware('auth:sanctum');
 Route::get('/mostrarPerro/{id}', [PerroController::class, 'mostrarPerro']);
-Route::get('/mostrarPerros', [PerroController::class, 'mostrarPerros']);
+Route::get('/mostrarPerros', [PerroController::class, 'mostrarPerros'])->middleware('auth:sanctum');
 Route::get('/buscarPerros', [PerroController::class, 'buscarPerros']);
 Route::get('/buscarPerras', [PerroController::class, 'buscarPerras']);
 Route::put('/inhabilitarPerro/{id}', [PerroController::class, 'inhabilitarPerro'])->middleware('auth:sanctum');
