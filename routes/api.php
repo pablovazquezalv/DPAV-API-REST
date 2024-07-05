@@ -37,12 +37,12 @@ Route::get('/mostrarPerrosEnVenta/{id}', [PerroController::class, 'mostrarPerros
 Route::get('/buscarPerroPorChip/{id}', [PerroController::class, 'buscarPerroPorChip']);
 Route::get('/mostrarPerrosRecientes', [PerroController::class, 'mostrarPerrosRecientes']);
 //Razas
-Route::post('/crearRaza', [RazaController::class, 'crearRaza']);
+Route::post('/crearRaza', [RazaController::class, 'crearRaza'])->middleware('auth:sanctum');
 Route::get('/mostrarRaza/{id}', [RazaController::class, 'mostrarRaza']);
 Route::get('/mostrarRazas', [RazaController::class, 'mostrarRazas']);
 Route::get('/mostrarRazasInhabilitadas', [RazaController::class, 'mostrarRazasInhabilitadas']);
 Route::get('/mostarRazasHabilitadas', [RazaController::class, 'mostrarRazasHabilitadas']);
-Route::post('/actualizarRaza/{id}', [RazaController::class, 'actualizarRaza']);
+Route::post('/actualizarRaza/{id}', [RazaController::class, 'actualizarRaza'])->middleware('auth:sanctum');
 Route::put('/eliminarRaza/{id}', [RazaController::class, 'inahabilitarRaza']);
 Route::put('/habilitarRaza/{id}', [RazaController::class, 'habilitarRaza']);
 //Certificados
