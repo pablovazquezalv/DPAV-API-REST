@@ -40,7 +40,7 @@ class PerroController extends Controller
             'id_raza' => 'required|int',
             'padre_id' => 'int|nullable',
             'madre_id' => 'int|nullable',
-            'imagen' => 'string|max:500|nullable',
+            'imagen' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ],
         [
             'nombre.required' => 'El nombre es requerido',
@@ -92,7 +92,7 @@ class PerroController extends Controller
             'padre_id' => $request->padre_id ? $request->padre_id : null,
             'madre_id' => $request->madre_id ? $request->madre_id : null,
             'user_id' => $user->id,
-            'imagen' => $imageUrl ? $imageUrl : ''
+            'imagen' => $imageUrl
           
         ]);
 
@@ -361,7 +361,7 @@ class PerroController extends Controller
         }
     }
 
-    public function buscarPerras()
+    public function buscarPerras(   )
     {
         $perras = Perro::where('sexo','F')->get();
 
