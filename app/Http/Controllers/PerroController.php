@@ -423,7 +423,7 @@ class PerroController extends Controller
 
     public function mostrarPerrosRecientes()
     {
-        $perros = Perro::orderBy('created_at','desc')->take(5)->get();
+        $perros = Perro::orderBy('created_at','desc')->take(3)->get();
 
         if($perros)
         {
