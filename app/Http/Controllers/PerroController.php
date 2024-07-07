@@ -64,16 +64,13 @@ class PerroController extends Controller
 
         $user = request()->user();
 
-        
+        $imageUrl = "";
+
         if($request->hasFile('imagen'))
         {
             $file = $request->file('imagen');
             $route = Storage::disk('s3')->put('images', $file);
             $imageUrl = Storage::disk('s3')->url($route);
-        }
-        else
-        {
-            $imageUrl = "";
         }
 
         $perro = Perro::create([
@@ -85,7 +82,7 @@ class PerroController extends Controller
             'estatus' => $request->estatus,
             'esterilizado' => $request->esterilizado,
             'fecha_nacimiento' => $request->fecha_nacimiento,
-            'imagen' => $request->imagen ? $request->imagen : "",
+            'imagen' => $request->imagen,
             'chip' => $request->chip,
             'tipo' => $request->tipo,
             'id_raza' => $request->id_raza,
@@ -93,7 +90,6 @@ class PerroController extends Controller
             'madre_id' => $request->madre_id ? $request->madre_id : null,
             'user_id' => $user->id,
             'imagen' => $imageUrl
-          
         ]);
 
         $perro->save();
@@ -361,7 +357,7 @@ class PerroController extends Controller
         }
     }
 
-    public function buscarPerras(   )
+    public function buscarPerras()
     {
         $perras = Perro::where('sexo','F')->get();
 
