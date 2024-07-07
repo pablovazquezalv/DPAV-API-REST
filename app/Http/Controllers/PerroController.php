@@ -38,8 +38,8 @@ class PerroController extends Controller
             'chip'=>'required|string|max:50|unique:perros',
             'tipo' => Rule::in(['cria','reproductor','venta'],'required'), //cria, reproductor, venta
             'id_raza' => 'required|int',
-            'padre_id' => 'int|nullable',
-            'madre_id' => 'int|nullable',
+            'padre_id' => 'nullable',
+            'madre_id' => 'nullable',
             'imagen' => 'string|max:500|nullable',
         ],
         [
@@ -133,17 +133,17 @@ class PerroController extends Controller
         [
             'nombre' => 'required|string|max:255',
            'distintivo' => 'string|max:55|nullable', //distintivo
-            'sexo' =>  'required|in:M,F',
-            'peso' => 'required',
-            'tamano' =>  Rule::in(['pequeño','mediano','grande'],'required'),           //pequeño, mediano, grande
+            'sexo' =>  'sometimes|in:M,F',
+            'peso' => 'sometimes',
+            'tamano' =>  Rule::in(['pequeño','mediano','grande'],'sometimes'),           //pequeño, mediano, grande
             'estatus' => 'required', //1 = Activo, 0 = Inactivo
             'esterilizado' => Rule::in(['si','no'],'required'), //si, no
-            'fecha_nacimiento' => 'required|date',
+            'fecha_nacimiento' => 'sometimes|date',
             'chip'=>'sometimes|string|max:50',
-            'tipo' => Rule::in(['cria','reproductor','venta'],'required'), //cria, reproductor, venta
+            'tipo' => Rule::in(['cria','reproductor','venta'],'sometimes'), //cria, reproductor, venta
             'id_raza' => 'required|int',
-            'padre_id' => 'int|nullable',
-            'madre_id' => 'int|nullable',
+            'padre_id' => 'sometimes|nullable',
+            'madre_id' => 'sometimes|nullable',
             'imagen' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
         
         ],
@@ -186,7 +186,7 @@ class PerroController extends Controller
         $perro->distintivo = $request->distintivo ? $request->distintivo : "";
         $perro->sexo = $request->sexo;
         $perro->peso = $request->peso;
-        $perro->tamano = $request->tamano;
+        $perro->tamano = $request->tamano ? $request->tamano : "";
         $perro->estatus = $request->estatus == "1" ? 1 : 0;
         $perro->esterilizado = $request->esterilizado;
         $perro->fecha_nacimiento = $request->fecha_nacimiento;
@@ -196,6 +196,7 @@ class PerroController extends Controller
         $perro->id_raza = $request->id_raza;
         $perro->padre_id = $request->padre_id ? $request->padre_id : null;
         $perro->madre_id = $request->madre_id ? $request->madre_id : null;
+     
         $perro->user_id = $user->id;
         $perro->imagen = $imageUrl ? $imageUrl : '';
 
@@ -221,7 +222,7 @@ class PerroController extends Controller
     public function mostrarPerro($id)
     {
 
-        $perro_usuario = User::Select('users.id','users.nombre','users.apellido_paterno','users.telefono','users.email','users.direccion','users.ciudad','users.estado_id','users.codigo_postal','perros.id as perro_id','perros.nombre as perro_nombre','perros.distintivo as perro_distintivo','perros.sexo as perro_sexo','perros.peso as perro_peso','perros.tamano as perro_tamano','perros.estatus as perro_estatus','perros.esterilizado as perro_esterilizado','perros.fecha_nacimiento as perro_fecha_nacimiento','perros.chip as perro_chip','perros.tipo as perro_tipo','perros.id_raza as perro_id_raza','perros.padre_id as perro_padre_id','perros.madre_id as perro_madre_id','perros.imagen as perro_imagen','razas.nombre as raza')
+        $perro_usuario = User::Select('users.id','users.nombre','users.apellido_paterno','users.telefono','users.email','users.direccion','users.ciudad','users.estado_id','users.codigo_postal','perros.id as perro_id','perros.nombre as perro_nombre','perros.distintivo','perros.sexo as perro_sexo','perros.peso as perro_peso','perros.tamano','perros.estatus as perro_estatus','perros.esterilizado as perro_esterilizado','perros.fecha_nacimiento as perro_fecha_nacimiento','perros.chip as perro_chip','perros.tipo','perros.id_raza','perros.padre_id','perros.madre_id','perros.imagen as perro_imagen','razas.nombre as raza')
         ->join('perros','users.id','=','perros.user_id')
         ->join('razas','perros.id_raza','=','razas.id')
         ->where('perros.id',$id)
