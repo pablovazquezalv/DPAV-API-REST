@@ -16,7 +16,7 @@ use App\Enums\EsterilizadoPerro;
 use App\Enums\TamanoPerro;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rules\Enum;
-
+use App\Models\User;
 class PerroController extends Controller
 {
     
@@ -40,7 +40,7 @@ class PerroController extends Controller
             'id_raza' => 'required|int',
             'padre_id' => 'int|nullable',
             'madre_id' => 'int|nullable',
-            'imagen' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'imagen' => 'string|max:500|nullable',
         ],
         [
             'nombre.required' => 'El nombre es requerido',
@@ -89,7 +89,7 @@ class PerroController extends Controller
             'padre_id' => $request->padre_id ? $request->padre_id : null,
             'madre_id' => $request->madre_id ? $request->madre_id : null,
             'user_id' => $user->id,
-            'imagen' => $imageUrl
+            'imagen' => $imageUrl ? $imageUrl : ''
         ]);
 
         $perro->save();
@@ -220,13 +220,20 @@ class PerroController extends Controller
 
     public function mostrarPerro($id)
     {
-        $perro = Perro::with('raza')->findOrFail($id);
 
-        if($perro)
+        $perro_usuario = User::Select('users.id','users.nombre','users.apellido_paterno','users.telefono','users.email','users.direccion','users.ciudad','users.estado_id','users.codigo_postal','perros.id as perro_id','perros.nombre as perro_nombre','perros.distintivo as perro_distintivo','perros.sexo as perro_sexo','perros.peso as perro_peso','perros.tamano as perro_tamano','perros.estatus as perro_estatus','perros.esterilizado as perro_esterilizado','perros.fecha_nacimiento as perro_fecha_nacimiento','perros.chip as perro_chip','perros.tipo as perro_tipo','perros.id_raza as perro_id_raza','perros.padre_id as perro_padre_id','perros.madre_id as perro_madre_id','perros.imagen as perro_imagen','razas.nombre as raza')
+        ->join('perros','users.id','=','perros.user_id')
+        ->join('razas','perros.id_raza','=','razas.id')
+        ->where('perros.id',$id)
+        ->first();
+        
+
+
+        if($perro_usuario)
         {
             return response()->json([
                 'message' => 'Perro encontrado',
-                'perro' => $perro
+                'perro' => $perro_usuario
             ], 200);
         }
         else
