@@ -78,6 +78,22 @@ class PerroSeeder extends Seeder
             'user_id' => 2,
         ]);
 
+        DB::table('perros')->insert([
+            'nombre' => 'Moka',
+            'distintivo' => 'Mokita',
+            'sexo' => 'F',
+            'peso' => 15.2,
+            'tamano' => 'mediano',
+            'estatus' => 1,
+            'esterilizado' => 'si',
+            'fecha_nacimiento' => '2020-05-01',
+            'imagen' => 'https://proyecto9o.s3.amazonaws.com/images/LF3fYwHcA3CKnjMn5jjmFsjUb9eqbPd34iqR4YUw.jpg',
+            'chip' => '987654321',
+            'tipo' => 'cria',
+            'id_raza' => 2,
+            'user_id' => 2,
+        ]);
+
         
 
 
