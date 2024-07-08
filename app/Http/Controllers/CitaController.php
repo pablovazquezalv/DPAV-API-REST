@@ -12,9 +12,21 @@ class CitaController extends Controller
 {
     public  function mostrarCitas()
     {
-        $cita = Cita::all();
-
-        return response()->json($cita);
+        try {
+            $citas = Cita::select('citas.id', 'citas.fecha', 'citas.hora', 'citas.motivo', 'citas.estado', 'users.nombre as nombre_usuario')
+                ->join('users', 'citas.user_id', '=', 'users.id')
+                ->get();
+    
+            return response()->json([
+                'message' => 'Citas encontradas',
+                'citas' => $citas
+            ], 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                'message' => 'Error al obtener las citas',
+                'error' => $e->getMessage()
+            ], 500);
+        }
     }
 
     public  function mostrarCita($id)
@@ -150,6 +162,7 @@ class CitaController extends Controller
         return response()->json($citas);
     }
 
+    
     
 
 }

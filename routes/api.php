@@ -50,7 +50,9 @@ Route::post('crearCertificado', [CertificadoController::class, 'crearCertificado
 //Citas
 Route::post('/crearCita', [CitaController::class, 'crearCita'])->middleware('auth:sanctum');
 Route::put('/cancelarCita/{id}', [CitaController::class, 'cancelarCita'])->middleware('auth:sanctum');
+//admin
+Route::get('/mostrarCitasAdmin', [CitaController::class, 'mostrarCitas'])->middleware('auth:sanctum');
+//usuarios
 Route::get('/mostrarCitas', [CitaController::class, 'verMisCitas'])->middleware('auth:sanctum');
 Route::get('/traerCitas', [CitaController::class, 'mostrarCitas'])->middleware('auth:sanctum');
-
 

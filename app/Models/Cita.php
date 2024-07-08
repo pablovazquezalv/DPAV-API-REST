@@ -16,4 +16,15 @@ class Cita extends Model
         'motivo',
         'user_id'
     ];
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+
+    public function cita_id()
+    {
+        return $this->belongsTo(Cita::class);
+    }
+
 }
