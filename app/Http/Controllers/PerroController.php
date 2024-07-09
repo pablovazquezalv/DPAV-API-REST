@@ -412,28 +412,7 @@ class PerroController extends Controller
         }
     }
 
-    public function mostrarPerrosPorUsuario()
-    {
-
-        $user = request()->user();
-
-        $perros = Perro::where('user_id',$user->id)->get();
-
-       if($perros > 0)
-       {
-           return response()->json([
-               'message' => 'Perros encontrados',
-               'perros' => $perros
-           ], 200);
-       }
-       else
-       {
-           return response()->json([
-               'message' => 'Perros no encontrados'
-           ], 404);
-       }
-    }
-
+  
     public function mostrarPerrosRecientes()
     {
 
@@ -450,6 +429,24 @@ class PerroController extends Controller
         }
         else
         {
+            return response()->json([
+                'message' => 'Perros no encontrados'
+            ], 404);
+        }
+    }
+
+    public function mostrarPerrosPorUsuario()
+    {
+        $user = request()->user();
+
+        $perros = Perro::where('user_id', $user->id)->get();
+
+        if ($perros->count() > 0) {
+            return response()->json([
+                'message' => 'Perros encontrados',
+                'perros' => $perros
+            ], 200);
+        } else {
             return response()->json([
                 'message' => 'Perros no encontrados'
             ], 404);
