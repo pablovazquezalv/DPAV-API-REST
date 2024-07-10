@@ -13,10 +13,13 @@ return new class extends Migration
     {
         Schema::create('citas', function (Blueprint $table) {
             $table->id();
-            $table->dateTime('fecha');
+            $table->date('fecha');
+
+            #generar id unique
+            $table->string('codigo')->unique();
             //hora
             $table->time('hora');
-            $table->enum('estado',['pendiente','realizada','cancelada'])->default('pendiente');
+            $table->enum('estado',['pendiente','aceptada','realizada','cancelada'])->default('pendiente');
             $table->enum('motivo',['cruce','compra','consulta']);
             $table->foreignId('user_id')->constrained('users');
             $table->timestamps();

@@ -13,7 +13,7 @@ class CitaController extends Controller
     public  function mostrarCitas()
     {
         try {
-            $citas = Cita::select('citas.id', 'citas.fecha', 'citas.hora', 'citas.motivo', 'citas.estado', 'users.nombre as nombre_usuario')
+            $citas = Cita::select('citas.id', 'citas.fecha', 'citas.hora', 'citas.motivo', 'citas.estado', 'users.nombre as nombre_usuario','users.apellido_paterno as apellido_usuario', 'users.telefono as telefono_usuario')
                 ->join('users', 'citas.user_id', '=', 'users.id')
                 ->get();
     
@@ -29,6 +29,7 @@ class CitaController extends Controller
         }
     }
 
+    
     public  function mostrarCita($id)
     {
         $cita = Cita::find($id);
@@ -40,6 +41,61 @@ class CitaController extends Controller
 
         return response()->json($cita, 200);
     }
+
+
+    public function aceptarCitaAdmin($id)
+    {
+        $cita = Cita::find($id);
+
+        if($cita == null)
+        {
+            return response()->json(['message' => 'No se encontro la cita'], 404);
+        }
+
+        $cita->estado = 'aceptada';
+
+        $cita->save();
+
+        if($cita->save())
+        {
+            return response()->json([
+                'message' => 'Cita aceptada correctamente',
+                'cita' => $cita
+            ]);
+        }
+        else
+        {
+            return response()->json(['message' => 'Error al aceptar la cita'], 400);
+        }
+    }
+
+
+    public function cancelarCitaAdmin($id)
+    {
+        $cita = Cita::find($id);
+
+        if($cita == null)
+        {
+            return response()->json(['message' => 'No se encontro la cita'], 404);
+        }
+
+        $cita->estado = 'cancelada';
+
+        $cita->save();
+
+        if($cita->save())
+        {
+            return response()->json([
+                'message' => 'Cita cancelada correctamente',
+                'cita' => $cita
+            ]);
+        }
+        else
+        {
+            return response()->json(['message' => 'Error al cancelar la cita'], 400);
+        }
+    }
+
 
 
     public function crearCita(Request $request)
@@ -103,6 +159,7 @@ class CitaController extends Controller
         $cita = Cita::create([
             'fecha' => $request->fecha,
             'hora' => $request->hora,
+            'codigo' => uniqid(), // Generar un código único para la cita
             'motivo' => $request->motivo,
             'user_id' => $user->id
         ]);
@@ -113,7 +170,7 @@ class CitaController extends Controller
             return response()->json(['message' => 'Error al crear la cita'], 400);
         }
     }
-
+    //CANCELAR CITA USUARIO
     public function cancelarCita($id)
     {
         $cita = Cita::find($id);
@@ -151,7 +208,6 @@ class CitaController extends Controller
             return response()->json(['message' => 'Error al cancelar la cita'], 400);
         }
     }
-
 
     public function verMisCitas()
     {
