@@ -266,6 +266,21 @@ class UserController extends Controller
         return response()->json('Sesión cerrada', 200);
     }
 
+    public function verificarToken(Request $request)
+    {
+        $user = $request->user();
+        
+        if($user)
+        {
+            return response()->json([
+                'message' => 'Token válido',
+                'id' => $user->id,
+                'role' => $user->role,
+                'status' => $user->status,
+            ], 200);
+        }
+    }
+
     public function verificarCodigo(Request $request)
     {
         $validator = Validator::make($request->all(), [

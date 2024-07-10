@@ -10,7 +10,8 @@ use App\Http\Controllers\CitaController;
 //LOGIN
 Route::post('/registrar', [UserController::class, 'registrarUsuario']);
 Route::post('/login', [UserController::class, 'login']);
-Route::post('/logout', [UserController::class, 'logout']);
+Route::post('/verificarToken',[UserController::class, 'verificarToken'])->middleware('auth:sanctum');
+Route::post('/logout', [UserController::class, 'logout'])->middleware('auth:sanctum');
 Route::post('/olvideContraseña', [UserController::class, 'olvideContraseña']);
 Route::post('restablecerContraseña', [UserController::class, 'restablecerContraseña'])->name('restablecerContraseña');
 

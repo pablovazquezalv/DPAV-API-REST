@@ -42,7 +42,7 @@ class PerroController extends Controller
                 'id_raza' => 'required|int',
                 'padre_id' => 'nullable',
                 'madre_id' => 'nullable',
-                'imagen' => 'string|max:500|nullable',
+                'imagen' => 'max:500|nullable',
             ],
             [
                 'nombre.required' => 'El nombre es requerido',
@@ -74,6 +74,9 @@ class PerroController extends Controller
             $route = Storage::disk('s3')->put('images', $file);
             $imageUrl = Storage::disk('s3')->url($route);
         }
+        else {
+            $imageUrl = "";
+        }
 
         $perro = Perro::create([
             'nombre' => $request->nombre,
@@ -84,7 +87,6 @@ class PerroController extends Controller
             'estatus' => $request->estatus,
             'esterilizado' => $request->esterilizado,
             'fecha_nacimiento' => $request->fecha_nacimiento,
-            'imagen' => $request->imagen,
             'chip' => $request->chip,
             'tipo' => $request->tipo,
             'id_raza' => $request->id_raza,
@@ -131,19 +133,19 @@ class PerroController extends Controller
             $request->all(),
             [
                 'nombre' => 'required|string|max:255',
-                'distintivo' => 'string|max:55|nullable', //distintivo
-                'sexo' =>  'sometimes|in:M,F',
-                'peso' => 'sometimes',
-                'tamano' =>  Rule::in(['Pequeño', 'Mediano', 'Grande'], 'sometimes'),           //pequeño, mediano, grande
+                'distintivo' => 'string|max:55|nullable',
+                'sexo' =>  'required|in:Macho,Hembra',
+                'peso' => 'required',
+                'tamano' =>  Rule::in(['Pequeño', 'Mediano', 'Grande'], 'required'),           //pequeño, mediano, grande
                 'estatus' => 'required', //1 = Activo, 0 = Inactivo
                 'esterilizado' => Rule::in(['Si', 'No'], 'required'), //si, no
-                'fecha_nacimiento' => 'sometimes|date',
-                'chip' => 'sometimes|string|max:50',
-                'tipo' => Rule::in(['Cria', 'Reproductor', 'Venta'], 'sometimes'), //cria, reproductor, venta
+                'fecha_nacimiento' => 'required|date',
+                'chip' => 'required|string|max:50',
+                'tipo' => Rule::in(['Cria', 'Reproductor', 'Venta'], 'required'), //cria, reproductor, venta
                 'id_raza' => 'required|int',
-                'padre_id' => 'sometimes|nullable',
-                'madre_id' => 'sometimes|nullable',
-                'imagen' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+                'padre_id' => 'nullable',
+                'madre_id' => 'nullable',
+                'imagen' => 'max:500|nullable',
 
             ],
             [
@@ -191,9 +193,13 @@ class PerroController extends Controller
         $perro->chip = $request->chip == null ? $perro->chip : $request->chip;
         $perro->tipo = $request->tipo;
         $perro->id_raza = $request->id_raza;
-        $perro->padre_id = $request->padre_id ? $request->padre_id : null;
-        $perro->madre_id = $request->madre_id ? $request->madre_id : null;
-
+        if ($request->padre_id == null) {
+            $perro->padre_id = $request->padre_id;
+        }
+        if ($request->madre_id == null) {
+            $perro->madre_id = $request->madre_id;
+        }
+    
         $perro->user_id = $user->id;
         $perro->imagen = $imageUrl ? $imageUrl : '';
 

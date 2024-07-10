@@ -32,6 +32,7 @@ class Perro extends Model
         'descripcion',
         'foto',
         'estatus',
+        'imagen',
         'esterilizado',
         'fecha_nacimiento',
         'chip',
