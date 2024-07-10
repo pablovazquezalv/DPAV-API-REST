@@ -5,6 +5,7 @@ namespace Database\Seeders;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
+
 class PerroSeeder extends Seeder
 {
     /**
@@ -15,15 +16,15 @@ class PerroSeeder extends Seeder
         DB::table('perros')->insert([
             'nombre' => 'Firulais',
             'distintivo' => 'Firu',
-            'sexo' => 'M',
+            'sexo' => 'Macho',
             'peso' => 50.5,
-            'tamano' => 'grande',
+            'tamano' => 'Grande',
             'estatus' => 1,
-            'esterilizado' => 'si',
+            'esterilizado' => 'Si',
             'fecha_nacimiento' => '2021-06-03',
             'imagen' => 'https://proyecto9o.s3.amazonaws.com/images/LF3fYwHcA3CKnjMn5jjmFsjUb9eqbPd34iqR4YUw.jpg',
             'chip' => '123456789',
-            'tipo' => 'venta',
+            'tipo' => 'Venta',
             'id_raza' => 1,
             'user_id' => 1,
         ]);
@@ -31,15 +32,15 @@ class PerroSeeder extends Seeder
         DB::table('perros')->insert([
             'nombre' => 'peso pluma',
             'distintivo' => 'Firu',
-            'sexo' => 'M',
+            'sexo' => 'Macho',
             'peso' => 50.5,
-            'tamano' => 'grande',
+            'tamano' => 'Grande',
             'estatus' => 1,
-            'esterilizado' => 'si',
+            'esterilizado' => 'Si',
             'fecha_nacimiento' => '2021-06-03',
             'imagen' => 'https://proyecto9o.s3.amazonaws.com/images/LF3fYwHcA3CKnjMn5jjmFsjUb9eqbPd34iqR4YUw.jpg',
             'chip' => '123456789',
-            'tipo' => 'venta',
+            'tipo' => 'Venta',
             'id_raza' => 1,
             'user_id' => 1,
         ]);
@@ -47,11 +48,11 @@ class PerroSeeder extends Seeder
         DB::table('perros')->insert([
             'nombre' => 'natanel',
             'distintivo' => 'Firu',
-            'sexo' => 'M',
+            'sexo' => 'Macho',
             'peso' => 50.5,
-            'tamano' => 'grande',
+            'tamano' => 'Grande',
             'estatus' => 1,
-            'esterilizado' => 'si',
+            'esterilizado' => 'Si',
             'fecha_nacimiento' => '2021-06-03',
             'imagen' => 'https://proyecto9o.s3.amazonaws.com/images/LF3fYwHcA3CKnjMn5jjmFsjUb9eqbPd34iqR4YUw.jpg',
             'chip' => '123456789',
@@ -65,15 +66,15 @@ class PerroSeeder extends Seeder
         DB::table('perros')->insert([
             'nombre' => 'Garfield',
             'distintivo' => 'Garfi',
-            'sexo' => 'M',
+            'sexo' => 'Macho',
             'peso' => 15.2,
-            'tamano' => 'mediano',
+            'tamano' => 'Mediano',
             'estatus' => 1,
-            'esterilizado' => 'si',
+            'esterilizado' => 'Si',
             'fecha_nacimiento' => '2020-05-01',
             'imagen' => 'https://proyecto9o.s3.amazonaws.com/images/LF3fYwHcA3CKnjMn5jjmFsjUb9eqbPd34iqR4YUw.jpg',
             'chip' => '987654321',
-            'tipo' => 'cria',
+            'tipo' => 'Cria',
             'id_raza' => 2,
             'user_id' => 2,
         ]);
@@ -81,23 +82,17 @@ class PerroSeeder extends Seeder
         DB::table('perros')->insert([
             'nombre' => 'Moka',
             'distintivo' => 'Mokita',
-            'sexo' => 'F',
+            'sexo' => 'Hembra',
             'peso' => 15.2,
-            'tamano' => 'mediano',
+            'tamano' => 'Mediano',
             'estatus' => 1,
-            'esterilizado' => 'si',
+            'esterilizado' => 'Si',
             'fecha_nacimiento' => '2020-05-01',
             'imagen' => 'https://proyecto9o.s3.amazonaws.com/images/LF3fYwHcA3CKnjMn5jjmFsjUb9eqbPd34iqR4YUw.jpg',
             'chip' => '987654321',
-            'tipo' => 'cria',
+            'tipo' => 'Cria',
             'id_raza' => 2,
             'user_id' => 2,
         ]);
-
-        
-
-
-        
-
     }
 }

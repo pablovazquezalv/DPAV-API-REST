@@ -36,6 +36,13 @@ Route::get('/mostrarPerrosEnVenta', [PerroController::class, 'mostrarPerrosEnVen
 Route::get('/mostrarPerrosEnVenta/{id}', [PerroController::class, 'mostrarPerrosEnVentaPorId']);
 Route::get('/buscarPerroPorChip/{id}', [PerroController::class, 'buscarPerroPorChip']);
 Route::get('/mostrarPerrosRecientes', [PerroController::class, 'mostrarPerrosRecientes'])->middleware('auth:sanctum');
+Route::post('/guardaPerro/{id?}', [PerroController::class, 'guardaPerro'])->middleware('auth:sanctum');
+
+
+
+
+
+
 //Razas
 Route::post('/crearRaza', [RazaController::class, 'crearRaza'])->middleware('auth:sanctum');
 Route::get('/mostrarRaza/{id}', [RazaController::class, 'mostrarRaza']);
@@ -55,4 +62,3 @@ Route::get('/mostrarCitasAdmin', [CitaController::class, 'mostrarCitas'])->middl
 //usuarios
 Route::get('/mostrarCitas', [CitaController::class, 'verMisCitas'])->middleware('auth:sanctum');
 Route::get('/traerCitas', [CitaController::class, 'mostrarCitas'])->middleware('auth:sanctum');
-
