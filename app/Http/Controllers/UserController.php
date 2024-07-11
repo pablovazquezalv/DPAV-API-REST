@@ -71,6 +71,58 @@ class UserController extends Controller
 
     }
 
+    public function editarDireccionUsuario(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'direccion' => 'sometimes|string|max:250',
+            'ciudad' => 'sometimes|string|max:50',
+            'codigo_postal' => 'sometimes|string|max:5',
+            'estado_id' => 'sometimes|integer'
+        ],
+
+        [
+            'direccion.required' => 'La dirección es requerida',
+            'direccion.max' => 'La dirección debe tener 255 caracteres',
+            'ciudad.required' => 'La ciudad es requerida',
+            'ciudad.max' => 'La ciudad debe tener 50 caracteres',
+            'codigo_postal.required' => 'El código postal es requerido',
+            'codigo_postal.max' => 'El código postal debe tener 5 caracteres',
+            'estado_id.required' => 'El estado es requerido',
+            'estado_id.integer' => 'El estado debe ser un número entero',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json($validator->errors(), 400);
+        }
+
+        $user = request()->user();
+
+        $user = User::find($user->id);
+
+        if($user)
+        {
+            $user->direccion = $request->direccion;
+            $user->ciudad = $request->ciudad;
+            $user->codigo_postal = $request->codigo_postal;
+            $user->estado_id = $request->estado_id;
+            #$user->ativo = $request->ativo;
+
+            $user->save();
+
+            if($user->save())
+            {
+                return response()->json($user, 200);
+            }
+            else
+            {
+                return response()->json('Error al actualizar dirección', 400);
+            }
+        }
+        else
+        {
+            return response()->json('Usuario no encontrado', 400);
+        }
+    }
     public function verificarTelefono(Request $request)
     {
         $validator = Validator::make($request->all(), [
