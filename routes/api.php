@@ -61,6 +61,8 @@ Route::post('/crearCita', [CitaController::class, 'crearCita'])->middleware('aut
 Route::put('/cancelarCita/{id}', [CitaController::class, 'cancelarCita'])->middleware('auth:sanctum');
 //admin
 Route::get('/mostrarCitasAdmin', [CitaController::class, 'mostrarCitas'])->middleware('auth:sanctum');
+Route::post('/aceptarCitaAdmin/{id}', [CitaController::class, 'aceptarCitaAdmin'])->middleware('auth:sanctum');
+Route::post('/cancelarCitaAdmin/{id}', [CitaController::class, 'cancelarCitaAdmin'])->middleware('auth:sanctum');
 //usuarios
 Route::get('/mostrarCitas', [CitaController::class, 'verMisCitas'])->middleware('auth:sanctum');
 Route::get('/traerCitas', [CitaController::class, 'mostrarCitas'])->middleware('auth:sanctum');
