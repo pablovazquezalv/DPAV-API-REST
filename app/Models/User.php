@@ -27,6 +27,7 @@ class User extends Authenticatable
         'direccion',
         'ciudad',
         'estado',
+        'colonia',
         'codigo_postal',
         'activo',
         'role_id',

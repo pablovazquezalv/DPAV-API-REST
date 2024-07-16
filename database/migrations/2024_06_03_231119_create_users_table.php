@@ -21,6 +21,7 @@ return new class extends Migration
             $table->string('email');
             $table->string('direccion')->nullable();
             $table->string('ciudad')->nullable();
+            $table->string('colonia')->nullable();
             $table->string('codigo_postal')->nullable();
             $table->boolean('activo');
             $table->foreignId('estado_id')->nullable()->constrained('estados');

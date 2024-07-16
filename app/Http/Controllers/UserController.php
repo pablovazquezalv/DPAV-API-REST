@@ -75,6 +75,7 @@ class UserController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'direccion' => 'sometimes|string|max:250',
+            'colonia' => 'sometimes|string|max:50',
             'ciudad' => 'sometimes|string|max:50',
             'codigo_postal' => 'sometimes|string|max:5',
             'estado_id' => 'sometimes|integer'
@@ -105,6 +106,8 @@ class UserController extends Controller
             $user->ciudad = $request->ciudad;
             $user->codigo_postal = $request->codigo_postal;
             $user->estado_id = $request->estado_id;
+            $user->colonia = $request->colonia;
+
             #$user->ativo = $request->ativo;
 
             $user->save();
@@ -604,4 +607,3 @@ class UserController extends Controller
 }
 
 
-//darle editar un modal que carg
