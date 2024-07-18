@@ -228,7 +228,7 @@ class PerroController extends Controller
             'users.email',
             'users.direccion',
             'users.ciudad',
-            'users.estado_id',
+            'users.estado',
             'users.codigo_postal',
             'perros.id as perro_id',
             'perros.nombre as perro_nombre',
