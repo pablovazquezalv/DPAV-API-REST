@@ -31,7 +31,7 @@ class User extends Authenticatable
         'codigo_postal',
         'activo',
         'role_id',
-        'estado_id', // 'estado_id' es la llave foránea de la tabla 'estados
+        'estado', // 'estado_id' es la llave foránea de la tabla 'estados
         'verification_code_sent_at',
         'email_verified_at',
         'password',

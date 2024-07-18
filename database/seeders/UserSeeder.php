@@ -19,7 +19,8 @@ class UserSeeder extends Seeder
         'direccion' => 'Calle San Juan, 553',
         'ciudad' => 'Torreon',
         'codigo_postal' => '87244',
-        'estado_id' => 1,
+        'colonia' => 'centro',
+        'estado' => 'Coahuila',
         'activo' => 1,
         'role_id' => 1,
         'email' => 'martilo@gmail.com',
@@ -33,8 +34,9 @@ class UserSeeder extends Seeder
             'telefono' => '8287526354',
             'direccion' => 'calle',
             'ciudad' => 'torreon',
-            'codigo_postal' => '87244',
-            'estado_id' => 1,
+            'colonia' => 'centro',
+            'codigo_postal' => '87244',    
+            'estado' => 'Coahuila',
             'activo' => 1,
             'role_id' => 2,
             'email' => 'yordi@gmail.com',
@@ -49,13 +51,12 @@ class UserSeeder extends Seeder
             'direccion' => 'calle',
             'ciudad' => 'torreon',
             'codigo_postal' => '87244',
-            'estado_id' => 1,
+            'estado' => 'Coahuila',
             'activo' => 1,
             'role_id' => 3,
             'email' => 'bryan@gmail.com',
             'password' => bcrypt('dpav@2024'),
         ]);
-
 
 
 

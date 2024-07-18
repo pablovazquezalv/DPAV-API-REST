@@ -24,7 +24,7 @@ return new class extends Migration
             $table->string('colonia')->nullable();
             $table->string('codigo_postal')->nullable();
             $table->boolean('activo');
-            $table->foreignId('estado_id')->nullable()->constrained('estados');
+            $table->string('estado')->nullable();
             $table->foreignId('role_id')->constrained('roles');
             $table->timestamp(('verification_code_sent_at'))->nullable();
             $table->timestamp('email_verified_at')->nullable();

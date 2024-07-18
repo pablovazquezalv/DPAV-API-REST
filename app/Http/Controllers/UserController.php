@@ -79,7 +79,7 @@ class UserController extends Controller
             'colonia' => 'sometimes|string|max:50',
             'ciudad' => 'sometimes|string|max:50',
             'codigo_postal' => 'sometimes|string|max:5',
-            'estado_id' => 'sometimes|string'
+            'estado' => 'sometimes|string|max:50',
         ],
 
         [
@@ -89,8 +89,11 @@ class UserController extends Controller
             'ciudad.max' => 'La ciudad debe tener 50 caracteres',
             'codigo_postal.required' => 'El código postal es requerido',
             'codigo_postal.max' => 'El código postal debe tener 5 caracteres',
-            'estado_id.required' => 'El estado es requerido',
-            'estado_id.integer' => 'El estado debe ser un número entero',
+            'estado.required' => 'El estado es requerido',
+            'estado.max' => 'El estado debe tener 50 caracteres',
+            'colonia.required' => 'La colonia es requerida',
+            'colonia.max' => 'La colonia debe tener 50 caracteres',
+
         ]);
 
         if ($validator->fails()) {
@@ -101,14 +104,14 @@ class UserController extends Controller
 
         $user = User::find($user->id);
 
-        $estado = Estado::find($request->estado_id);
+        
 
         if($user)
         {
             $user->direccion = $request->direccion;
             $user->ciudad = $request->ciudad;
             $user->codigo_postal = $request->codigo_postal;
-            $user->estado_id = $request->estado_id;
+            $user->estado = $request->estado;
             $user->colonia = $request->colonia;
 
             #$user->ativo = $request->ativo;
