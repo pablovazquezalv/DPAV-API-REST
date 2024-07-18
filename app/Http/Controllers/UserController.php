@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\RegisterMail;
 use Illuminate\Support\Facades\Http;
+use App\Models\Estado;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Facades\Crypt;
 
@@ -78,7 +79,7 @@ class UserController extends Controller
             'colonia' => 'sometimes|string|max:50',
             'ciudad' => 'sometimes|string|max:50',
             'codigo_postal' => 'sometimes|string|max:5',
-            'estado_id' => 'sometimes|integer'
+            'estado_id' => 'sometimes|string'
         ],
 
         [
@@ -99,6 +100,8 @@ class UserController extends Controller
         $user = request()->user();
 
         $user = User::find($user->id);
+
+        $estado = Estado::find($request->estado_id);
 
         if($user)
         {
@@ -202,7 +205,6 @@ class UserController extends Controller
         }
     }
 
-
     public function registrarUsuario(Request $request)
     {
         $validator = Validator::make($request->all(), [
@@ -267,7 +269,6 @@ class UserController extends Controller
             return response()->json('Error al registrar usuario', 400);
         }
     }
-    
     public function login(Request $request)
     {
         $validator = Validator::make($request->all(), [

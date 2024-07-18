@@ -12,7 +12,7 @@ class CitaController extends Controller
 {
     //ADMIN
     public function mostrarCitas()
-{
+    {
     try {
         $citas = Cita::select('citas.id', 'citas.fecha', 'citas.hora', 'citas.motivo', 'citas.estado', 'users.nombre as nombre_usuario', 'users.apellido_paterno as apellido_usuario', 'users.telefono as telefono_usuario')
             ->join('users', 'citas.user_id', '=', 'users.id')
