@@ -55,5 +55,48 @@ class CruceController extends Controller
     }
 
 
+    public function deleteCruce($id)
+    {
+        $cruce = Cruce::find($id);
+
+        if($cruce == null)
+        {
+            return response()->json(['message' => 'No se encontro el cruce'], 404);
+        }
+
+        $cruce->delete();
+
+        return response()->json(['message' => 'Cruce eliminado']);
+    }
+
+
+    public function showCruce($id)
+    {
+        $cruce = Cruce::find($id);
+
+        if($cruce == null)
+        {
+            return response()->json(['message' => 'No se encontro el cruce'], 404);
+        }
+
+        return response()->json($cruce);
+    }
+
+
+    public function showAllCruces()
+    {
+        $cruces = Cruce::all();
+
+        return response()->json($cruces);
+    }
+
+
+    public function showCrucesByPerro($id)
+    {
+        $cruces = Cruce::where('perro_macho_id', $id)->orWhere('perro_hembra_id', $id)->get();
+
+        return response()->json($cruces);
+    }
+    
 
 }
