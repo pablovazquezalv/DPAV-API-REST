@@ -108,8 +108,7 @@ class PerroController extends Controller
 
 
             return response()->json([
-                'message' => 'Perro creado correctamente',
-                'perro' => $perro
+                'mascota' => $perro
             ], 201);
         } else {
             return response()->json([
@@ -208,7 +207,7 @@ class PerroController extends Controller
         if ($perro->save()) {
             return response()->json([
                 'message' => 'Perro actualizado correctamente',
-                'perro' => $perro
+                'mascota' => $perro
             ], 200);
         } else {
             return response()->json([

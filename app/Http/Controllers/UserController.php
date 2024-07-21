@@ -299,7 +299,7 @@ class UserController extends Controller
                 {
                     return response()->json([
                         'message' => 'Usuario inactivo',
-                        'user' => $user
+                       
                     
                     ], 400);
                 }
@@ -316,6 +316,94 @@ class UserController extends Controller
             else
             {
                 return response()->json('Usuario o contraseña incorrectos', 400);
+            }
+    }
+    #hacer la funcion que genere un codigo aleatorio de 6 digitos unico y valido por 5 minutos
+    public function loginSwarthWatch(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'email' => 'required|string|email|max:255',
+        ],
+        [
+            'email.required' => 'El email es requerido',
+            'email.email' => 'El email no es válido',
+        ]);
+
+            if ($validator->fails()) {
+                return response()->json($validator->errors(), 400);
+            }
+
+            $user = User::where('email', $request->email)->first();
+            
+            if($user)
+            {
+                if($user->activo == 0)
+                {
+                    return response()->json([
+                        'message' => 'Usuario inactivo',
+                       
+                    
+                    ], 400);
+                }
+                else
+                {
+                    $user->codigo = rand(100000, 999999);
+                    $user->save();
+    
+                    $codigoResponse = $this->enviarCodigo(new Request(['id' => $user->id]));
+
+                    // Verificar si hubo un error en el envío del código
+                    if ($codigoResponse->getStatusCode() == 200) 
+                    {
+                        return response()->json([
+                            'message' => 'Código enviado',
+                            'codigo' => $user->codigo
+                        ]);
+                    } else 
+                    {
+                        return $codigoResponse; // Retornar la respuesta del error
+                    }
+                    
+                }
+            }
+            else
+            {
+                return response()->json('Usuario no encontrado', 400);
+            }
+    }
+
+    public function loginVerificarCodigoSmartWatch(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            
+            'codigo' => 'required|max:6',
+        ],
+        [
+            'email.required' => 'El email es requerido',
+            'codigo.required' => 'El código es requerido',
+            'email.email' => 'El email no es válido',
+            'codigo.max' => 'El código debe tener 6 caracteres',
+            
+        ]);
+
+            if ($validator->fails()) {
+                return response()->json($validator->errors(), 400);
+            }
+
+            $user = User::where('codigo', $request->codigo)->first();
+
+            if($user)
+            {
+                $token = $user->createToken('token')->plainTextToken;
+                return response()->json([
+                    'message' => 'Usuario autenticado',
+                    'user' => $user,
+                    'token' => $token
+                ]);
+            }
+            else
+            {
+                return response()->json('Código incorrecto', 400);
             }
     }
 
@@ -584,7 +672,7 @@ class UserController extends Controller
                        ]
                    ],
                    'from' => 'InfoSMS',
-                   'text' => 'Tu código de verificación es: '.$user->codigo
+                   'text' => 'Hola nos comunicamos de DPAV tu codigo es: '.$user->codigo
                 ]
             ]
     
