@@ -11,10 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('certificados', function (Blueprint $table) {
+        Schema::create('sensores', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('perro_id')->constrained('perros');   
-            $table->date('fecha');
+            $table->string('nombre');
+            $table->string('ubicacion');
             $table->timestamps();
         });
     }
@@ -24,6 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('certificados');
+        Schema::dropIfExists('sensores');
     }
 };

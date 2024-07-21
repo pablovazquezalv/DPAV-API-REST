@@ -6,7 +6,7 @@ use App\Http\Controllers\RazaController;
 use App\Http\Controllers\PerroController;
 use App\Http\Controllers\CertificadoController;
 use App\Http\Controllers\CitaController;
-
+use App\Http\Controllers\SensoresController;
 //LOGIN
 Route::post('/registrar', [UserController::class, 'registrarUsuario']);
 Route::post('/login', [UserController::class, 'login']);
@@ -56,8 +56,6 @@ Route::get('/mostarRazasHabilitadas', [RazaController::class, 'mostrarRazasHabil
 Route::post('/actualizarRaza/{id}', [RazaController::class, 'actualizarRaza'])->middleware('auth:sanctum');
 Route::put('/eliminarRaza/{id}', [RazaController::class, 'inahabilitarRaza']);
 Route::put('/habilitarRaza/{id}', [RazaController::class, 'habilitarRaza']);
-//Certificados
-Route::post('crearCertificado', [CertificadoController::class, 'crearCertificado']);
 //Citas
 Route::post('/crearCita', [CitaController::class, 'crearCita'])->middleware('auth:sanctum');
 Route::put('/cancelarCita/{id}', [CitaController::class, 'cancelarCita'])->middleware('auth:sanctum');
@@ -68,3 +66,5 @@ Route::post('/cancelarCitaAdmin/{id}', [CitaController::class, 'cancelarCitaAdmi
 //usuarios
 Route::get('/mostrarCitas', [CitaController::class, 'verMisCitas'])->middleware('auth:sanctum');
 Route::get('/traerCitas', [CitaController::class, 'mostrarCitas'])->middleware('auth:sanctum');
+
+Route::post('/sensores', [SensoresController::class, 'store']);
