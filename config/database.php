@@ -110,9 +110,10 @@ return [
         ],
         'mongodb' => [
             'driver' => 'mongodb',
-            'dsn' => env('DB_URI', 'mongodb+srv://pablo:pablo@cluster0.qfgfj6v.mongodb.net/test?retryWrites=true&w=majority'),
-            'database' => env('DB_DATABASE', 'cluster0'),
+            'dsn' => env('MONGO_DB_URI', 'mongodb+srv://pablo:pablo@cluster0.qfgfj6v.mongodb.net/test?retryWrites=true&w=majority'),
+            'database' => env('MONGO_DB_DATABASE', 'cluster0'),
         ],
+    
     ],
 
     /*

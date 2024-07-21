@@ -13,8 +13,8 @@ class SensoresController extends Controller
     public function __construct()
     {
         // Conectar a MongoDB usando la URI de conexión
-        $this->client = new MongoClient(env('DB_URI'));
-        $this->database = $this->client->selectDatabase(env('DB_DATABASE'));
+        $this->client = new MongoClient(env('MONGO_DB_URI'));
+        $this->database = $this->client->selectDatabase(env('MONGO_DB_DATABASE'));
     }
 
     public function store(Request $request)
