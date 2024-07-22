@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 use MongoDB\Client as MongoClient;
+use App\Models\Sensor;
 
 class SensoresController extends Controller
 {
@@ -19,7 +20,76 @@ class SensoresController extends Controller
         $this->database = $this->client->selectDatabase(env('MONGO_DB_DATABASE'));
     }
 
-    public function store(Request $request)
+    public function añadirSensor(Request $request)
+    {
+        // Validar datos
+        $validator = Validator::make(
+            $request->all(),
+            [
+                'sensor_id' => 'required|string',
+                'ubicacion' => 'required|string',
+            ],
+            [
+                'sensor_id.required' => 'El campo nombre es obligatorio',
+                'sensor_id.string' => 'El campo nombre debe ser una cadena de texto',
+                'ubicacion.required' => 'El campo ubicacion es obligatorio',
+                'ubicacion.string' => 'El campo ubicacion debe ser una cadena de texto',
+            ]
+        );
+    
+        if ($validator->fails()) {
+            return response()->json(['errors' => $validator->errors()], 400);
+        }
+    
+        // Crear un nuevo sensor
+        $sensor = Sensor::create([
+            'sensor_id' => $request->input('sensor_id'),
+            'ubicacion' => $request->input('ubicacion'),
+        ]);
+
+        $sensor->save();
+
+        if($sensor->save())
+        {
+            return response()->json(['message' => 'Sensor creado', 'sensor' => $sensor], 201);
+        }
+        else
+        {
+            return response()->json(['message' => 'Error al crear el sensor'], 500);
+        }
+    }
+
+    public function obtenerSensores()
+    {
+        $sensores = Sensor::all();
+
+        if($sensores && count($sensores) > 0)
+        {
+            return response()->json($sensores, 200);
+        }
+        else
+        {
+            return response()->json(['message' => 'No se encontraron sensores'], 404);
+        }
+    }
+
+    public function obtenerSensor($id)
+    {
+        $sensor = Sensor::find($id);
+
+        if($sensor)
+        {
+            return response()->json($sensor, 200);
+        }
+        else
+        {
+            return response()->json(['message' => 'Sensor no encontrado'], 404);
+        }
+    }
+
+
+
+    public function mandarDatosMongo(Request $request)
     {
         // Validar datos
         $validator = Validator::make(
@@ -57,4 +127,27 @@ class SensoresController extends Controller
     
         return response()->json(['message' => 'Datos guardados', 'id' => $result->getInsertedId()], 201);
     }
+
+    public function show($sensorId)
+    {
+     
+     try{
+        // Determinar el nombre de la colección basado en el sensor_id
+        $collectionName = 'sensor_' . $sensorId; // Nombre de la colección por sensor
+        $collection = $this->database->selectCollection($collectionName);
+    
+        // Obtener los datos de la colección específica del sensor
+        $data = $collection->find();
+    
+        return response()->json
+        ([
+            'sensor_id' => $sensorId,
+            'data' => $data->toArray()
+        ], 200);
+    }catch (\Exception $e){
+        return response()->json(['message' => 'Error al obtener los datos del sensor'], 500);
+    }
+    }
+    
+    
 }

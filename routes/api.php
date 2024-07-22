@@ -42,11 +42,6 @@ Route::get('/buscarPerroPorChip/{id}', [PerroController::class, 'buscarPerroPorC
 Route::get('/mostrarPerrosRecientes', [PerroController::class, 'mostrarPerrosRecientes'])->middleware('auth:sanctum');
 Route::post('/guardaPerro/{id?}', [PerroController::class, 'guardaPerro'])->middleware('auth:sanctum');
 
-
-
-
-
-
 //Razas
 Route::post('/crearRaza', [RazaController::class, 'crearRaza'])->middleware('auth:sanctum');
 Route::get('/mostrarRaza/{id}', [RazaController::class, 'mostrarRaza']);
@@ -67,4 +62,7 @@ Route::post('/cancelarCitaAdmin/{id}', [CitaController::class, 'cancelarCitaAdmi
 Route::get('/mostrarCitas', [CitaController::class, 'verMisCitas'])->middleware('auth:sanctum');
 Route::get('/traerCitas', [CitaController::class, 'mostrarCitas'])->middleware('auth:sanctum');
 
-Route::post('/sensores', [SensoresController::class, 'store']);
+Route::post('/sensores', [SensoresController::class, 'mandarDatosMongo']);
+Route::post('/añadirSensor', [SensoresController::class, 'añadirSensor'])->middleware('auth:sanctum');
+Route::get('/mostrarSensores', [SensoresController::class, 'obtenerSensores'])->middleware('auth:sanctum');
+Route::get('/mostrarSensores/{id}', [SensoresController::class, 'show'])->middleware('auth:sanctum');
