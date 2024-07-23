@@ -93,6 +93,8 @@ class SensoresController extends Controller
             'sensor_id' => $sensorId,
             'value' => $request->input('value'),
             'nivel' => $request->input('nivel'),
+            //obtener la hora actual
+            'created_at' => date('Y-m-d H:i:s')
         ]);
 
         return response()->json(['message' => 'Datos guardados', 'id' => $result->getInsertedId()], 201);
