@@ -49,7 +49,7 @@ class SensoresController extends Controller
 
         if ($sensor->save()) {
             // Crear una colección en MongoDB específica para el sensor
-            $collectionName = 'sensor_' . $request->input('sensor_id');
+            $collectionName =  $request->input('sensor_id');
             $this->database->createCollection($collectionName);
 
             return response()->json(['message' => 'Sensor creado y colección en MongoDB creada', 'sensor' => $sensor], 201);
@@ -85,7 +85,7 @@ class SensoresController extends Controller
 
         // Determinar el nombre de la colección basado en el sensor_id
         $sensorId = $request->input('sensor_id');
-        $collectionName = $sensorId; // Nombre de la colección por sensor
+        $collectionName =   $sensorId; // Nombre de la colección por sensor
         $collection = $this->database->selectCollection($collectionName);
 
         // Insertar datos en la colección específica del sensor
