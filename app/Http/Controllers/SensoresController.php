@@ -36,57 +36,27 @@ class SensoresController extends Controller
                 'ubicacion.string' => 'El campo ubicacion debe ser una cadena de texto',
             ]
         );
-    
+
         if ($validator->fails()) {
             return response()->json(['errors' => $validator->errors()], 400);
         }
-    
+
         // Crear un nuevo sensor
         $sensor = Sensor::create([
             'sensor_id' => $request->input('sensor_id'),
             'ubicacion' => $request->input('ubicacion'),
         ]);
 
-        $sensor->save();
+        if ($sensor->save()) {
+            // Crear una colección en MongoDB específica para el sensor
+            $collectionName = 'sensor_' . $request->input('sensor_id');
+            $this->database->createCollection($collectionName);
 
-        if($sensor->save())
-        {
-            return response()->json(['message' => 'Sensor creado', 'sensor' => $sensor], 201);
-        }
-        else
-        {
+            return response()->json(['message' => 'Sensor creado y colección en MongoDB creada', 'sensor' => $sensor], 201);
+        } else {
             return response()->json(['message' => 'Error al crear el sensor'], 500);
         }
     }
-
-    public function obtenerSensores()
-    {
-        $sensores = Sensor::all();
-
-        if($sensores && count($sensores) > 0)
-        {
-            return response()->json($sensores, 200);
-        }
-        else
-        {
-            return response()->json(['message' => 'No se encontraron sensores'], 404);
-        }
-    }
-
-    public function obtenerSensor($id)
-    {
-        $sensor = Sensor::find($id);
-
-        if($sensor)
-        {
-            return response()->json($sensor, 200);
-        }
-        else
-        {
-            return response()->json(['message' => 'Sensor no encontrado'], 404);
-        }
-    }
-
 
 
     public function mandarDatosMongo(Request $request)
@@ -108,25 +78,59 @@ class SensoresController extends Controller
                 'nivel.in' => 'El campo nivel debe ser uno de los siguientes valores: bajo, medio, lleno, vacio',
             ]
         );
-    
+
         if ($validator->fails()) {
             return response()->json(['errors' => $validator->errors()], 400);
         }
-    
+
         // Determinar el nombre de la colección basado en el sensor_id
         $sensorId = $request->input('sensor_id');
-        $collectionName = 'sensor_' . $sensorId; // Nombre de la colección por sensor
+        $collectionName = $sensorId; // Nombre de la colección por sensor
         $collection = $this->database->selectCollection($collectionName);
-    
+
         // Insertar datos en la colección específica del sensor
         $result = $collection->insertOne([
             'sensor_id' => $sensorId,
             'value' => $request->input('value'),
             'nivel' => $request->input('nivel'),
         ]);
-    
+
         return response()->json(['message' => 'Datos guardados', 'id' => $result->getInsertedId()], 201);
     }
+
+    public function obtenerSensores()
+    {
+        $sensores = Sensor::all();
+
+        if($sensores && count($sensores) > 0)
+        {
+            return response()->json($sensores, 200);
+        }
+        else
+        {
+            return response()->json(['message' => 'No se encontraron sensores'], 404);
+        }
+    }
+
+   
+
+    public function obtenerSensor($id)
+    {
+        $sensor = Sensor::find($id);
+
+        if($sensor)
+        {
+            return response()->json($sensor, 200);
+        }
+        else
+        {
+            return response()->json(['message' => 'Sensor no encontrado'], 404);
+        }
+    }
+
+
+
+   
 
     public function show($sensorId)
     {
