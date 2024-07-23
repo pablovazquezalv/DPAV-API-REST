@@ -136,23 +136,22 @@ class SensoresController extends Controller
 
     public function show($sensorId)
     {
-     
-     try{
-        // Determinar el nombre de la colección basado en el sensor_id
-        $collectionName =  $sensorId; // Nombre de la colección por sensor
-        $collection = $this->database->selectCollection($collectionName);
+        try {
+            // Determinar el nombre de la colección basado en el sensor_id
+            $collectionName = $sensorId; // Nombre de la colección por sensor
+            $collection = $this->database->selectCollection($collectionName);
     
-        // Obtener los datos de la colección específica del sensor
-        $data = $collection->find();
+            // Obtener los datos de la colección específica del sensor
+            $cursor = $collection->find();
+            $data = iterator_to_array($cursor);
     
-        return response()->json
-        ([
-            'sensor_id' => $sensorId,
-            'data' => $data->toArray()
-        ], 200);
-    }catch (\Exception $e){
-        return response()->json(['message' => 'Error al obtener los datos del sensor'], 500);
-    }
+            return response()->json([
+                'sensor_id' => $sensorId,
+                'data' => $data,
+            ], 200);
+        } catch (\Exception $e) {
+            return response()->json(['message' => 'Error al obtener los datos del sensor'], 500);
+        }
     }
     
     
