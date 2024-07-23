@@ -7,6 +7,8 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 use MongoDB\Client as MongoClient;
 use App\Models\Sensor;
+use Symfony\Component\HttpFoundation\StreamedResponse;
+
 
 class SensoresController extends Controller
 {
@@ -78,26 +80,56 @@ class SensoresController extends Controller
                 'nivel.in' => 'El campo nivel debe ser uno de los siguientes valores: bajo, medio, lleno, vacio',
             ]
         );
-
+    
         if ($validator->fails()) {
             return response()->json(['errors' => $validator->errors()], 400);
         }
-
+    
         // Determinar el nombre de la colección basado en el sensor_id
         $sensorId = $request->input('sensor_id');
-        $collectionName =   $sensorId; // Nombre de la colección por sensor
+        $collectionName = $sensorId; // Nombre de la colección por sensor
         $collection = $this->database->selectCollection($collectionName);
-
+    
         // Insertar datos en la colección específica del sensor
         $result = $collection->insertOne([
             'sensor_id' => $sensorId,
             'value' => $request->input('value'),
             'nivel' => $request->input('nivel'),
-            //obtener la hora actual
             'created_at' => date('Y-m-d H:i:s')
         ]);
-
+    
+        $this->emitEvent($sensorId, [
+            'sensor_id' => $sensorId,
+            'value' => $request->input('value'),
+            'nivel' => $request->input('nivel'),
+            'created_at' => date('Y-m-d H:i:s')
+        ]);
+    
         return response()->json(['message' => 'Datos guardados', 'id' => $result->getInsertedId()], 201);
+    }
+    
+    private function emitEvent($sensorId, $data)
+    {
+        event(new \App\Events\SensorDataUpdated($sensorId, $data));
+    }
+    
+    // Método para manejar la transmisión de datos en tiempo real
+    public function streamSensorData($sensorId)
+    {
+        $response = new StreamedResponse(function () use ($sensorId) {
+            while (true) {
+                echo 'data: ' . json_encode(['sensor_id' => $sensorId, 'timestamp' => now()]) . "\n\n";
+                ob_flush();
+                flush();
+                sleep(5); // Intervalo de tiempo para la emisión de eventos
+            }
+        });
+    
+        $response->headers->set('Content-Type', 'text/event-stream');
+        $response->headers->set('Cache-Control', 'no-cache');
+        $response->headers->set('Connection', 'keep-alive');
+    
+        return $response;
     }
 
     public function obtenerSensores()

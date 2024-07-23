@@ -66,3 +66,4 @@ Route::post('/sensores', [SensoresController::class, 'mandarDatosMongo']);
 Route::post('/añadirSensor', [SensoresController::class, 'añadirSensor'])->middleware('auth:sanctum');
 Route::get('/mostrarSensores', [SensoresController::class, 'obtenerSensores'])->middleware('auth:sanctum');
 Route::get('/mostrarSensores/{id}', [SensoresController::class, 'show'])->middleware('auth:sanctum');
+Route::get('/stream-sensor-data/{sensor_id}', [SensoresController::class, 'streamSensorData']);
