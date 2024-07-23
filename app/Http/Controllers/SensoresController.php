@@ -139,7 +139,7 @@ class SensoresController extends Controller
      
      try{
         // Determinar el nombre de la colección basado en el sensor_id
-        $collectionName = 'sensor_' . $sensorId; // Nombre de la colección por sensor
+        $collectionName =  $sensorId; // Nombre de la colección por sensor
         $collection = $this->database->selectCollection($collectionName);
     
         // Obtener los datos de la colección específica del sensor
