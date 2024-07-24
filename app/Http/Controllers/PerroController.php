@@ -90,8 +90,8 @@ class PerroController extends Controller
             'chip' => $request->chip,
             'tipo' => $request->tipo,
             'id_raza' => $request->id_raza,
-            'padre_id' => $request->padre_id ? $request->padre_id : null,
-            'madre_id' => $request->madre_id ? $request->madre_id : null,
+            'padre_id' => $request->padre_id != null ? $request->padre_id : null,
+            'madre_id' => $request->madre_id != null ? $request->madre_id : null,
             'user_id' => $user->id,
             'imagen' => $imageUrl ? $imageUrl : ''
         ]);
@@ -192,10 +192,10 @@ class PerroController extends Controller
         $perro->chip = $request->chip == null ? $perro->chip : $request->chip;
         $perro->tipo = $request->tipo;
         $perro->id_raza = $request->id_raza;
-        if ($request->padre_id == null) {
+        if ($request->padre_id != null) {
             $perro->padre_id = $request->padre_id;
         }
-        if ($request->madre_id == null) {
+        if ($request->madre_id != null) {
             $perro->madre_id = $request->madre_id;
         }
     
