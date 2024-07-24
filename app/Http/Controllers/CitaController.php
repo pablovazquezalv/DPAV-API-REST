@@ -6,8 +6,9 @@ use Illuminate\Http\Request;
 use App\Models\Cita;
 use Illuminate\Support\Facades\Validator;
 use Carbon\Carbon;
-
-
+use Illuminate\Support\Facades\Mail;
+use  App\Mail\CitaAceptada;
+use App\Mail\CitaRechazada;
 class CitaController extends Controller
 {
     //ADMIN
@@ -68,10 +69,45 @@ class CitaController extends Controller
 
         if($cita->save())
         {
-            return response()->json([
-                'message' => 'Cita aceptada correctamente',
-                'cita' => $cita
-            ]);
+
+            $cita = Cita::Select(
+                'citas.id',
+                'citas.fecha',
+                'citas.hora',
+                'citas.estado',
+                'citas.motivo',
+                'users.nombre',
+            'users.apellido_paterno',
+            'users.telefono',
+            'users.email',
+            'users.direccion',
+            'users.ciudad',
+            'users.estado',
+            'users.codigo_postal'
+
+            )->join('users','users.id', '=', 'citas.user_id')
+            ->where('citas.id',$cita->id)
+            ->first();
+
+            
+            //enviar correo
+           
+            try{
+                Mail::to($cita->email)->send(new CitaAceptada($cita));
+                return response()->json([
+                    'message' => 'Cita aceptada correctamente',
+                    'cita' => $cita
+                ]);
+            }
+            catch(\Exception $e)
+            {
+                return response()->json([
+                    'message' => 'Cita aceptada correctamente, pero ocurrió un error al enviar el correo',
+                    'cita' => $cita
+                ]);
+            }
+       
+       
         }
         else
         {
@@ -95,10 +131,43 @@ class CitaController extends Controller
 
         if($cita->save())
         {
-            return response()->json([
-                'message' => 'Cita cancelada correctamente',
-                'cita' => $cita
-            ]);
+
+            $cita = Cita::Select(
+                'citas.id',
+                'citas.fecha',
+                'citas.hora',
+                'citas.estado',
+                'citas.motivo',
+                'users.nombre',
+            'users.apellido_paterno',
+            'users.telefono',
+            'users.email',
+            'users.direccion',
+            'users.ciudad',
+            'users.estado',
+            'users.codigo_postal'
+
+            )->join('users','users.id', '=', 'citas.user_id')
+            ->where('citas.id',$cita->id)
+            ->first();
+
+                 
+            try{
+                Mail::to($cita->email)->send(new CitaRechazada($cita));
+                return response()->json([
+                    'message' => 'Cita rechazada correctamente',
+                    'cita' => $cita
+                ]);
+            }
+            catch(\Exception $e)
+            {
+                return response()->json([
+                    'message' => 'Cita aceptada correctamente, pero ocurrió un error al enviar el correo',
+                    'cita' => $cita
+                ]);
+            }
+
+           
         }
         else
         {

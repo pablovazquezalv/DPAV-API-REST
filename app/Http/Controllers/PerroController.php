@@ -373,7 +373,7 @@ class PerroController extends Controller
 
         if ($perras->count() > 0) {
             return response()->json([
-                'message' => 'Perro encontrado',
+                'message' => 'Perras encontradas',
                 'perras' => $perras
             ], 200);
         } else {

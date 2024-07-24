@@ -7,6 +7,7 @@ use App\Http\Controllers\PerroController;
 use App\Http\Controllers\CertificadoController;
 use App\Http\Controllers\CitaController;
 use App\Http\Controllers\SensoresController;
+use App\Http\Controllers\CruceController;
 //LOGIN
 Route::post('/registrar', [UserController::class, 'registrarUsuario']);
 Route::post('/login', [UserController::class, 'login']);
@@ -61,6 +62,9 @@ Route::post('/cancelarCitaAdmin/{id}', [CitaController::class, 'cancelarCitaAdmi
 //usuarios
 Route::get('/mostrarCitas', [CitaController::class, 'verMisCitas'])->middleware('auth:sanctum');
 Route::get('/traerCitas', [CitaController::class, 'mostrarCitas'])->middleware('auth:sanctum');
+
+//Cruces
+Route::post('/crearCruce', [CruceController::class, 'createCruce'])->middleware('auth:sanctum');
 
 Route::post('/sensores', [SensoresController::class, 'mandarDatosMongo']);
 Route::post('/añadirSensor', [SensoresController::class, 'añadirSensor'])->middleware('auth:sanctum');

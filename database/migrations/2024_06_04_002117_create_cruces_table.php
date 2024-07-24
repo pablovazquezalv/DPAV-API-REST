@@ -17,7 +17,8 @@ return new class extends Migration
             $table->foreignId('perro_hembra_id')->constrained('perros');
             $table->date('fecha');
             $table->enum('estado',['pendiente','realizado','fallido']);
-            $table->foreignId('cita_id')->constrained('citas')->nullable();
+            
+            $table->foreignId('cita_id')->nullable()->constrained('citas');
             $table->string('observaciones',100)->nullable();
             $table->timestamps();
         });
