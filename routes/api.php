@@ -73,3 +73,6 @@ Route::post('/añadirSensor', [SensoresController::class, 'añadirSensor'])->mid
 Route::get('/mostrarSensores', [SensoresController::class, 'obtenerSensores'])->middleware('auth:sanctum');
 Route::get('/mostrarSensores/{id}', [SensoresController::class, 'show'])->middleware('auth:sanctum');
 Route::get('/stream-sensor-data/{sensor_id}', [SensoresController::class, 'streamSensorData']);
+
+Route::get('/oauth2/handler', [OAuthController::class, 'handleAuthorization']);
+Route::get('/get-code', [OAuthController::class, 'getCode']);
