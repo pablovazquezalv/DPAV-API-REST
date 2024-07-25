@@ -8,6 +8,8 @@ use App\Http\Controllers\CertificadoController;
 use App\Http\Controllers\CitaController;
 use App\Http\Controllers\SensoresController;
 use App\Http\Controllers\CruceController;
+use App\Http\Controllers\OAuthController;
+
 //LOGIN
 Route::post('/registrar', [UserController::class, 'registrarUsuario']);
 Route::post('/login', [UserController::class, 'login']);
