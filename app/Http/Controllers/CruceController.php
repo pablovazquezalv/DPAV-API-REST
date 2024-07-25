@@ -113,8 +113,10 @@ class CruceController extends Controller
 
     public function showAllCruces()
     {
-        $cruces = Cruce::all();
-
+        $cruces = Cruce::Select('cruces.*', 'perros.nombre as perro_macho', 'perros2.nombre as perro_hembra'
+        )->join('perros', 'cruces.perro_macho_id', '=', 'perros.id'
+        )->join('perros as perros2', 'cruces.perro_hembra_id', '=', 'perros2.id')->get();
+        
         return response()->json($cruces);
     }
 

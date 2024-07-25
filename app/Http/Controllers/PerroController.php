@@ -256,7 +256,7 @@ class PerroController extends Controller
         if ($perro_usuario) {
             return response()->json([
                 'message' => 'Perro encontrado',
-                'perro' => $perro_usuario
+                'mascota' => $perro_usuario
             ], 200);
         } else {
             return response()->json([
@@ -342,7 +342,7 @@ class PerroController extends Controller
         if ($perros) {
             return response()->json([
                 'message' => 'Perros en venta encontrados',
-                'perros' => $perros
+                'mascota' => $perros
             ], 200);
         } else {
             return response()->json([
@@ -410,7 +410,7 @@ class PerroController extends Controller
         if ($perros) {
             return response()->json([
                 'message' => 'Perros encontrados',
-                'perros' => $perros
+                'mascotas' => $perros
             ], 200);
         } else {
             return response()->json([
@@ -428,7 +428,7 @@ class PerroController extends Controller
         if ($perros->count() > 0) {
             return response()->json([
                 'message' => 'Perros encontrados',
-                'perros' => $perros
+                'mascota' => $perros
             ], 200);
         } else {
             return response()->json([
