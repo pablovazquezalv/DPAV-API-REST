@@ -65,6 +65,8 @@ Route::get('/traerCitas', [CitaController::class, 'mostrarCitas'])->middleware('
 
 //Cruces
 Route::post('/crearCruce', [CruceController::class, 'createCruce'])->middleware('auth:sanctum');
+Route::get('/mostrarCruces', [CruceController::class, 'showAllCruces'])->middleware('auth:sanctum');
+Route::get('/mostrarCruce/{id}', [CruceController::class, 'showCruce'])->middleware('auth:sanctum');
 
 Route::post('/sensores', [SensoresController::class, 'mandarDatosMongo']);
 Route::post('/añadirSensor', [SensoresController::class, 'añadirSensor'])->middleware('auth:sanctum');

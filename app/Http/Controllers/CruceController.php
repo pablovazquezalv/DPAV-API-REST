@@ -52,8 +52,6 @@ class CruceController extends Controller
         }
     }
 
-   
-
     public function updateCruce(Request $request, $id)
     {
         $request->validate([
@@ -95,7 +93,6 @@ class CruceController extends Controller
         return response()->json(['message' => 'Cruce eliminado']);
     }
 
-
     public function showCruce($id)
     {
         $cruce = Cruce::find($id);
@@ -105,6 +102,11 @@ class CruceController extends Controller
             return response()->json(['message' => 'No se encontro el cruce'], 404);
         }
 
+        $cruce = Cruce::Select('cruces.*', 'perros.nombre as perro_macho', 'perros2.nombre as perro_hembra'
+        )->join('perros', 'cruces.perro_macho_id', '=', 'perros.id'
+        )->join('perros as perros2', 'cruces.perro_hembra_id', '=', 'perros2.id'
+        )->where('cruces.id', $id)->first();
+        
         return response()->json($cruce);
     }
 
