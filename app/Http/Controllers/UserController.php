@@ -348,6 +348,8 @@ class UserController extends Controller
                 else
                 {
                     $user->codigo = rand(100000, 999999);
+                    $user->codigo_expiration = now()->addMinutes(5);
+
                     $user->save();
     
                     $codigoResponse = $this->enviarCodigo(new Request(['id' => $user->id]));
@@ -390,20 +392,32 @@ class UserController extends Controller
                 return response()->json($validator->errors(), 400);
             }
 
+           
             $user = User::where('codigo', $request->codigo)->first();
-
-            if($user)
-            {
-                $token = $user->createToken('token')->plainTextToken;
+            if ($user) {
+                // Verificar si el código ha caducado
+                if ($user->codigo_expiration && now()->lessThan($user->codigo_expiration)) 
+                
+                
+                
+                
+                {
+                    $token = $user->createToken('token')->plainTextToken;
+                    return response()->json([
+                        'message' => 'Usuario autenticado',
+                        'user' => $user,
+                        'token' => $token
+                    ]);
+                } else {
+                    return response()->json([
+                        'message' => 'Código expirado',
+                    ], 400);
+                }
+              
+            } else {
                 return response()->json([
-                    'message' => 'Usuario autenticado',
-                    'user' => $user,
-                    'token' => $token
-                ]);
-            }
-            else
-            {
-                return response()->json('Código incorrecto', 400);
+                    'message' => 'Código incorrecto',
+                ], 400);
             }
     }
 
@@ -683,7 +697,7 @@ class UserController extends Controller
             $user->verification_code_sent_at = now();
             $user->email_verified_at = now();
             //generar nuevo codigo
-            $user->codigo = rand(100000, 999999);
+           # $user->codigo = rand(100000, 999999);
             $user->save();
             return response()->view('email/correo-enviado', ['user' => $user]);
         }

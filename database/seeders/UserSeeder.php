@@ -59,6 +59,21 @@ class UserSeeder extends Seeder
         ]);
 
 
+        DB::table('users')->insert([
+            'nombre' => 'jose',
+            'apellido_paterno' => 'gasca',
+            'usuario' => 'jose',
+            'telefono' => '8718458147',
+            'direccion' => 'calle',
+            'ciudad' => 'torreon',
+            'codigo_postal' => '87244',
+            'estado' => 'Coahuila',
+            'activo' => 1,
+            'role_id' => 3,
+            'email' => 'pabloalvaradovazquez10@gmail.com',
+            'password' => bcrypt('Juventud12@'),
+        ]);
+
 
 
     }

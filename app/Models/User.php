@@ -25,6 +25,7 @@ class User extends Authenticatable
         'codigo',
         'email',
         'direccion',
+        'codigo_expiration',
         'ciudad',
         'estado',
         'colonia',

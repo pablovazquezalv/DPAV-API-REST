@@ -18,6 +18,8 @@ return new class extends Migration
             $table->string('apellido_paterno');
             $table->string('telefono')->unique();
             $table->bigInteger('codigo')->nullable();
+             #$user->codigo_expiration
+            $table->timestamp('codigo_expiration')->nullable(); 
             $table->string('email');
             $table->string('direccion')->nullable();
             $table->string('ciudad')->nullable();
