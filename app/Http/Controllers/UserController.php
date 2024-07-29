@@ -399,8 +399,6 @@ class UserController extends Controller
                 if ($user->codigo_expiration && now()->lessThan($user->codigo_expiration)) 
                 
                 
-                
-                
                 {
                     $token = $user->createToken('token')->plainTextToken;
                     return response()->json([
@@ -410,7 +408,7 @@ class UserController extends Controller
                     ]);
                 } else {
                     return response()->json([
-                        'message' => 'Código expirado',
+                        'message' => 'Código expirado,solicita un nuevo código  ',
                     ], 400);
                 }
               

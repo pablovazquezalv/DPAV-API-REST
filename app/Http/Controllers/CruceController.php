@@ -102,7 +102,7 @@ class CruceController extends Controller
             return response()->json(['message' => 'No se encontro el cruce'], 404);
         }
 
-        $cruce = Cruce::Select('cruces.*', 'perros.nombre as perro_macho', 'perros2.nombre as perro_hembra'
+        $cruce = Cruce::Select('cruces.*', 'perros.nombre as perro_macho', 'perros.imagen as perro_macho_imagen','perros2.imagen as perro_hembra_imagen','perros2.nombre as perro_hembra'
         )->join('perros', 'cruces.perro_macho_id', '=', 'perros.id'
         )->join('perros as perros2', 'cruces.perro_hembra_id', '=', 'perros2.id'
         )->where('cruces.id', $id)->first();
@@ -113,10 +113,10 @@ class CruceController extends Controller
 
     public function showAllCruces()
     {
-        $cruces = Cruce::Select('cruces.*', 'perros.nombre as perro_macho', 'perros2.nombre as perro_hembra'
+        $cruces = Cruce::Select('cruces.*', 'perros.nombre as perro_macho', 'perros.imagen as perro_macho_imagen','perros2.imagen as perro_hembra_imagen','perros2.nombre as perro_hembra'
         )->join('perros', 'cruces.perro_macho_id', '=', 'perros.id'
         )->join('perros as perros2', 'cruces.perro_hembra_id', '=', 'perros2.id')->get();
-        
+
         return response()->json($cruces);
     }
 
