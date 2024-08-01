@@ -15,9 +15,11 @@ return new class extends Migration
             $table->id();
             $table->foreignId('cruce_id')->constrained('cruces');
             $table->date('fecha');
-            $table->integer('numero_cachorros');
-            $table->integer('numero_machos');
-            $table->integer('numero_hembras');
+            $table->integer('numero_machos')->nullable();
+            $table->integer('numero_hembras')->nullable();
+            $table->integer('numero_total')->nullable();
+            //variables de control
+            $table->integer('hijos_registrados')->default(0);
 
             $table->timestamps();
         });

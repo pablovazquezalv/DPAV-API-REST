@@ -78,7 +78,6 @@ class CruceController extends Controller
         ]);
     }
 
-
     public function deleteCruce($id)
     {
         $cruce = Cruce::find($id);
@@ -102,10 +101,20 @@ class CruceController extends Controller
             return response()->json(['message' => 'No se encontro el cruce'], 404);
         }
 
-        $cruce = Cruce::Select('cruces.*', 'perros.nombre as perro_macho', 'perros.imagen as perro_macho_imagen','perros2.imagen as perro_hembra_imagen','perros2.nombre as perro_hembra'
-        )->join('perros', 'cruces.perro_macho_id', '=', 'perros.id'
-        )->join('perros as perros2', 'cruces.perro_hembra_id', '=', 'perros2.id'
-        )->where('cruces.id', $id)->first();
+        $cruce = Cruce::select(
+            'cruces.*', 
+            'perros.nombre as perro_macho', 
+            'perros.imagen as perro_macho_imagen',
+            'perros2.nombre as perro_hembra', 
+            'perros2.imagen as perro_hembra_imagen',
+            'camadas.id as camada_id', 
+            
+        )->join('perros', 'cruces.perro_macho_id', '=', 'perros.id')
+        ->join('perros as perros2', 'cruces.perro_hembra_id', '=', 'perros2.id')
+        ->leftJoin('camadas', 'cruces.id', '=', 'camadas.cruce_id')
+        ->where('cruces.id', $id)
+        ->first();
+        
         
         return response()->json($cruce);
     }
@@ -117,6 +126,10 @@ class CruceController extends Controller
         )->join('perros', 'cruces.perro_macho_id', '=', 'perros.id'
         )->join('perros as perros2', 'cruces.perro_hembra_id', '=', 'perros2.id')->get();
 
+        if($cruces->isEmpty())
+        {
+            return response()->json(['message' => 'No se encontraron cruces'], 404);
+        }
         return response()->json($cruces);
     }
 

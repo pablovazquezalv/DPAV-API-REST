@@ -9,6 +9,7 @@ use App\Http\Controllers\CitaController;
 use App\Http\Controllers\SensoresController;
 use App\Http\Controllers\CruceController;
 use App\Http\Controllers\OAuthController;
+use App\Http\Controllers\CamadasController;
 
 //LOGIN
 Route::post('/registrar', [UserController::class, 'registrarUsuario']);
@@ -69,6 +70,17 @@ Route::get('/traerCitas', [CitaController::class, 'mostrarCitas'])->middleware('
 Route::post('/crearCruce', [CruceController::class, 'createCruce'])->middleware('auth:sanctum');
 Route::get('/mostrarCruces', [CruceController::class, 'showAllCruces'])->middleware('auth:sanctum');
 Route::get('/mostrarCruce/{id}', [CruceController::class, 'showCruce'])->middleware('auth:sanctum');
+Route::put('/actualizarCruce/{id}', [CruceController::class, 'updateCruce'])->middleware('auth:sanctum');
+
+
+//Camadas
+Route::post('/crearCamada', [CamadasController::class, 'createCamada'])->middleware('auth:sanctum');
+Route::get('/mostrarCamadas', [CamadasController::class, 'mostrarCamadas'])->middleware('auth:sanctum');
+//crearCachorro
+Route::post('/crearCachorro', [CamadasController::class, 'crearCachorro'])->middleware('auth:sanctum');
+Route::get('/mostrarCamada/{id}', [CamadasController::class, 'mostrarCamada'])->middleware('auth:sanctum');
+Route::put('/actualizarCamada/{id}', [CamadasController::class, 'updateCamada'])->middleware('auth:sanctum');
+
 
 Route::post('/sensores', [SensoresController::class, 'mandarDatosMongo']);
 Route::post('/añadirSensor', [SensoresController::class, 'añadirSensor'])->middleware('auth:sanctum');

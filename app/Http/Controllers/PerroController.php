@@ -177,7 +177,7 @@ class PerroController extends Controller
             $route = Storage::disk('s3')->put('images', $file);
             $imageUrl = Storage::disk('s3')->url($route);
         } else {
-            $imageUrl = "";
+            $imageUrl = $request->imagen;
         }
 
         $perro->nombre = $request->nombre;
@@ -192,12 +192,10 @@ class PerroController extends Controller
         $perro->chip = $request->chip == null ? $perro->chip : $request->chip;
         $perro->tipo = $request->tipo;
         $perro->id_raza = $request->id_raza;
-        if ($request->padre_id != null) {
-            $perro->padre_id = $request->padre_id;
-        }
-        if ($request->madre_id != null) {
-            $perro->madre_id = $request->madre_id;
-        }
+        $request->padre_id != null ? $request->padre_id : null;
+        $request->madre_id != null ? $request->madre_id : null;
+    
+      
     
         $perro->user_id = $user->id;
         $perro->imagen = $imageUrl ? $imageUrl : '';
@@ -421,20 +419,28 @@ class PerroController extends Controller
 
     public function mostrarPerrosPorUsuario()
     {
+        try{
         $user = request()->user();
 
         $perros = Perro::where('user_id', $user->id)->get();
 
         if ($perros->count() > 0) {
             return response()->json([
-                'message' => 'Perros encontrados',
-                'mascota' => $perros
+                'message' => 'Mascotas encontrados',
+                'mascotas' => $perros
             ], 200);
         } else {
             return response()->json([
-                'message' => 'Perros no encontrados'
+                'message' => 'Mascotas no encontrados'
             ], 404);
         }
+    }
+    catch (\Exception $e) {
+        return response()->json([
+            'message' => 'Error al obtener las mascotas',
+            'error' => $e->getMessage()
+        ], 500);
+    }
     }
 
     public function guardaPerro(Request $request, $id = null)
