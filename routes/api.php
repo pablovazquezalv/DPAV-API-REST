@@ -10,6 +10,8 @@ use App\Http\Controllers\SensoresController;
 use App\Http\Controllers\CruceController;
 use App\Http\Controllers\OAuthController;
 use App\Http\Controllers\CamadasController;
+use App\Http\Controllers\TrackimoController;
+use App\Http\Middleware\DisableCsrf;
 
 //LOGIN
 Route::post('/registrar', [UserController::class, 'registrarUsuario']);
@@ -90,3 +92,9 @@ Route::get('/stream-sensor-data/{sensor_id}', [SensoresController::class, 'strea
 
 Route::get('/oauth2/handler', [OAuthController::class, 'handleAuthorization']);
 Route::get('/get-code', [OAuthController::class, 'getCode']);
+
+//Trackimo
+Route::middleware([DisableCsrf::class])->group(function () {
+    Route::get('/login', [TrackimoController::class, 'login']);
+    Route::post('/ultima-ubicacion', [TrackimoController::class, 'obtenerUltimaUbicacion']);
+});
