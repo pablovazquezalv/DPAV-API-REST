@@ -29,23 +29,23 @@ Route::post('/enviarCodigoCuenta', [UserController::class, 'enviarCodigoCuenta']
 
 //USUARIOS
 Route::get('/mostrarUsuario', [UserController::class, 'mostrarUsuario'])->middleware('auth:sanctum');
-Route::get('/mostrarPerroPorUsuario', [PerroController::class, 'mostrarPerrosPorUsuario'])->middleware('auth:sanctum');
+Route::get('/mostrarMascotaPorUsuario', [PerroController::class, 'mostrarPerrosPorUsuario'])->middleware('auth:sanctum');
 Route::post('/actualizarTelefono', [UserController::class, 'editarTelefonoUsuario'])->middleware('auth:sanctum');
 Route::post('/verificarTelefono ', [UserController::class, 'verificarTelefono'])->middleware('auth:sanctum');
 Route::put('/editarDireccion', [UserController::class, 'editarDireccionUsuario'])->middleware('auth:sanctum');
 //Perros
-Route::post('/crearPerro', [PerroController::class, 'crearPerro'])->middleware('auth:sanctum');
-Route::get('/mostrarPerro/{id}', [PerroController::class, 'mostrarPerro']);
-Route::get('/mostrarPerros', [PerroController::class, 'mostrarPerros'])->middleware('auth:sanctum');
+Route::post('/crearMascota', [PerroController::class, 'crearPerro'])->middleware('auth:sanctum');
+Route::get('/mostrarMascota/{id}', [PerroController::class, 'mostrarPerro']);
+Route::get('/mostrarMascotas', [PerroController::class, 'mostrarPerros'])->middleware('auth:sanctum');
 Route::get('/buscarPerros', [PerroController::class, 'buscarPerros']);
 Route::get('/buscarPerras', [PerroController::class, 'buscarPerras']);
-Route::put('/inhabilitarPerro/{id}', [PerroController::class, 'inhabilitarPerro'])->middleware('auth:sanctum');
-Route::put('/habilitarPerro/{id}', [PerroController::class, 'habilitarPerro'])->middleware('auth:sanctum');
-Route::post('/actualizarPerro/{id}', [PerroController::class, 'actualizarPerro'])->middleware('auth:sanctum');
-Route::get('/mostrarPerrosEnVenta', [PerroController::class, 'mostrarPerrosEnVenta']);
-Route::get('/mostrarPerrosEnVenta/{id}', [PerroController::class, 'mostrarPerrosEnVentaPorId']);
-Route::get('/buscarPerroPorChip/{id}', [PerroController::class, 'buscarPerroPorChip']);
-Route::get('/mostrarPerrosRecientes', [PerroController::class, 'mostrarPerrosRecientes'])->middleware('auth:sanctum');
+Route::put('/inhabilitarMascota/{id}', [PerroController::class, 'inhabilitarPerro'])->middleware('auth:sanctum');
+Route::put('/habilitarMascota/{id}', [PerroController::class, 'habilitarPerro'])->middleware('auth:sanctum');
+Route::post('/actualizarMascota/{id}', [PerroController::class, 'actualizarPerro'])->middleware('auth:sanctum');
+Route::get('/mostrarMascotaEnVenta', [PerroController::class, 'mostrarPerrosEnVenta']);
+Route::get('/mostrarMascotaEnVenta/{id}', [PerroController::class, 'mostrarPerrosEnVentaPorId']);
+Route::get('/buscarMascotaPorChip/{id}', [PerroController::class, 'buscarPerroPorChip']);
+Route::get('/mostrarMascotaRecientes', [PerroController::class, 'mostrarPerrosRecientes'])->middleware('auth:sanctum');
 Route::post('/guardaPerro/{id?}', [PerroController::class, 'guardaPerro'])->middleware('auth:sanctum');
 
 //Razas

@@ -269,12 +269,12 @@ class PerroController extends Controller
 
         if ($perros) {
             return response()->json([
-                'message' => 'Perros encontrados',
+                'message' => 'Mascotas encontrados',
                 'perros' => $perros
             ], 200);
         } else {
             return response()->json([
-                'message' => 'Perros no encontrados'
+                'message' => 'Mascotas no encontrados'
             ], 404);
         }
     }
