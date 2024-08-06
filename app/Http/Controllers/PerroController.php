@@ -424,7 +424,28 @@ class PerroController extends Controller
         try{
         $user = request()->user();
 
-        $perros = Perro::where('user_id', $user->id)->get();
+        $perros = Perro::select
+        (
+            'perros.id',
+            'perros.nombre',
+            'perros.distintivo',
+            'perros.sexo',
+            'perros.peso',
+            'perros.tamano',
+            'perros.estatus',
+            'perros.esterilizado',
+            'perros.fecha_nacimiento',
+            'perros.chip',
+            'perros.tipo',
+            'perros.id_raza',
+            'perros.padre_id',
+            'perros.madre_id',
+            'perros.imagen',
+            'razas.nombre as raza'
+        )
+        ->join('razas', 'perros.id_raza', '=', 'razas.id')
+        ->where('perros.user_id', $user->id)
+        ->get();
 
         if ($perros->count() > 0) {
             return response()->json([

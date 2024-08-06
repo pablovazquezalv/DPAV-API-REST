@@ -13,6 +13,7 @@ use App\Http\Controllers\CamadasController;
 use App\Http\Controllers\TrackimoController;
 use App\Http\Middleware\DisableCsrf;
 
+
 //LOGIN
 Route::post('/registrar', [UserController::class, 'registrarUsuario']);
 Route::post('/login', [UserController::class, 'login']);
