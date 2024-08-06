@@ -89,6 +89,8 @@ Route::post('/añadirSensor', [SensoresController::class, 'añadirSensor'])->mid
 Route::get('/mostrarSensores', [SensoresController::class, 'obtenerSensores'])->middleware('auth:sanctum');
 Route::get('/mostrarSensores/{id}', [SensoresController::class, 'show'])->middleware('auth:sanctum');
 Route::get('/stream-sensor-data/{sensor_id}', [SensoresController::class, 'streamSensorData']);
+Route::get('/stream-ubicacion/{deviceId}', [TrackimoController::class, 'streamUbicacion']);
+
 
 Route::get('/oauth2/handler', [OAuthController::class, 'handleAuthorization']);
 Route::get('/get-code', [OAuthController::class, 'getCode']);
@@ -107,4 +109,7 @@ Route::middleware('auth:sanctum')->group(function () {
 Route::middleware([DisableCsrf::class])->group(function () {
     Route::get('/login', [TrackimoController::class, 'login']);
     Route::post('/ultima-ubicacion', [TrackimoController::class, 'obtenerUltimaUbicacion']);
+    Route::post('/loginGps', [TrackimoController::class, 'loginGps']);
+    Route::get('/obtenerUbicacion/{device_id}', [TrackimoController::class, 'obtenerUbicacion']);
 });
+
