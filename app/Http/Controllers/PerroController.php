@@ -8,6 +8,8 @@ use Illuminate\Support\Facades\Validator;
 use App\Enums\ServerStatus;
 use Illuminate\Validation\Rule;
 use App\Models\PerroUser;
+use App\Models\Gps;
+use App\Models\Zona;
 use App\Enums\TamañoPerro;
 use App\Enums\SexoPerro;
 use App\Enums\TipoPerro;
@@ -529,4 +531,216 @@ class PerroController extends Controller
             ], 500);
         }
     }
+
+       //Ruta Lista
+       public function crearGps(Request $request)
+       {
+           $validator = Validator::make(
+               $request->all(),
+               [
+                   'device_id' => 'required|string|max:50|unique:gps',
+                   'perro_id' => 'required|int',
+               ],
+               [
+                   'device_id.required' => 'El device_id es requerido',
+                   'perro_id.required' => 'El perro_id es requerido',
+               ]
+           );
+   
+           if ($validator->fails()) {
+               return response()->json($validator->errors(), 400);
+           }
+   
+           $gps = Gps::create([
+               'device_id' => $request->device_id,
+               'perro_id' => $request->perro_id,
+           ]);
+   
+           $gps->save();
+   
+           if ($gps->save()) {
+               return response()->json([
+                   'message' => 'GPS creado correctamente',
+                   'gps' => $gps
+               ], 201);
+           } else {
+               return response()->json([
+                   'message' => 'Error al crear el GPS'
+               ], 400);
+           }
+       }
+   
+   //Ruta Lista
+       public function mostrarGps($id)
+       {
+           $gps = Gps::where('perro_id', $id)->get();
+   
+           if ($gps->count() > 0) {
+               return response()->json([
+                   'message' => 'GPS encontrado',
+                   'gps' => $gps
+               ], 200);
+           } else {
+               return response()->json([
+                   'message' => 'GPS no encontrado'
+               ], 404);
+           }
+       }
+       
+   
+   //Ruta Lista
+       public function actualizarGps(Request $request, $id)
+       {
+           $gps = Gps::find($id);
+   
+           if (!$gps) {
+               return response()->json([
+                   'message' => 'GPS no encontrado'
+               ], 404);
+           }
+   
+           $validator = Validator::make(
+               $request->all(),
+               [
+                   'device_id' => 'required|string|max:50|unique:gps',
+                   'perro_id' => 'required|int',
+               ],
+               [
+                   'device_id.required' => 'El device_id es requerido',
+                   'perro_id.required' => 'El perro_id es requerido',
+               ]
+           );
+   
+           if ($validator->fails()) {
+               return response()->json($validator->errors(), 400);
+           }
+   
+           $gps->device_id = $request->device_id;
+           $gps->perro_id = $request->perro_id;
+   
+           $gps->save();
+   
+           if ($gps->save()) {
+               return response()->json([
+                   'message' => 'GPS actualizado correctamente',
+                   'gps' => $gps
+               ], 200);
+           } else {
+               return response()->json([
+                   'message' => 'Error al actualizar el GPS'
+               ], 400);
+           }
+       }
+   
+   //Ruta Lista
+       public function crearZona(Request $request)
+       {
+           $validator = Validator::make(
+               $request->all(),
+               [
+                   'nombre' => 'required|string|max:50',
+                   'latitud' => 'required|string|max:50',
+                   'longitud' => 'required|string|max:50',
+                   'gps_id' => 'required|int',
+               ],
+               [
+                   'nombre.required' => 'El nombre es requerido',
+                   'latitud.required' => 'La latitud es requerida',
+                   'longitud.required' => 'La longitud es requerida',
+                   'gps_id.required' => 'El gps_id es requerido',
+               ]
+           );
+   
+           if ($validator->fails()) {
+               return response()->json($validator->errors(), 400);
+           }
+   
+           $zona = Zona::create([
+               'nombre' => $request->nombre,
+               'latitud' => $request->latitud,
+               'longitud' => $request->longitud,
+               'gps_id' => $request->gps_id,
+           ]);
+   
+           $zona->save();
+   
+           if ($zona->save()) {
+               return response()->json([
+                   'message' => 'Zona creada correctamente',
+                   'zona' => $zona
+               ], 201);
+           } else {
+               return response()->json([
+                   'message' => 'Error al crear la zona'
+               ], 400);
+           }
+       }
+   
+   
+   //Ruta Lista
+       public function mostrarZonaGps($id)
+       {
+           $zona = Zona::where('gps_id', $id)->get();
+   
+           if ($zona->count() > 0) {
+               return response()->json([
+                   'message' => 'Zona encontrada',
+                   'zona' => $zona
+               ], 200);
+           } else {
+               return response()->json([
+                   'message' => 'Zona no encontrada'
+               ], 404);
+           }
+       }
+   
+   //Ruta Lista
+       public function actualizarZonaGps(Request $request, $id)
+       {
+           $zona = Zona::find($id);
+   
+           if (!$zona) {
+               return response()->json([
+                   'message' => 'Zona no encontrada'
+               ], 404);
+           }
+   
+           $validator = Validator::make(
+               $request->all(),
+               [
+                   'nombre' => 'required|string|max:50',
+                   'latitud' => 'required|string|max:50',
+                   'longitud' => 'required|string|max:50',
+                   'gps_id' => 'required|int',
+               ],
+               [
+                   'nombre.required' => 'El nombre es requerido',
+                   'latitud.required' => 'La latitud es requerida',
+                   'longitud.required' => 'La longitud es requerida',
+                   'gps_id.required' => 'El gps_id es requerido',
+               ]
+           );
+   
+           if ($validator->fails()) {
+               return response()->json($validator->errors(), 400);
+           }
+   
+           $zona->nombre = $request->nombre;
+           $zona->latitud = $request->latitud;
+           $zona->longitud = $request->longitud;
+           $zona->gps_id = $request->gps_id;
+   
+           $zona->save();
+   
+           if ($zona->save()) {
+               return response()->json([
+                   'message' => 'Zona actualizada correctamente',
+                   'zona' => $zona
+               ], 200);
+           } else {
+               return response()->json([
+                   'message' => 'Error al actualizar la zona'
+               ], 400);
+           }
+       }
 }

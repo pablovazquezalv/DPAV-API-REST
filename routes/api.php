@@ -93,6 +93,16 @@ Route::get('/stream-sensor-data/{sensor_id}', [SensoresController::class, 'strea
 Route::get('/oauth2/handler', [OAuthController::class, 'handleAuthorization']);
 Route::get('/get-code', [OAuthController::class, 'getCode']);
 
+
+Route::middleware('auth:sanctum')->group(function () {
+    Route::post('/crear/gps', [PerroController::class, 'crearGps']);
+    Route::get('/mostrar/gps/{perro_id}', [PerroController::class, 'mostrarGps']);
+    Route::put('/actualizar/gps/{id}', [PerroController::class, 'actualizarGps']);
+    Route::post('/crear/zonas', [PerroController::class, 'crearZona']);
+    Route::get('/mostrar/zona/{gps_id}', [PerroController::class, 'mostrarZonaGps']);
+    Route::put('/actualizar/zona/{id}', [PerroController::class, 'actualizarZonaGps']);
+});
+
 //Trackimo
 Route::middleware([DisableCsrf::class])->group(function () {
     Route::get('/login', [TrackimoController::class, 'login']);

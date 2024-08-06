@@ -13,9 +13,7 @@ return new class extends Migration
     {
         Schema::create('gps', function (Blueprint $table) {
             $table->id();
-            $table->string('serial', 50)->unique();
-            $table->string('latitud', 50);
-            $table->string('longitud', 50);
+            $table->string('device_id', 50)->unique();
             $table->foreignId('perro_id')->constrained('perros');
             $table->timestamps();
         });
