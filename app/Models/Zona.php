@@ -15,6 +15,7 @@ class Zona extends Model
         'nombre',
         'latitud',
         'longitud',
+        'radio',
         'gps_id',
     ];
 
@@ -22,8 +23,6 @@ class Zona extends Model
     {
         return $this->belongsTo(Gps::class);
     }
-
-   
 
 
 }
