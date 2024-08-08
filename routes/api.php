@@ -118,3 +118,5 @@ Route::middleware([DisableCsrf::class])->group(function () {
     Route::post('/obtenerUbicacion', [TrackimoController::class, 'obtenerUbicacion']);
 });
 
+
+
