@@ -242,6 +242,7 @@ class CitaController extends Controller
         ]);
     
         if ($cita) {
+            event(new \App\Events\CitaCreada($cita));
             return response()->json($cita, 201);
         } else {
             return response()->json(['message' => 'Error al crear la cita'], 400);

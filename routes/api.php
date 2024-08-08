@@ -12,6 +12,7 @@ use App\Http\Controllers\OAuthController;
 use App\Http\Controllers\CamadasController;
 use App\Http\Controllers\TrackimoController;
 use App\Http\Middleware\DisableCsrf;
+use  App\Http\Controllers\SseController;
 
 
 //LOGIN
@@ -105,6 +106,8 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/mostrar/zona/{gps_id}', [PerroController::class, 'mostrarZonaGps']);
     Route::put('/actualizar/zona/{id}', [PerroController::class, 'actualizarZonaGps']);
 });
+
+Route::get('/sse', [SseController::class, 'stream']);
 
 //Trackimo
 Route::middleware([DisableCsrf::class])->group(function () {
