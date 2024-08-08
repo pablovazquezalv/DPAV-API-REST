@@ -16,6 +16,7 @@ return new class extends Migration
             $table->string('nombre',50)->unique();
             $table->string('latitud',50);
             $table->string('longitud',50);
+            $table->decimal('radio', 8, 2);
             $table->foreignId('gps_id')->constrained('gps');
             $table->timestamps();
         });
