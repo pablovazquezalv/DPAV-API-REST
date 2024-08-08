@@ -112,6 +112,6 @@ Route::middleware([DisableCsrf::class])->group(function () {
     Route::post('/ultima-ubicacion', [TrackimoController::class, 'obtenerUltimaUbicacion']);
    
     Route::post('/loginGps', [TrackimoController::class, 'loginGps']);
-    Route::get('/obtenerUbicacion/{device_id}', [TrackimoController::class, 'obtenerUbicacion']);
+    Route::post('/obtenerUbicacion', [TrackimoController::class, 'obtenerUbicacion']);
 });
 

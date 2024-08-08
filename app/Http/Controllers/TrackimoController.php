@@ -65,6 +65,38 @@ class TrackimoController extends Controller
             return response()->json(['error' => $e->getMessage()], 500);
         }
     }
+    public function obtenerUbicacion(Request $request)
+    {
+        try {
+            $token = 'f54ac611-787f-4460-acd6-bda123d3b8a7';
+            $client = new Client();
+            
+            $deviceId = $request->input('device_id');
+            
+            if (!$deviceId) {
+                return response()->json(['error' => 'device_id es requerido'], 400);
+            }
+    
+            $response = $client->post("{$this->trackimoServerUrl}/api/v3/accounts/1311342/locations/filter?limit=2", [
+                'json' => [
+                    'device_ids' => [$deviceId],
+                    'forceGpsRead' => true,
+                    'sendGsmBeforeLock' => true
+                ],
+                'headers' => [
+                    'Authorization' => "Bearer {$token}",
+                    'Content-Type' => 'application/json'
+                ]
+            ]);
+    
+            $data = json_decode($response->getBody(), true);
+            return response()->json($data);
+        } catch (\Exception $e) {
+            Log::error('Error obtaining last location: ' . $e->getMessage());
+            return response()->json(['error' => $e->getMessage()], 500);
+        }
+    }
+    
 
     public function obtenerUltimaUbicacion(Request $request)
     {
@@ -186,32 +218,6 @@ class TrackimoController extends Controller
         }
     }
 
-    public function obtenerUbicacion(Request $request)
-    {
-        try {
-            $token = 'f54ac611-787f-4460-acd6-bda123d3b8a7';
-            $client = new Client();
 
-            $deviceId = $request->query('device_id');
-
-            $response = $client->post("{$this->trackimoServerUrl}/api/v3/accounts/1311342/locations/filter?limit=2", [
-                'json' => [
-                    'device_ids' => [$deviceId],
-                    'forceGpsRead' => true,
-                    'sendGsmBeforeLock' => true
-                ],
-                'headers' => [
-                    'Authorization' => "Bearer {$token}",
-                    'Content-Type' => 'application/json'
-                ]
-            ]);
-
-            $data = json_decode($response->getBody(), true);
-            return response()->json($data);
-        } catch (\Exception $e) {
-            Log::error('Error obtaining last location: ' . $e->getMessage());
-            return response()->json(['error' => $e->getMessage()], 500);
-        }
-    }
 
 }
