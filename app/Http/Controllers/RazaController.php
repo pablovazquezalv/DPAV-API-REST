@@ -79,8 +79,8 @@ class RazaController extends Controller
 
         if($raza->save())
         {
-            return response()->json($raza, 201);
-        }
+                return response()->json($raza, 201);
+            }
         else
         {
             return response()->json($raza, 400);
