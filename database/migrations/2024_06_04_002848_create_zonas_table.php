@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('zonas', function (Blueprint $table) {
             $table->id();
-            $table->string('nombre',50)->unique();
+            $table->string('nombre',50);
             $table->string('latitud',50);
             $table->string('longitud',50);
             $table->decimal('radio', 8, 2);
