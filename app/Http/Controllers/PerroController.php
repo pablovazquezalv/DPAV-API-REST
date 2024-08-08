@@ -677,6 +677,14 @@ class PerroController extends Controller
                return response()->json($validator->errors(), 400);
            }
        
+           $gps_id = Gps::find($request->gps_id);
+
+           if (!$gps_id) {
+               return response()->json([
+                   'message' => 'GPS no encontrado'
+               ], 404);
+           }
+
            $zona = Zona::create([
                'nombre' => $request->nombre,
                'latitud' => $request->latitud,

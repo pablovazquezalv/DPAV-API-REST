@@ -110,6 +110,7 @@ Route::middleware('auth:sanctum')->group(function () {
 Route::middleware([DisableCsrf::class])->group(function () {
     Route::get('/login', [TrackimoController::class, 'login']);
     Route::post('/ultima-ubicacion', [TrackimoController::class, 'obtenerUltimaUbicacion']);
+   
     Route::post('/loginGps', [TrackimoController::class, 'loginGps']);
     Route::get('/obtenerUbicacion/{device_id}', [TrackimoController::class, 'obtenerUbicacion']);
 });

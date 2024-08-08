@@ -174,7 +174,10 @@ class SensoresController extends Controller
             $collection = $this->database->selectCollection($collectionName);
     
             // Obtener los datos de la colección específica del sensor
-            $cursor = $collection->find();
+            // Ordenar los resultados por 'created_at' en orden descendente
+            $cursor = $collection->find([], [
+                'sort' => ['created_at' => -1] // -1 para orden descendente
+            ]);
             $data = iterator_to_array($cursor);
     
             return response()->json([
