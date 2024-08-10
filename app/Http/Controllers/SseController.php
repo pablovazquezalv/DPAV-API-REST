@@ -4,33 +4,31 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Events\RazaCreada;
 use Illuminate\Support\Facades\Redis;
-
+use Symfony\Component\HttpFoundation\StreamedResponse;
 class SseController extends Controller
 {
     public function stream()
     {
-        header('Content-Type: text/event-stream');
-        header('Cache-Control: no-cache');
-        header('Connection: keep-alive');
-        header('Access-Control-Allow-Origin: http://localhost:4200');
-        header('Access-Control-Allow-Methods: GET, POST, OPTIONS');
-        header('Access-Control-Allow-Headers: Content-Type, Authorization');
+        $response = new StreamedResponse(function () {
+            while (true) {
+                // Your server-side logic to get data
+                $data = json_encode(['message' => 'This is a message']);
 
-        while (true) {
-            if (connection_aborted()) {
-                break;
-            }
+                echo "data: $data\n\n";
 
-            // Lee eventos desde Redis
-            $raza = Redis::lpop('RazaCreada');
-
-            if ($raza) {
-                echo "data: " . $raza . "\n\n";
+                // Flush the output buffer
                 ob_flush();
                 flush();
-            }
 
-            sleep(1); // Ajusta el tiempo de espera según tus necesidades
-        }
-    }
+                // Delay for 1 second
+                sleep(1);
+            }
+        });
+
+        $response->headers->set('Content-Type', 'text/event-stream');
+        $response->headers->set('Cache-Control', 'no-cache');
+        $response->headers->set('Connection', 'keep-alive');
+
+        return $response;
+   }
 }

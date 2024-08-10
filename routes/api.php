@@ -38,6 +38,8 @@ Route::put('/editarDireccion', [UserController::class, 'editarDireccionUsuario']
 //Perros
 Route::post('/crearMascota', [PerroController::class, 'crearPerro'])->middleware('auth:sanctum');
 Route::get('/mostrarMascota/{id}', [PerroController::class, 'mostrarPerro']);
+// routes/web.php
+Route::get('/generate-pdf/{id}', [PerroController::class, 'generatePDF']);
 Route::get('/mostrarMascotas', [PerroController::class, 'mostrarPerros'])->middleware('auth:sanctum');
 Route::get('/buscarPerros', [PerroController::class, 'buscarPerros']);
 Route::get('/buscarPerras', [PerroController::class, 'buscarPerras']);

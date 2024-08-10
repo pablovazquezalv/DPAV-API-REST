@@ -19,6 +19,10 @@ use App\Enums\TamanoPerro;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rules\Enum;
 use App\Models\User;
+use Dompdf\Dompdf;
+
+use Spatie\LaravelPdf\Facades\Pdf;
+
 
 class PerroController extends Controller
 {
@@ -775,4 +779,66 @@ class PerroController extends Controller
        }
    }
    
+   public function generatePDF(Request $request,$id)
+    {
+        
+
+        $perro = User::Select(
+            'users.id',
+            'users.nombre',
+            'users.apellido_paterno',
+            'users.telefono',
+            'users.email',
+            
+            'users.direccion',
+            'users.ciudad',
+            'users.estado',
+            'users.codigo_postal',
+            'perros.id as perro_id',
+            'perros.nombre as perro_nombre',
+            'perros.distintivo',
+            'perros.sexo as perro_sexo',
+            'perros.peso as perro_peso',
+            'perros.tamano',
+            'perros.estatus as perro_estatus',
+            'perros.esterilizado',
+            'perros.fecha_nacimiento',
+            'perros.chip as perro_chip',
+            'perros.tipo',
+            'perros.id_raza',
+            'perros.padre_id',
+            'perros.madre_id',
+            'perros.imagen',
+            'razas.nombre as raza'
+        )
+            ->join('perros', 'users.id', '=', 'perros.user_id')
+            ->join('razas', 'perros.id_raza', '=', 'razas.id')
+            ->where('perros.id', $id)
+            ->first();
+
+        if ($perro) {
+
+        $dompdf = new Dompdf();
+
+        // Genera el HTML desde una vista de Laravel
+        $html = view('certificado', compact('perro'))->render();
+
+        // Carga el HTML en Dompdf
+        $dompdf->loadHtml($html);
+
+        // Opcional: Ajusta el tamaño del papel y la orientación horizontal
+        $dompdf->setPaper('A4', 'landscape');
+        // Renderiza el PDF
+        $dompdf->render();
+
+        // Envía el archivo PDF para su descarga al navegador
+        return $dompdf->stream('invoice.pdf');
+        } else {
+            return response()->json([
+                'message' => 'Mascota no encontrado'
+            ], 404);
+        }
+
+
+    }
 }

@@ -28,6 +28,12 @@ class CitaController extends Controller
             return $cita;
         });
 
+        if ($citas->isEmpty()) {
+            return response()->json([
+                'message' => 'No se encontraron citas'
+            ], 404);
+        }
+
         return response()->json([
             'message' => 'Citas encontradas',
             'citas' => $citas
