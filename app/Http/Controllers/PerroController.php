@@ -271,7 +271,38 @@ class PerroController extends Controller
 
     public function mostrarPerros()
     {
-        $perros = Perro::all();
+        $perros = User::Select(
+            'users.id',
+            'users.nombre',
+            'users.apellido_paterno',
+            'users.telefono',
+            'users.email',
+            'users.direccion',
+            'users.ciudad',
+            'users.estado',
+            'users.codigo_postal',
+            'perros.id as perro_id',
+            'perros.nombre as perro_nombre',
+            'perros.distintivo',
+            'perros.sexo as perro_sexo',
+            'perros.peso as perro_peso',
+            'perros.tamano',
+            'perros.estatus as perro_estatus',
+            'perros.esterilizado',
+            'perros.fecha_nacimiento',
+            'perros.chip as perro_chip',
+            'perros.tipo',
+            'perros.id_raza',
+            'perros.padre_id',
+            'perros.madre_id',
+            'perros.imagen',
+            'razas.nombre as raza'
+        )
+            ->join('perros', 'users.id', '=', 'perros.user_id')
+            ->join('razas', 'perros.id_raza', '=', 'razas.id')
+            
+            ->get();
+
 
         if ($perros) {
             return response()->json([
