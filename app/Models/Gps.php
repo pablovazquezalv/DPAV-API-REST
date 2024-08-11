@@ -12,6 +12,7 @@ class Gps extends Model
     protected $table = 'gps';
 
     protected $fillable = [
+        'id',
         'device_id',
         'perro_id',
     ];

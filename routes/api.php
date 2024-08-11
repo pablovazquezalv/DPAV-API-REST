@@ -10,6 +10,7 @@ use App\Http\Controllers\SensoresController;
 use App\Http\Controllers\CruceController;
 use App\Http\Controllers\OAuthController;
 use App\Http\Controllers\CamadasController;
+use App\Http\Controllers\HistorialController;
 use App\Http\Controllers\TrackimoController;
 use App\Http\Middleware\DisableCsrf;
 use  App\Http\Controllers\SseController;
@@ -38,6 +39,7 @@ Route::put('/editarDireccion', [UserController::class, 'editarDireccionUsuario']
 //Perros
 Route::post('/crearMascota', [PerroController::class, 'crearPerro'])->middleware('auth:sanctum');
 Route::get('/mostrarMascota/{id}', [PerroController::class, 'mostrarPerro']);
+
 // routes/web.php
 Route::get('/generate-pdf/{id}', [PerroController::class, 'generatePDF']);
 Route::get('/mostrarMascotas', [PerroController::class, 'mostrarPerros'])->middleware('auth:sanctum');
@@ -99,7 +101,6 @@ Route::get('/stream-ubicacion/{deviceId}', [TrackimoController::class, 'streamUb
 Route::get('/oauth2/handler', [OAuthController::class, 'handleAuthorization']);
 Route::get('/get-code', [OAuthController::class, 'getCode']);
 
-
 Route::middleware('auth:sanctum')->group(function () {
     Route::post('/crear/gps', [PerroController::class, 'crearGps']);
     Route::get('/mostrar/gps/{perro_id}', [PerroController::class, 'mostrarGps']);
@@ -107,6 +108,11 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/crear/zonas', [PerroController::class, 'crearZona']);
     Route::get('/mostrar/zona/{gps_id}', [PerroController::class, 'mostrarZonaGps']);
     Route::put('/actualizar/zona/{id}', [PerroController::class, 'actualizarZonaGps']);
+    //Historial Alertas
+    Route::post('/guardarAlerta', [HistorialController::class, 'registrarAlerta']);
+    Route::get('/mostrarAlertas/{id}', [HistorialController::class, 'mostrarAlertas']);
+
+
 });
 
 Route::get('/sse', [SseController::class, 'stream']);

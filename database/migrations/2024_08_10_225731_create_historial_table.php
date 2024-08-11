@@ -11,12 +11,14 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('notificaciones', function (Blueprint $table) {
+        Schema::create('historial', function (Blueprint $table) {
             $table->id();
-            $table->string('titulo', 100);
-            $table->string('descripcion', 255);
-            $table->foreignId('user_id')->constrained('users');
-            $table->boolean('leido')->default(false);
+            $table->string('latitud',50);
+            $table->string('longitud',50);
+            $table->string('direccion',150);
+            $table->date('fecha');
+            $table->time('hora');
+            $table->foreignId('gps_id')->constrained('gps');
             $table->timestamps();
         });
     }
@@ -26,6 +28,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('notificaciones');
+        Schema::dropIfExists('historial');
     }
 };
