@@ -10,6 +10,8 @@ use Illuminate\Validation\Rule;
 use App\Models\PerroUser;
 use App\Models\Gps;
 use App\Models\Zona;
+use Illuminate\Support\Facades\DB;
+
 use App\Enums\TamañoPerro;
 use App\Enums\SexoPerro;
 use App\Enums\TipoPerro;
@@ -19,6 +21,7 @@ use App\Enums\TamanoPerro;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rules\Enum;
 use App\Models\User;
+
 use Dompdf\Dompdf;
 
 use Spatie\LaravelPdf\Facades\Pdf;
@@ -203,7 +206,6 @@ class PerroController extends Controller
     
       
     
-        $perro->user_id = $user->id;
         $perro->imagen = $imageUrl ? $imageUrl : '';
 
         $perro->save();
@@ -413,7 +415,7 @@ class PerroController extends Controller
             ], 200);
         } else {
             return response()->json([
-                'message' => 'Perro no encontrado'
+                'message' => 'Perras no encontradas'
             ], 404);
         }
     }
@@ -610,6 +612,11 @@ class PerroController extends Controller
            $gps = Gps::create([
                'device_id' => $request->device_id,
                'perro_id' => $request->perro_id,
+               'fecha_inicio' => //formato de fecha
+                date('Y-m-d'),
+               'created_at' => //formato de fecha y hora
+                date('Y-m-d H:i:s')
+
            ]);
    
            $gps->save();
@@ -645,48 +652,50 @@ class PerroController extends Controller
        
    
    //Ruta Lista
-       public function actualizarGps(Request $request, $id)
-       {
-           $gps = Gps::find($id);
+   public function actualizarGps(Request $request, $id)
+   {
+       $gps = Gps::find($id);
    
-           if (!$gps) {
-               return response()->json([
-                   'message' => 'GPS no encontrado'
-               ], 404);
-           }
-   
-           $validator = Validator::make(
-               $request->all(),
-               [
-                   'device_id' => 'som|string|max:50|unique:gps',
-                   'perro_id' => 'required|int',
-               ],
-               [
-                   'device_id.required' => 'El device_id es requerido',
-                   'perro_id.required' => 'El perro_id es requerido',
-               ]
-           );
-   
-           if ($validator->fails()) {
-               return response()->json($validator->errors(), 400);
-           }
-   
-           $gps->device_id = $request->device_id;
-           $gps->perro_id = $request->perro_id;
-   
-           $gps->save();
-   
-           if ($gps->save()) {
-               return response()->json([
-                   'message' => 'GPS actualizado correctamente',
-                   'gps' => $gps
-               ], 200);
-           } else {
-               return response()->json([
-                   'message' => 'Error al actualizar el GPS'
-               ], 400);
-           }
+       if (!$gps) {
+           return response()->json([
+               'message' => 'GPS no encontrado'
+           ], 404);
        }
+   
+       $validator = Validator::make(
+           $request->all(),
+           [
+               'device_id' => 'string|max:50|unique:gps,device_id,' . $gps->id,
+               'perro_id' => 'sometimes|int',
+           ],
+           [
+               'device_id.required' => 'El device_id es requerido',
+               'perro_id.required' => 'El perro_id es requerido',
+           ]
+       );
+   
+       if ($validator->fails()) {
+           return response()->json($validator->errors(), 400);
+       }
+   
+       $gps->device_id = $request->device_id;
+   
+       // Actualizar perro_id solo si se envía en la solicitud
+       if ($request->has('perro_id')) {
+           $gps->perro_id = $request->perro_id;
+       }
+   
+       if ($gps->save()) {
+           return response()->json([
+               'message' => 'GPS actualizado correctamente',
+               'gps' => $gps
+           ], 200);
+       } else {
+           return response()->json([
+               'message' => 'Error al actualizar el GPS'
+           ], 400);
+       }
+   }
       //Ruta Lista
        public function crearZona(Request $request)
        {
@@ -871,5 +880,48 @@ class PerroController extends Controller
         }
 
 
+    }
+
+    public function mostrarGPSDeviceIDS()
+    {
+        $gps = Gps::Select(
+                'gps.id',
+                'gps.device_id',
+                'gps.perro_id',
+                'gps.fecha_inicio',
+                'perros.nombre as perro_nombre',
+                'perros.distintivo',
+                'perros.sexo as perro_sexo',
+                'perros.peso as perro_peso',
+                'perros.tamano',
+                'perros.estatus as perro_estatus',
+                'perros.esterilizado',
+                'perros.fecha_nacimiento',
+                'perros.chip as perro_chip',
+                'perros.tipo',
+                'perros.id_raza',
+                'perros.padre_id',
+                'perros.madre_id',
+                'perros.imagen',
+                'razas.nombre as raza',
+                'users.nombre as usuario_nombre',
+                'users.apellido_paterno as usuario_apellido_paterno',
+                'users.telefono as usuario_telefono'
+            )
+            ->join('perros', 'gps.perro_id', '=', 'perros.id')
+            ->join('razas', 'perros.id_raza', '=', 'razas.id')
+            ->join('users', 'perros.user_id', '=', 'users.id')
+            ->get();
+    
+        if ($gps->count() > 0) {
+            return response()->json([
+                'message' => 'GPS encontrados',
+                'gps' => $gps
+            ], 200);
+        } else {
+            return response()->json([
+                'message' => 'GPS no encontrados'
+            ], 404);
+        }
     }
 }

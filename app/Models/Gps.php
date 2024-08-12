@@ -13,6 +13,7 @@ class Gps extends Model
 
     protected $fillable = [
         'id',
+        'fecha_inicio',
         'device_id',
         'perro_id',
     ];
