@@ -118,6 +118,8 @@ Route::middleware('auth:sanctum')->group(function () {
 
 Route::get('/sse', [SseController::class, 'stream']);
 
+Route::get('/getLink', [HistorialController::class, 'getLink']);
+
 //Trackimo
 Route::middleware([DisableCsrf::class])->group(function () {
     Route::get('/login', [TrackimoController::class, 'login']);

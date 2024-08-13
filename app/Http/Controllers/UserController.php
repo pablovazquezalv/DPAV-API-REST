@@ -12,6 +12,7 @@ use App\Mail\RegisterMail;
 use Illuminate\Support\Facades\Http;
 use App\Models\Estado;
 use Illuminate\Support\Facades\URL;
+use App\Mail\enviarCodigoSesion;
 use Illuminate\Support\Facades\Crypt;
 
 class UserController extends Controller
@@ -669,40 +670,45 @@ class UserController extends Controller
         $user = User::find($request->id);
 
         
-        $response = Http::withHeaders([
+        // $response = Http::withHeaders([
 
-            'Authorization' => 'App 16abca2ac5b56ee130ca5c236b16943a-1d3e8a4d-cd81-4bec-96c5-05fb2dbdc14b',
-            'Content-Type' => 'application/json',
-            'Accept' => 'application/json'
-        ])->post('https://2v8jjz.api.infobip.com/sms/2/text/advanced', [
-            'messages' => [
-                [
-                   'destinations' => [
-                       [
-                           'to' => '528718458147'
-                           //'to' => $user->telefono
-                       ]
-                   ],
-                   'from' => 'InfoSMS',
-                   'text' => 'Hola nos comunicamos de DPAV tu codigo es: '.$user->codigo
-                ]
-            ]
+        //     'Authorization' => 'App 16abca2ac5b56ee130ca5c236b16943a-1d3e8a4d-cd81-4bec-96c5-05fb2dbdc14b',
+        //     'Content-Type' => 'application/json',
+        //     'Accept' => 'application/json'
+        // ])->post('https://2v8jjz.api.infobip.com/sms/2/text/advanced', [
+        //     'messages' => [
+        //         [
+        //            'destinations' => [
+        //                [
+        //                    'to' => '528718458147'
+        //                    //'to' => $user->telefono
+        //                ]
+        //            ],
+        //            'from' => 'InfoSMS',
+        //            'text' => 'Hola nos comunicamos de DPAV tu codigo es: '.$user->codigo
+        //         ]
+        //     ]
     
-        ]);
+        // ]);
+        Mail::to($user->email)->send(new enviarCodigoSesion($user));
 
-        if($response->status() == 200)
-        {
-            $user->verification_code_sent_at = now();
-            $user->email_verified_at = now();
-            //generar nuevo codigo
-           # $user->codigo = rand(100000, 999999);
-            $user->save();
-            return response()->view('email/correo-enviado', ['user' => $user]);
-        }
-        else
-        {
-            return response()->json('Error al enviar SMS', 400);
-        }
+
+        return response()->json('Código enviado', 200);
+        
+
+        // if($response->status() == 200)
+        // {
+        //     $user->verification_code_sent_at = now();
+        //     $user->email_verified_at = now();
+        //     //generar nuevo codigo
+        //    # $user->codigo = rand(100000, 999999);
+        //     $user->save();
+        //     return response()->view('email/correo-enviado', ['user' => $user]);
+        // }
+        // else
+        // {
+        //     return response()->json('Error al enviar SMS', 400);
+        // }
     }
 
 

@@ -16,6 +16,7 @@ class Historial extends Model
         'longitud',
         'direccion',
         'fecha',
+        'link',
         'hora',
         'gps_id'
     ];

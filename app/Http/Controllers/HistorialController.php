@@ -48,6 +48,8 @@ class HistorialController extends Controller
             'latitud' => $request->latitud,
             'longitud' => $request->longitud,
             'direccion' => $direccion,
+            'link' => 'https://www.google.com/maps/search/?api=1&query=' . $request->latitud . ',' . $request->longitud,
+            //LINK DE DE UBICACION PARA MOSTRAR EN EL MAPA
             'fecha' => date('Y-m-d'),
             'hora' => date('H:i:s'),
             'gps_id' => $request->gps_id      
@@ -61,7 +63,7 @@ class HistorialController extends Controller
             return response()->json([
                 'message' => 'Alerta registrada correctamente',
                 'historial' => $historial
-            ], 201);
+            ], 201, [], JSON_UNESCAPED_SLASHES);
         } else {
             return response()->json([
                 'message' => 'Error al registrar la alerta'
@@ -74,10 +76,6 @@ class HistorialController extends Controller
     {
 
         $user = $request->user();
-
-
-      
-        
 
        
         $historial = Historial::Select
@@ -93,7 +91,6 @@ class HistorialController extends Controller
         ->join('perros', 'gps.perro_id', '=', 'perros.id')
         ->where('perros.user_id', '=', $user->id)
         ->where('gps.id', '=', $id)
-
         ->get();
 
         
@@ -106,6 +103,23 @@ class HistorialController extends Controller
         return response()->json([
             'message' => 'Alertas encontradas',
             'historial' => $historial
-        ], 200);
+        ], 200,[], JSON_UNESCAPED_SLASHES);
+    }
+
+    public function getLink()
+    {
+
+        $latitud = 25.59799433;
+        $longitud = -103.41291189;
+
+        $response = Http::post('https://maps.googleapis.com/maps/api/geocode/json?latlng='
+            . $latitud . ',' . $longitud . '&key=AIzaSyCUl6BBdSHA0A-MWtcPRj0KTQtAIBtavb8')
+            ->json();
+
+            return response()->json([
+                'message' => 'Link generado',
+                'address' => $response['results'][0]['formatted_address'],
+                'link' => 'https://www.google.com/maps/search/?api=1&query=' . $latitud . ',' . $longitud
+            ], 200, [], JSON_UNESCAPED_SLASHES);
     }
 }

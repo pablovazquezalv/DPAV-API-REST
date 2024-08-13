@@ -16,6 +16,7 @@ return new class extends Migration
             $table->string('latitud',50);
             $table->string('longitud',50);
             $table->string('direccion',150);
+            $table->string('link',350);
             $table->date('fecha');
             $table->time('hora');
             $table->foreignId('gps_id')->constrained('gps');
