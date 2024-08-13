@@ -109,6 +109,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/crear/zonas', [PerroController::class, 'crearZona']);
     Route::get('/mostrar/zona/{gps_id}', [PerroController::class, 'mostrarZonaGps']);
     Route::put('/actualizar/zona/{id}', [PerroController::class, 'actualizarZonaGps']);
+    Route::delete('/eliminar/zona/{id}', [PerroController::class, 'eliminarZonasGps']);
     //Historial Alertas
     Route::post('/guardarAlerta', [HistorialController::class, 'registrarAlerta']);
     Route::get('/mostrarAlertas/{id}', [HistorialController::class, 'mostrarAlertas']);

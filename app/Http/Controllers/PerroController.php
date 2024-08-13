@@ -818,6 +818,25 @@ class PerroController extends Controller
            ], 400);
        }
    }
+
+   public function eliminarZonasGps($id)
+   {
+       $zona = Zona::find($id);
+
+       if ($zona) {
+           $zona->delete();
+
+           return response()->json([
+               'message' => 'Zona eliminada',
+               'zona' => $zona
+           ], 200);
+       } else {
+           return response()->json([
+               'message' => 'Zona no encontrada'
+           ], 404);
+       }
+   }
+   
    
    public function generatePDF(Request $request,$id)
     {
