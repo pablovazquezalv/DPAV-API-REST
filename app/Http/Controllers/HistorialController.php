@@ -85,6 +85,7 @@ class HistorialController extends Controller
             'historial.longitud',
             'historial.direccion',
             'historial.fecha',
+            'historial.link',
             'historial.hora',
             'historial.gps_id'
         )->join('gps', 'historial.gps_id', '=', 'gps.id')
