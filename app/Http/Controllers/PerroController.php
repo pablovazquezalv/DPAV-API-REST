@@ -652,7 +652,7 @@ class PerroController extends Controller
 
        public function mostrarGPSDeviceID($id)
        {
-           $gps = Gps::where('id', $id)->get();
+           $gps = Gps::find($id);
    
            if ($gps->count() > 0) {
                return response()->json([
