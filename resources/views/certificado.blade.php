@@ -173,7 +173,7 @@
         <div class="watermark">DPAV</div>
 
         <div class="dog-image">
-            <img src="{{ public_path('images/dog.png') }}" alt="Perro">
+            <img src="https://dpav.shop/assets/img/icono.png" alt="Dog">
         </div>
     </div>
 </body>

@@ -23,6 +23,7 @@ use Illuminate\Validation\Rules\Enum;
 use App\Models\User;
 
 use Dompdf\Dompdf;
+use Dompdf\Options;
 
 use Spatie\LaravelPdf\Facades\Pdf;
 
@@ -915,7 +916,9 @@ class PerroController extends Controller
 
         if ($perro) {
 
-        $dompdf = new Dompdf();
+        $options = new Options();
+        $options->set('isRemoteEnabled', true);
+        $dompdf = new Dompdf($options);
         
         // Genera el HTML desde una vista de Laravel
         $html = view('certificado', compact('perro'))->render();
