@@ -248,17 +248,18 @@ class PerroController extends Controller
             'perros.tipo',
             'perros.id_raza',
             'perros.padre_id',
+            'padre.nombre as perro_nombre_padre',  // Nombre del padre
+            'madre.nombre as perro_nombre_madre',  // Nombre de la madre
             'perros.madre_id',
             'perros.imagen',
             'razas.nombre as raza'
         )
-            ->join('perros', 'users.id', '=', 'perros.user_id')
-            ->join('razas', 'perros.id_raza', '=', 'razas.id')
-            ->where('perros.id', $id)
-            ->first();
-
-
-
+        ->join('perros', 'users.id', '=', 'perros.user_id')
+        ->join('razas', 'perros.id_raza', '=', 'razas.id')
+        ->leftJoin('perros as padre', 'perros.padre_id', '=', 'padre.id')
+        ->leftJoin('perros as madre', 'perros.madre_id', '=', 'madre.id')
+        ->where('perros.id', $id)
+        ->get();
         if ($perro_usuario) {
             return response()->json([
                 'message' => 'Perro encontrado',
