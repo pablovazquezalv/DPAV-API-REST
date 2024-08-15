@@ -635,15 +635,15 @@ class UserController extends Controller
        
         $response = Http::withHeaders([
 
-            'Authorization' => 'App 16abca2ac5b56ee130ca5c236b16943a-1d3e8a4d-cd81-4bec-96c5-05fb2dbdc14b',
+            'Authorization' => 'App ae6f077ec349231e89761c8c54350ab6-e558221a-0ade-4c70-a4c1-cbb04196ef64',
             'Content-Type' => 'application/json',
             'Accept' => 'application/json'
-        ])->post('https://2v8jjz.api.infobip.com/sms/2/text/advanced', [
+        ])->post('https://e1qzvq.api.infobip.com/sms/2/text/advanced', [
             'messages' => [
                 [
                    'destinations' => [
                        [
-                           'to' => '528718458147'
+                           'to' => '52' . $user->telefono 
                            //'to' => $user->telefono
                        ]
                    ],
@@ -669,52 +669,39 @@ class UserController extends Controller
 
     public function enviarCodigo(Request $request)
     {
-        $user = User::find($request->id);
-
+        $user = User::where('email', $request->email)->first();
         
-        // $response = Http::withHeaders([
-
-        //     'Authorization' => 'App 16abca2ac5b56ee130ca5c236b16943a-1d3e8a4d-cd81-4bec-96c5-05fb2dbdc14b',
-        //     'Content-Type' => 'application/json',
-        //     'Accept' => 'application/json'
-        // ])->post('https://2v8jjz.api.infobip.com/sms/2/text/advanced', [
-        //     'messages' => [
-        //         [
-        //            'destinations' => [
-        //                [
-        //                    'to' => '528718458147'
-        //                    //'to' => $user->telefono
-        //                ]
-        //            ],
-        //            'from' => 'InfoSMS',
-        //            'text' => 'Hola nos comunicamos de DPAV tu codigo es: '.$user->codigo
-        //         ]
-        //     ]
+        if (!$user) {
+            return response()->json('Usuario no encontrado', 400);
+        }
+        
+      
+        $response = Http::withHeaders([
+            'Authorization' => 'App ae6f077ec349231e89761c8c54350ab6-e558221a-0ade-4c70-a4c1-cbb04196ef64',
+            'Content-Type' => 'application/json',
+            'Accept' => 'application/json'
+        ])->post('https://e1qzvq.api.infobip.com/sms/2/text/advanced', [
+            'messages' => [
+                [
+                    'destinations' => [
+                        [
+                            'to' => '52' . $user->telefono 
+                        ]
+                    ],
+                    'from' => 'InfoSMS',
+                    'text' => 'Hola nos comunicamos de DPAV tu código es: ' . $user->codigo
+                ]
+            ]
+        ]);
     
-        // ]);
-        Mail::to($user->email)->send(new enviarCodigoSesion($user));
-
-
-        return response()->json('Código enviado', 200);
-        
-
-        // if($response->status() == 200)
-        // {
-        //     $user->verification_code_sent_at = now();
-        //     $user->email_verified_at = now();
-        //     //generar nuevo codigo
-        //    # $user->codigo = rand(100000, 999999);
-        //     $user->save();
-        //     return response()->view('email/correo-enviado', ['user' => $user]);
-        // }
-        // else
-        // {
-        //     return response()->json('Error al enviar SMS', 400);
-        // }
+        if ($response->status() == 200) {
+            $user->verification_code_sent_at = now();
+            $user->save();
+            return response()->json('Código enviado exitosamente por SMS', 200);
+        } else {
+            return response()->json('Error al enviar SMS', 400);
+        }
     }
-
-
-
     
 }
 
