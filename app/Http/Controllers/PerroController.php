@@ -916,7 +916,7 @@ class PerroController extends Controller
         if ($perro) {
 
         $dompdf = new Dompdf();
-
+        
         // Genera el HTML desde una vista de Laravel
         $html = view('certificado', compact('perro'))->render();
 

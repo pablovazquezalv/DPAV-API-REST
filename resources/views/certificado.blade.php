@@ -114,29 +114,66 @@
                 
             </span>
             <span class="info-label">Dirección:
-                {{$perro->direccion}}
+                @if($perro->direccion == null)
+                    Sin Dirección
+                @else
+                    {{$perro->direccion}}
+                @endif
             </span>
-            <span class="info-label">Código Postal:
-                {{$perro->codigo_postal}}
+            <span class="info-label">
+                
+                
+                Código Postal:
+                @if($perro->codigo_postal == null)
+                    Sin Código Postal
+                @else
+                    {{$perro->codigo_postal}}
+                @endif
+
             </span>
             <span class="info-label">Estado:
-                {{$perro->estado}}
+                @if($perro->estado == null)
+                    Sin Estado
+                @else
+                    {{$perro->estado}}
+                @endif
+
+
+
             </span>
             <span class="info-label">Colonia:
-                {{$perro->colonia}}
+                @if($perro->colonia == null)
+                    Sin Colonia
+                @else
+                    {{$perro->colonia}}
+                @endif
+
+
             </span>
             <span class="info-label">Teléfono:
-                {{$perro->telefono}}
+               
+                @if($perro->telefono == null)
+                    Sin Teléfono
+                @else
+                    {{$perro->telefono}}
+                @endif
+
             </span>
             <span class="info-label">Correo:
-                {{$perro->email}}
+                @if($perro->correo == null)
+                    Sin Correo
+                @else
+                    {{$perro->correo}}
+                @endif
+
+
             </span>
         </div>
 
         <div class="watermark">DPAV</div>
 
         <div class="dog-image">
-            <img src="{{ asset('images/DPAV.png') }}" alt="Dog Image">
+            <img src="{{ public_path('images/dog.png') }}" alt="Perro">
         </div>
     </div>
 </body>
