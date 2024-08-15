@@ -19,7 +19,7 @@ class UserController extends Controller
 {
 
 
-    //Usuario
+    //FUNCION PARA MOSTRAR USUARIO
     public function mostrarUsuario()
     {
 
@@ -37,6 +37,8 @@ class UserController extends Controller
         }
     }
 
+
+    //FUNCION PARA EDITAR TELEFONO DE USUARIO
     public function editarTelefonoUsuario(Request $request)
     {
         $validator = Validator::make($request->all(), [
@@ -73,6 +75,53 @@ class UserController extends Controller
 
     }
 
+     //FUNCION PARA EDITAR EL TELEFONO DE USUARIO
+     public function verificarTelefono(Request $request)
+     {
+         $validator = Validator::make($request->all(), [
+             'telefono' => 'required|string|max:10',
+             'codigo' => 'required|string|max:6',
+         ],
+         [
+             'telefono.required' => 'El teléfono es requerido',
+             'codigo.required' => 'El código es requerido',
+             'telefono.max' => 'El teléfono debe tener 10 dígitos',
+             'codigo.max' => 'El código debe tener 6 caracteres',
+         ]);
+ 
+             if ($validator->fails()) {
+                 return response()->json($validator->errors(), 400);
+             }
+ 
+             $user = request()->user();
+             $user = User::where('email', $user->email)->first();
+ 
+             
+             if($user->codigo == $request->codigo)
+             {
+                # $user->codigo = null;
+ 
+                 $user->telefono = $request->telefono;
+                 $user->codigo = null;
+ 
+              
+                 $user->save();
+ 
+                 return response()->json([
+                     'message' => 'Código correcto',
+                     'nuevo telefono' => $request->telefono
+                 ]);
+             }
+             else
+             {
+                 return response()->json([
+                     'message' => 'Código incorrecto',
+                     
+                 ], 400);
+             }
+     }
+
+    //FUNCION PARA EDITAR DIRECCION DE USUARIO
     public function editarDireccionUsuario(Request $request)
     {
         $validator = Validator::make($request->all(), [
@@ -133,51 +182,9 @@ class UserController extends Controller
             return response()->json('Usuario no encontrado', 400);
         }
     }
-    public function verificarTelefono(Request $request)
-    {
-        $validator = Validator::make($request->all(), [
-            'telefono' => 'required|string|max:10',
-            'codigo' => 'required|string|max:6',
-        ],
-        [
-            'telefono.required' => 'El teléfono es requerido',
-            'codigo.required' => 'El código es requerido',
-            'telefono.max' => 'El teléfono debe tener 10 dígitos',
-            'codigo.max' => 'El código debe tener 6 caracteres',
-        ]);
 
-            if ($validator->fails()) {
-                return response()->json($validator->errors(), 400);
-            }
-
-            $user = request()->user();
-            $user = User::where('email', $user->email)->first();
-
-            
-            if($user->codigo == $request->codigo)
-            {
-               # $user->codigo = null;
-
-                $user->telefono = $request->telefono;
-                $user->codigo = null;
-
-             
-                $user->save();
-
-                return response()->json([
-                    'message' => 'Código correcto',
-                    'nuevo telefono' => $request->telefono
-                ]);
-            }
-            else
-            {
-                return response()->json([
-                    'message' => 'Código incorrecto',
-                    
-                ], 400);
-            }
-    }
-
+   
+    //FUNCION PARA EDITAR EMAIL DE USUARIO
     public function editarEmailUsuario(Request $request)
     {
         $validator = Validator::make($request->all(), [
@@ -209,6 +216,10 @@ class UserController extends Controller
         }
     }
 
+
+    // REGISTRO DE USUARIOS
+
+    //FUNCION PARA REGISTRAR USUARIO
     public function registrarUsuario(Request $request)
     {
         $validator = Validator::make($request->all(), [
@@ -275,6 +286,8 @@ class UserController extends Controller
             return response()->json('Error al registrar usuario', 400);
         }
     }
+
+    //FUNCION PARA LOGIN DE USUARIO
     public function login(Request $request)
     {
         $validator = Validator::make($request->all(), [
@@ -321,7 +334,8 @@ class UserController extends Controller
                 return response()->json('Usuario o contraseña incorrectos', 400);
             }
     }
-    #hacer la funcion que genere un codigo aleatorio de 6 digitos unico y valido por 5 minutos
+
+    //FUNCION PARA LOGIN DE USUARIO DESDE SMARTWATCH
     public function loginSwarthWatch(Request $request)
     {
         $validator = Validator::make($request->all(), [
@@ -380,6 +394,8 @@ class UserController extends Controller
             }
     }
 
+
+    //FUNCION PARA VERIFICAR CODIGO DE SESION DE USUARIO DESDE SMARTWATCH
     public function loginVerificarCodigoSmartWatch(Request $request)
     {
         $validator = Validator::make($request->all(), [
@@ -418,12 +434,14 @@ class UserController extends Controller
             }
     }
 
+    //FUNCION PARA CERRAR SESION
     public function logout(Request $request)
     {
         $request->user()->currentAccessToken()->delete();
         return response()->json('Sesión cerrada', 200);
     }
 
+    //FUNCION PARA VERIFICAR TOKEN
     public function verificarToken(Request $request)
     {
         $user = $request->user();
@@ -439,6 +457,7 @@ class UserController extends Controller
         }
     }
 
+    //FUNCION PARA VERIFICAR CODIGO DE ACTIVACION
     public function verificarCodigo(Request $request)
     {
         $validator = Validator::make($request->all(), [
@@ -475,7 +494,7 @@ class UserController extends Controller
             }
     }
 
-    //Funcion para enviar correo de restablecimiento de contraseña
+    //FUNCION PARA OLVIDAR CONTRASEÑA
     public function olvideContraseña(Request $request)
     {
         $validator = Validator::make($request->all(), [
@@ -511,7 +530,7 @@ class UserController extends Controller
 
     }
 
-    //Funcion para restablecer contraseña
+    //FUNCION PARA RESTABLECER CONTRASEÑA
     public function restablecerContraseña(Request $request)
     {
 
@@ -559,7 +578,7 @@ class UserController extends Controller
 
     }
 
-    //Funcion para mostrar la vista de restablecer contraseña
+    //FUNCION PARA MOSTRAR LA VISTA DE RESTABLECER CONTRASEÑA
     public function restablecerContraseñaView(Request $request)
     {
         $user = User::find($request->id);
@@ -568,7 +587,7 @@ class UserController extends Controller
         return view('restablecer-contraseña', ['user' => $user]);
     }
   
-    //Funcion para mostrar la vista de contraseña restablecida
+    //FUNCION PARA MOSTRAR LA VISTA DE CONTRASEÑA RESTABLECIDA
     public function contraseñaRestablecidaView(Request $request)
     {
         $user = User::find($request->id);
@@ -576,6 +595,8 @@ class UserController extends Controller
         return view('contraseña-cambiada', ['user' => $user]);
     }
 
+
+    //FUNCION PARA ENVIAR CODIGO DE SESION Y REENVIARLO
     public function enviarCodigoCuenta(Request $request)
     {
 
@@ -592,7 +613,6 @@ class UserController extends Controller
             return response()->json($validator->errors(), 400);
         }
 
-        dd($request->all(  ));
 
         $user = User::where('email', $request->email)->first();
 
@@ -624,6 +644,9 @@ class UserController extends Controller
     }
 
     //RUTAS FIRMADAS - SERVICIOS
+
+
+    //FUNCION PARA ENVIAR CODIGO DE SESION EN REGISTRO
     public function enviarSMS(Request $request)
     {
         $user = User::find($request->id);
@@ -667,6 +690,8 @@ class UserController extends Controller
         }
     }
 
+
+    //FUNCION PARA ENVIAR CODIGO DE SESION O REENVIARLO
     public function enviarCodigo(Request $request)
     {
 
