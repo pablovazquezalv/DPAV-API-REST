@@ -97,7 +97,8 @@ class SensoresController extends Controller
             'sensor_id' => $sensorId,
             'value' => $request->input('value'),
             'nivel' => $request->input('nivel'),
-            'created_at' => date('Y-m-d H:i:s')
+            'fecha' => date('Y-m-d'),
+            'hora' => date('H:i'),
         ]);
     
      
@@ -152,7 +153,7 @@ class SensoresController extends Controller
             // Ordenar los resultados por 'created_at' en orden descendente
             $cursor = $collection->find([], [
                 'sort' => ['created_at' => -1], // -1 para orden descendente
-                'limit' => 100 // Limitar a los primeros 100 resultados
+                            'limit' => 100 // Limitar a los primeros 100 resultados
 
             ]);
             $data = iterator_to_array($cursor);
