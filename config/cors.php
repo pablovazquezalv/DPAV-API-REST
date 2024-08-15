@@ -1,14 +1,8 @@
 <?php
-
 return [
     'paths' => ['api/*', 'sanctum/csrf-cookie'],
     'allowed_methods' => ['*'],
-    'allowed_origins' => [
-        'https://dpav.shop',
-        'https://api.dpav.shop',
-        'http://localhost:4200',
-        'http://localhost:3000'
-    ],
+    'allowed_origins' => ['https://dpav.shop', 'https://api.dpav.shop', 'http://localhost:4200', 'http://localhost:3000'],
     'allowed_origins_patterns' => [],
     'allowed_headers' => ['*'],
     'exposed_headers' => [],
