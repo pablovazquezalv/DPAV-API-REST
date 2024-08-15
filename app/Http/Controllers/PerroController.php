@@ -201,8 +201,8 @@ class PerroController extends Controller
         $perro->chip = $request->chip == null ? $perro->chip : $request->chip;
         $perro->tipo = $request->tipo;
         $perro->id_raza = $request->id_raza;
-        $request->padre_id != null ? $request->padre_id : null;
-        $request->madre_id != null ? $request->madre_id : null;
+        $perro->padre_id = $request->padre_id != null ? $request->padre_id : null;
+        $perro->madre_id = $request->madre_id != null ? $request->madre_id : null;
     
       
     
