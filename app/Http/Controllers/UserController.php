@@ -79,12 +79,14 @@ class UserController extends Controller
      public function verificarTelefono(Request $request)
      {
          $validator = Validator::make($request->all(), [
-             'telefono' => 'required|string|max:10',
+             'telefono' => 'required|string|max:10|min:10|unique:users',
              'codigo' => 'required|string|max:6',
          ],
          [
              'telefono.required' => 'El teléfono es requerido',
              'codigo.required' => 'El código es requerido',
+             'telefono.unique' => 'El teléfono ya está en uso',
+                'telefono.min' => 'El teléfono debe tener 10 dígitos',
              'telefono.max' => 'El teléfono debe tener 10 dígitos',
              'codigo.max' => 'El código debe tener 6 caracteres',
          ]);
@@ -643,7 +645,7 @@ class UserController extends Controller
     }
 
 
-    
+
     //RUTAS FIRMADAS - SERVICIOS
 
     //FUNCION PARA ENVIAR CODIGO DE SESION EN REGISTRO
