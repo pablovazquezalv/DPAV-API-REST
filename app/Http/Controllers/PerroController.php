@@ -931,14 +931,14 @@ class PerroController extends Controller
         // Renderiza el PDF
         $dompdf->render();
 
-        // Envía el archivo PDF para su descarga al navegador
-        return $dompdf->stream('invoice.pdf');
+        // Envia el PDF generado al navegador
+        $dompdf->stream('certificado.pdf', array('Attachment' => 0));
+        return $dompdf->stream();
         } else {
             return response()->json([
-                'message' => 'Mascota no encontrado'
+                'message' => 'Perro no encontrado'
             ], 404);
         }
-
 
     }
 
