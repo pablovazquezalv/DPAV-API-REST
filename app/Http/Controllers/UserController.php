@@ -214,7 +214,7 @@ class UserController extends Controller
         $validator = Validator::make($request->all(), [
             'nombre' => 'required|string|max:50|min:2',
             'apellido_paterno' => 'required|string|max:50',
-            'telefono' => 'required|string|max:10',
+            'telefono' => 'required|string|max:10|min:10|unique:users',
             'email' => 'required|string|email|max:255|unique:users',
             'password' => 'required|string|min:8',
         ],
@@ -227,6 +227,8 @@ class UserController extends Controller
             'password.min' => 'La contraseña debe tener al menos 8 caracteres',
             'telefono.required' => 'El teléfono es requerido',
             'telefono.max' => 'El teléfono debe tener 10 dígitos',
+            'telefono.min' => 'El teléfono debe tener 10 dígitos',
+            'telefono.unique' => 'El teléfono ya está en uso',
           
             'apellido_paterno.required' => 'El apellido paterno es requerido',
             'apellido_materno.required' => 'El apellido materno es requerido',
