@@ -336,7 +336,9 @@ class UserController extends Controller
                 return response()->json($validator->errors(), 400);
             }
 
+            
             $user = User::where('email', $request->email)->first();
+           
             
             if($user)
             {
@@ -357,6 +359,7 @@ class UserController extends Controller
     
                     $codigoResponse = $this->enviarCodigo(new Request(['id' => $user->id]));
 
+
                     // Verificar si hubo un error en el envío del código
                     if ($codigoResponse->getStatusCode() == 200) 
                     {
@@ -373,7 +376,7 @@ class UserController extends Controller
             }
             else
             {
-                return response()->json('Usuario no encontrado', 400);
+                return response()->json('Usuario no encontrado.', 500);
             }
     }
 
@@ -669,7 +672,9 @@ class UserController extends Controller
 
     public function enviarCodigo(Request $request)
     {
-        $user = User::where('email', $request->email)->first();
+        $user = User::where('id', $request->id)->first();
+
+    
         
         if (!$user) {
             return response()->json('Usuario no encontrado', 400);
