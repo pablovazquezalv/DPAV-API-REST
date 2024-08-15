@@ -555,7 +555,6 @@ class UserController extends Controller
             {
 
                 //regresar la misma  vi,sta en la que se encontraba
-                dd($validator->errors());
                 return redirect()->back()->withErrors($validator)->withInput();
 
             }
