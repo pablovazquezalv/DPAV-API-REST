@@ -595,7 +595,6 @@ class UserController extends Controller
         return view('contraseña-cambiada', ['user' => $user]);
     }
 
-
     //FUNCION PARA ENVIAR CODIGO DE SESION Y REENVIARLO
     public function enviarCodigoCuenta(Request $request)
     {
@@ -643,8 +642,9 @@ class UserController extends Controller
         }
     }
 
-    //RUTAS FIRMADAS - SERVICIOS
 
+    
+    //RUTAS FIRMADAS - SERVICIOS
 
     //FUNCION PARA ENVIAR CODIGO DE SESION EN REGISTRO
     public function enviarSMS(Request $request)

@@ -22,6 +22,7 @@ class SensoresController extends Controller
         $this->database = $this->client->selectDatabase(env('MONGO_DB_DATABASE'));
     }
 
+    //ANADIR SENSOR EN BD Y EN MONGO
     public function añadirSensor(Request $request)
     {
         // Validar datos
@@ -60,6 +61,7 @@ class SensoresController extends Controller
         }
     }
 
+    //MANDAR DATOS A MONGO
 
     public function mandarDatosMongo(Request $request)
     {
@@ -98,40 +100,13 @@ class SensoresController extends Controller
             'created_at' => date('Y-m-d H:i:s')
         ]);
     
-        $this->emitEvent($sensorId, [
-            'sensor_id' => $sensorId,
-            'value' => $request->input('value'),
-            'nivel' => $request->input('nivel'),
-            'created_at' => date('Y-m-d H:i:s')
-        ]);
+     
     
         return response()->json(['message' => 'Datos guardados', 'id' => $result->getInsertedId()], 201);
     }
     
-    private function emitEvent($sensorId, $data)
-    {
-        event(new \App\Events\SensorDataUpdated($sensorId, $data));
-    }
     
-    // Método para manejar la transmisión de datos en tiempo real
-    public function streamSensorData($sensorId)
-    {
-        $response = new StreamedResponse(function () use ($sensorId) {
-            while (true) {
-                echo 'data: ' . json_encode(['sensor_id' => $sensorId, 'timestamp' => now()]) . "\n\n";
-                ob_flush();
-                flush();
-                sleep(5); // Intervalo de tiempo para la emisión de eventos
-            }
-        });
     
-        $response->headers->set('Content-Type', 'text/event-stream');
-        $response->headers->set('Cache-Control', 'no-cache');
-        $response->headers->set('Connection', 'keep-alive');
-    
-        return $response;
-    }
-
     public function obtenerSensores()
     {
         $sensores = Sensor::all();
@@ -176,7 +151,9 @@ class SensoresController extends Controller
             // Obtener los datos de la colección específica del sensor
             // Ordenar los resultados por 'created_at' en orden descendente
             $cursor = $collection->find([], [
-                'sort' => ['created_at' => -1] // -1 para orden descendente
+                'sort' => ['created_at' => -1], // -1 para orden descendente
+                'limit' => 100 // Limitar a los primeros 100 resultados
+
             ]);
             $data = iterator_to_array($cursor);
     
