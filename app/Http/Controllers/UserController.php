@@ -402,21 +402,14 @@ class UserController extends Controller
             $user = User::where('codigo', $request->codigo)->first();
             if ($user) {
                 // Verificar si el código ha caducado
-                if ($user->codigo_expiration && now()->lessThan($user->codigo_expiration)) 
-                
-                
-                {
+               
                     $token = $user->createToken('token')->plainTextToken;
                     return response()->json([
                         'message' => 'Usuario autenticado',
                         'user' => $user,
                         'token' => $token
                     ]);
-                } else {
-                    return response()->json([
-                        'message' => 'Código expirado,solicita un nuevo código  ',
-                    ], 400);
-                }
+                
               
             } else {
                 return response()->json([
@@ -599,11 +592,16 @@ class UserController extends Controller
             return response()->json($validator->errors(), 400);
         }
 
+        dd($request->all(  ));
+
         $user = User::where('email', $request->email)->first();
 
+        
+            
         if($user)
         {
             $user->save();
+
 
              // Enviar código SMS llamando a la función enviarCodigo
             $codigoResponse = $this->enviarCodigo(new Request(['id' => $user->id]));
@@ -671,15 +669,17 @@ class UserController extends Controller
 
     public function enviarCodigo(Request $request)
     {
-        $user = User::where('id', $request->id)->first();
 
-    
-        
-        if (!$user) {
-            return response()->json('Usuario no encontrado', 400);
-        }
-        
-      
+       if(request()->has('email'))
+         {
+              $user = User::where('email', request()->email)->first();
+         }
+         else
+         {
+             $user = User::where('id', $request->id)->first();
+         }
+
+
         $response = Http::withHeaders([
             'Authorization' => 'App ae6f077ec349231e89761c8c54350ab6-e558221a-0ade-4c70-a4c1-cbb04196ef64',
             'Content-Type' => 'application/json',
