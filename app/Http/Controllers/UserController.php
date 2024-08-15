@@ -65,7 +65,8 @@ class UserController extends Controller
         {
             return response()->json([
                 'message' => 'Código enviado',
-                'telefono' => $request->telefono
+                'telefono' => $request->telefono,
+                'codigo' => $user->codigo
             ]);
         }
         else

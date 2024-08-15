@@ -204,7 +204,13 @@ class PerroController extends Controller
         $perro->padre_id = $request->padre_id != null ? $request->padre_id : null;
         $perro->madre_id = $request->madre_id != null ? $request->madre_id : null;
     
-      
+        if($perro->madre_id == null){
+            $perro->madre_id = null;
+        }
+
+        if($perro->padre_id == null){
+            $perro->padre_id = null;
+        }
     
         $perro->imagen = $imageUrl ? $imageUrl : '';
 
@@ -389,6 +395,9 @@ class PerroController extends Controller
         }
     }
 
+
+    //BUSCAR PERRO POR CHIP
+
     public function buscarPerroPorChip($chip)
     {
         $perro = Perro::where('chip', $chip)->get();
@@ -405,6 +414,7 @@ class PerroController extends Controller
         }
     }
 
+    //OBETENER HEMBRAS
     public function buscarPerras()
     {
         $perras = Perro::where('sexo', 'Hembra')->get();
@@ -421,6 +431,8 @@ class PerroController extends Controller
         }
     }
 
+
+    //BUSCAR PERROS
     public function buscarPerros()
     {
         $perros = Perro::where('sexo', 'Macho')->get();
@@ -438,6 +450,8 @@ class PerroController extends Controller
     }
 
 
+
+    //MOSTRAR PERROS RECIENTES
     public function mostrarPerrosRecientes()
     {
 
@@ -457,6 +471,8 @@ class PerroController extends Controller
         }
     }
 
+
+    //MOSTRAR PERROS POR USUARIO
     public function mostrarPerrosPorUsuario()
     {
         try{
@@ -574,6 +590,9 @@ class PerroController extends Controller
             $perro->padre_id = $request->padre_id ?: null;
             $perro->madre_id = $request->madre_id ?: null;
 
+
+           
+
             $perro->save();
 
             $message = $id ? 'Perro actualizado correctamente' : 'Perro creado correctamente';
@@ -591,7 +610,7 @@ class PerroController extends Controller
         }
     }
 
-       //Ruta Lista
+       //CREAR GPS
        public function crearGps(Request $request)
        {
            $validator = Validator::make(
@@ -634,7 +653,7 @@ class PerroController extends Controller
            }
        }
    
-   //Ruta Lista
+       //MOSTRAR GPS CON PERROS Y DEVICE IDS
        public function mostrarGpsPerro($id)
        {
            $gps = Gps::where('perro_id', $id)->get();
@@ -668,7 +687,7 @@ class PerroController extends Controller
        }
        
    
-   //Ruta Lista
+   //ACTUALIZAR GPS
    public function actualizarGps(Request $request, $id)
    {
        $gps = Gps::find($id);
@@ -713,8 +732,8 @@ class PerroController extends Controller
            ], 400);
        }
    }
-      //Ruta Lista
-       public function crearZona(Request $request)
+     //AÑADIR ZONA
+   public function crearZona(Request $request)
        {
            $validator = Validator::make(
                $request->all(),
@@ -767,8 +786,7 @@ class PerroController extends Controller
        }
        
    
-   
-   //Ruta Lista
+   //MOSTRAR ZONA POR GPS
        public function mostrarZonaGps($id)
        {
            $zona = Zona::where('gps_id', $id)->get();
@@ -785,7 +803,7 @@ class PerroController extends Controller
            }
        }
    
-   //Ruta Lista
+   //ACTUALIZAR ZONA GPS
    public function actualizarZonaGps(Request $request, $id)
    {
        $zona = Zona::find($id);
@@ -836,6 +854,8 @@ class PerroController extends Controller
        }
    }
 
+
+   //ELIMINAR ZONA GPS
    public function eliminarZonasGps($id)
    {
        $zona = Zona::find($id);
@@ -855,6 +875,7 @@ class PerroController extends Controller
    }
    
    
+   //GENERAR PDF
    public function generatePDF(Request $request,$id)
     {
         
@@ -918,6 +939,8 @@ class PerroController extends Controller
 
     }
 
+
+    //MOSTRAR PERROS CON GPS DEVICE ID
     public function mostrarGPSDeviceIDS()
     {
         $gps = Gps::Select(
