@@ -12,10 +12,10 @@ class UserSeeder extends Seeder
     public function run(): void
     {
      DB::table('users')->insert([
-        'nombre' => 'John Doe',
-        'apellido_paterno' => 'torres',
-        'usuario' => 'juanpan',
-        'telefono' => '8487526354',
+        'nombre' => 'Martilo',
+        'apellido_paterno' => 'Vazquez',
+        'usuario' => 'Marti',
+        'telefono' => '8718458147',
         'direccion' => 'Calle San Juan, 553',
         'ciudad' => 'Torreon',
         'codigo_postal' => '87244',
@@ -28,9 +28,9 @@ class UserSeeder extends Seeder
      ]);
 
         DB::table('users')->insert([
-            'nombre' => 'yordi',
-            'apellido_paterno' => 'ortiz',
-            'usuario' =>'yordi',
+            'nombre' => 'Yordi',
+            'apellido_paterno' => 'Ortiz',
+            'usuario' =>'Yordi',
             'telefono' => '8287526354',
             'direccion' => 'calle',
             'ciudad' => 'torreon',
@@ -39,14 +39,14 @@ class UserSeeder extends Seeder
             'estado' => 'Coahuila',
             'activo' => 1,
             'role_id' => 2,
-            'email' => 'yordi@gmail.com',
+            'email' => 'yordiortiz16@gmail.com',
             'password' => bcrypt('dpav@2024'),
         ]);
 
         DB::table('users')->insert([
-            'nombre' => 'jose',
-            'apellido_paterno' => 'gasca',
-            'usuario' => 'jose',
+            'nombre' => 'Bryan',
+            'apellido_paterno' => 'Canedo',
+            'usuario' => 'Canaba',
             'telefono' => '8187526354',
             'direccion' => 'calle',
             'ciudad' => 'torreon',
@@ -54,7 +54,7 @@ class UserSeeder extends Seeder
             'estado' => 'Coahuila',
             'activo' => 1,
             'role_id' => 3,
-            'email' => 'bryan@gmail.com',
+            'email' => 'bryansoe871@gmail.com',
             'password' => bcrypt('dpav@2024'),
         ]);
 
