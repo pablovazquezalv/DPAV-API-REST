@@ -259,7 +259,7 @@ class PerroController extends Controller
         ->leftJoin('perros as padre', 'perros.padre_id', '=', 'padre.id')
         ->leftJoin('perros as madre', 'perros.madre_id', '=', 'madre.id')
         ->where('perros.id', $id)
-        ->get();
+        ->first();   
         if ($perro_usuario) {
             return response()->json([
                 'message' => 'Perro encontrado',
@@ -597,7 +597,7 @@ class PerroController extends Controller
            $validator = Validator::make(
                $request->all(),
                [
-                   'device_id' => 'required|string|max:50',
+                   'device_id' => 'required|string|max:50|unique:gps',
                    'perro_id' => 'required|int',
                ],
                [
