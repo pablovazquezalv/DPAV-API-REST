@@ -63,7 +63,7 @@ class UserSeeder extends Seeder
             'nombre' => 'jose',
             'apellido_paterno' => 'gasca',
             'usuario' => 'jose',
-            'telefono' => '8718458147',
+            'telefono' => '8418458147',
             'direccion' => 'calle',
             'ciudad' => 'torreon',
             'codigo_postal' => '87244',
