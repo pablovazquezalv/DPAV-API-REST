@@ -101,10 +101,17 @@ Route::get('/stream-ubicacion/{deviceId}', [TrackimoController::class, 'streamUb
 Route::get('/oauth2/handler', [OAuthController::class, 'handleAuthorization']);
 Route::get('/get-code', [OAuthController::class, 'getCode']);
 
-Route::get('/mostrarGPSDeviceIDS', [PerroController::class, 'mostrarGPSDeviceIDS']);
 Route::middleware('auth:sanctum')->group(function () {
     Route::post('/crear/gps', [PerroController::class, 'crearGps']);
-    Route::get('/mostrar/gps/{perro_id}', [PerroController::class, 'mostrarGps']);
+    //MOSTRAR GPS CON PERROS Y DEVICE IDS
+    Route::get('/mostrarGPSDeviceIDS', [PerroController::class, 'mostrarGPSDeviceIDS']);
+
+    //MOSTRAR GPS CON PERROS
+    Route::get('/mostrar/gps/{perro_id}', [PerroController::class, 'mostrarGpsPerro']);
+
+    //OBTENER GPS POR ID
+    Route::get('/mostrar/gpsPorId/{id}', [PerroController::class, 'mostrarGPSDeviceID']);
+    
     Route::put('/actualizar/gps/{id}', [PerroController::class, 'actualizarGps']);
     Route::post('/crear/zonas', [PerroController::class, 'crearZona']);
     Route::get('/mostrar/zona/{gps_id}', [PerroController::class, 'mostrarZonaGps']);

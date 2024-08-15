@@ -634,9 +634,25 @@ class PerroController extends Controller
        }
    
    //Ruta Lista
-       public function mostrarGps($id)
+       public function mostrarGpsPerro($id)
        {
            $gps = Gps::where('perro_id', $id)->get();
+   
+           if ($gps->count() > 0) {
+               return response()->json([
+                   'message' => 'GPS encontrado',
+                   'gps' => $gps
+               ], 200);
+           } else {
+               return response()->json([
+                   'message' => 'GPS no encontrado'
+               ], 404);
+           }
+       }
+
+       public function mostrarGPSDeviceID($id)
+       {
+           $gps = Gps::where('id', $id)->get();
    
            if ($gps->count() > 0) {
                return response()->json([
