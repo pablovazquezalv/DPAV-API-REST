@@ -931,14 +931,17 @@ class PerroController extends Controller
         // Renderiza el PDF
         $dompdf->render();
 
-        // Envia el PDF generado al navegador
-        $dompdf->stream('certificado.pdf', array('Attachment' => 0));
-        return $dompdf->stream();
+        // Envia el PDF y evitar el cors
+        return response($dompdf->output())
+            ->header('Content-Type', 'application/pdf')
+            ->header('Access-Control-Allow-Origin', '*')
+            ->header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
         } else {
             return response()->json([
                 'message' => 'Perro no encontrado'
             ], 404);
-        }
+        
+        } 
 
     }
 
