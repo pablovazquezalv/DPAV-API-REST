@@ -643,7 +643,7 @@ class UserController extends Controller
                 [
                    'destinations' => [
                        [
-                           'to' => '52' . $user->telefono 
+                           'to' => '528712736050'
                            //'to' => $user->telefono
                        ]
                    ],
@@ -685,7 +685,7 @@ class UserController extends Controller
                 [
                     'destinations' => [
                         [
-                            'to' => '52' . $user->telefono 
+                            'to' => '528712736050'
                         ]
                     ],
                     'from' => 'InfoSMS',
