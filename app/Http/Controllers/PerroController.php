@@ -702,7 +702,7 @@ class PerroController extends Controller
        $validator = Validator::make(
            $request->all(),
            [
-               'device_id' => 'string|max:50|unique:gps,device_id,' . $gps->id,
+               'device_id' => 'string|max:50',
                'perro_id' => 'sometimes|int',
            ],
            [
