@@ -143,29 +143,32 @@ class SensoresController extends Controller
    
 
     public function show($sensorId)
-    {
-        try {
-            // Determinar el nombre de la colección basado en el sensor_id
-            $collectionName = $sensorId; // Nombre de la colección por sensor
-            $collection = $this->database->selectCollection($collectionName);
-    
-            // Obtener los datos de la colección específica del sensor
-            // Ordenar los resultados por 'created_at' en orden descendente
-            $cursor = $collection->find([], [
-                'sort' => ['created_at' => -1], // -1 para orden descendente
-                            'limit' => 100 // Limitar a los primeros 100 resultados
+{
+    try {
+        // Determinar el nombre de la colección basado en el sensor_id
+        $collectionName = $sensorId; // Nombre de la colección por sensor
+        $collection = $this->database->selectCollection($collectionName);
 
-            ]);
-            $data = iterator_to_array($cursor);
-    
-            return response()->json([
-                'sensor_id' => $sensorId,
-                'data' => $data,
-            ], 200);
-        } catch (\Exception $e) {
-            return response()->json(['message' => 'Error al obtener los datos del sensor'], 500);
-        }
+        // Obtener los datos de la colección específica del sensor
+        // Ordenar los resultados primero por 'fecha' y luego por 'hora' en orden descendente
+        $cursor = $collection->find([], [
+            'sort' => [
+                'fecha' => -1, // Orden descendente por fecha
+                'hora' => -1   // Orden descendente por hora
+            ],
+            'limit' => 100 // Limitar a los primeros 100 resultados
+        ]);
+
+        $data = iterator_to_array($cursor);
+
+        return response()->json([
+            'sensor_id' => $sensorId,
+            'data' => $data,
+        ], 200);
+    } catch (\Exception $e) {
+        return response()->json(['message' => 'Error al obtener los datos del sensor'], 500);
     }
+}
     
     
 }
