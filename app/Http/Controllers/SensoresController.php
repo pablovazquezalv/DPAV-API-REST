@@ -156,7 +156,6 @@ class SensoresController extends Controller
                 'fecha' => -1, // Orden descendente por fecha
                 'hora' => -1   // Orden descendente por hora
             ],
-            'limit' => 100 // Limitar a los primeros 100 resultados
         ]);
 
         $data = iterator_to_array($cursor);
