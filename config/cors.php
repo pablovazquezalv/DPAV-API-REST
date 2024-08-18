@@ -4,6 +4,7 @@ return [
     'allowed_methods' => ['*'],
     'allowed_origins' => ['https://dpav.shop'
     
+    
 ],
     'allowed_origins_patterns' => [],
     'allowed_headers' => ['*'],

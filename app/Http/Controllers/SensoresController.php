@@ -8,6 +8,8 @@ use Illuminate\Validation\Rule;
 use MongoDB\Client as MongoClient;
 use App\Models\Sensor;
 use Symfony\Component\HttpFoundation\StreamedResponse;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Http;
 
 
 class SensoresController extends Controller
@@ -72,14 +74,6 @@ class SensoresController extends Controller
                 'sensor_id' => 'required|string',
                 'value' => 'required|numeric',
                 'nivel' => ['required', Rule::in(['bajo', 'medio', 'lleno', 'vacio'])],
-            ],
-            [
-                'sensor_id.required' => 'El campo sensor_id es obligatorio',
-                'sensor_id.string' => 'El campo sensor_id debe ser una cadena de texto',
-                'value.required' => 'El campo value es obligatorio',
-                'value.numeric' => 'El campo value debe ser un número',
-                'nivel.required' => 'El campo nivel es obligatorio',
-                'nivel.in' => 'El campo nivel debe ser uno de los siguientes valores: bajo, medio, lleno, vacio',
             ]
         );
     
@@ -101,13 +95,56 @@ class SensoresController extends Controller
             'hora' => date('H:i'),
         ]);
     
-     
+        // Si el nivel es vacio, enviar alerta
+        if ($request->input('nivel') == 'vacio') 
+        {
+            $cacheKey = 'last_notification_' . $sensorId;
     
+            // Obtener la última vez que se envió una notificación
+            $lastNotificationTime = Cache::get($cacheKey);
+    
+            if (!$lastNotificationTime || now()->diffInMinutes($lastNotificationTime) >= 4)
+             {
+                // Enviar la notificación aquí
+                $response = Http::withHeaders([
+                    'Authorization' => 'App ae6f077ec349231e89761c8c54350ab6-e558221a-0ade-4c70-a4c1-cbb04196ef64',
+                    'Content-Type' => 'application/json',
+                    'Accept' => 'application/json'
+                ])->post('https://e1qzvq.api.infobip.com/sms/2/text/advanced', [
+                    'messages' => [
+                        [
+                            'destinations' => [
+                                [
+                                    'to' => '528712736050'
+                                ]
+                            ],
+                            'from' => 'InfoSMS',
+                            'text' => 'El nivel del sensor está vacío'
+                        ]
+                    ]
+                ]);
+               
+
+    
+                if ($response->successful())
+                 {
+                    // Actualizar el tiempo de la última notificación
+                    Cache::put($cacheKey, now(), now()->addMinutes(4)); // Actualizar para 4 minutos
+    
+                    return response()->json(['message' => 'Datos guardados y notificación enviada'], 201);
+                }
+    
+                return response()->json(['message' => 'Datos guardados pero no se pudo enviar la notificación'], 201);
+            }
+        
+        else{
+            return response()->json(['message' => 'Datos guardados'], 201);
+        }
+    }
         return response()->json(['message' => 'Datos guardados', 'id' => $result->getInsertedId()], 201);
     }
     
-    
-    
+    //OBTENER SENSORES
     public function obtenerSensores()
     {
         $sensores = Sensor::all();
@@ -121,9 +158,8 @@ class SensoresController extends Controller
             return response()->json(['message' => 'No se encontraron sensores'], 404);
         }
     }
-
    
-
+    //OBTENER SENSOR POR ID
     public function obtenerSensor($id)
     {
         $sensor = Sensor::find($id);
@@ -138,36 +174,33 @@ class SensoresController extends Controller
         }
     }
 
-
-
-   
-
+    //MOSTRAR VALORES DE SENSOR
     public function show($sensorId)
-{
-    try {
-        // Determinar el nombre de la colección basado en el sensor_id
-        $collectionName = $sensorId; // Nombre de la colección por sensor
-        $collection = $this->database->selectCollection($collectionName);
+    {
+        try {
+            // Determinar el nombre de la colección basado en el sensor_id
+            $collectionName = $sensorId; // Nombre de la colección por sensor
+            $collection = $this->database->selectCollection($collectionName);
 
-        // Obtener los datos de la colección específica del sensor
-        // Ordenar los resultados primero por 'fecha' y luego por 'hora' en orden descendente
-        $cursor = $collection->find([], [
-            'sort' => [
-                'fecha' => -1, // Orden descendente por fecha
-                'hora' => -1   // Orden descendente por hora
-            ],
-        ]);
+            // Obtener los datos de la colección específica del sensor
+            // Ordenar los resultados primero por 'fecha' y luego por 'hora' en orden descendente
+            $cursor = $collection->find([], [
+                'sort' => [
+                    'fecha' => -1, // Orden descendente por fecha
+                    'hora' => -1   // Orden descendente por hora
+                ],
+            ]);
 
-        $data = iterator_to_array($cursor);
+            $data = iterator_to_array($cursor);
 
-        return response()->json([
-            'sensor_id' => $sensorId,
-            'data' => $data,
-        ], 200);
-    } catch (\Exception $e) {
-        return response()->json(['message' => 'Error al obtener los datos del sensor'], 500);
+            return response()->json([
+                'sensor_id' => $sensorId,
+                'data' => $data,
+            ], 200);
+        } catch (\Exception $e) {
+            return response()->json(['message' => 'Error al obtener los datos del sensor'], 500);
+        }
     }
-}
     
     
 }
