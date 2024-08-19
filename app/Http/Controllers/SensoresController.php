@@ -86,6 +86,11 @@ class SensoresController extends Controller
         $collectionName = $sensorId; // Nombre de la colección por sensor
         $collection = $this->database->selectCollection($collectionName);
     
+
+
+        $sensor = Sensor::where('sensor_id', $sensorId)->first();
+
+        
         // Insertar datos en la colección específica del sensor
         $result = $collection->insertOne([
             'sensor_id' => $sensorId,
@@ -95,6 +100,7 @@ class SensoresController extends Controller
             'hora' => date('H:i'),
         ]);
     
+
         // Si el nivel es vacio, enviar alerta
         if ($request->input('nivel') == 'vacio') 
         {
@@ -102,6 +108,7 @@ class SensoresController extends Controller
     
             // Obtener la última vez que se envió una notificación
             $lastNotificationTime = Cache::get($cacheKey);
+
     
             if (!$lastNotificationTime || now()->diffInMinutes($lastNotificationTime) >= 4)
              {
@@ -119,7 +126,7 @@ class SensoresController extends Controller
                                 ]
                             ],
                             'from' => 'InfoSMS',
-                            'text' => 'El nivel del sensor está vacío'
+                            'text' => 'El nivel del sensor ' . $sensor->ubicacion . ' está vacío',
                         ]
                     ]
                 ]);
