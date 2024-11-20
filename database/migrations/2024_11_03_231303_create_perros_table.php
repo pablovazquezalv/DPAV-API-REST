@@ -16,21 +16,15 @@ return new class extends Migration
             $table->string('nombre',50);
             $table->string('color',50);
             $table->string('edad',50);
-            $table->enum('sexo',['masculino','femenino']);
+            $table->enum('sexo',['Macho','Hembra']);
             $table->string('peso',50);
             $table->string('tamaño',50);
             $table->string('altura',50);
             $table->boolean('estatus');
             $table->string('esterilizado',50);
             $table->date('fecha_nacimiento');
-            $table->string('imagen',500)->nullable();
-            $table->string('chip',50)->nullable();
-            $table->enum('tipo',['cria','reproductor','venta']);
             $table->foreignId('id_raza')->constrained('razas');
-            $table->foreignId('padre_id')->nullable()->constrained('perros');
-            $table->foreignId('madre_id')->nullable()->constrained('perros');
             $table->foreignId('user_id')->constrained('users');
-           
             $table->timestamps();
         });
     }

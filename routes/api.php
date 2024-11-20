@@ -33,5 +33,3 @@ Route::get('/mostrarRazasInhabilitadas', [RazaController::class, 'mostrarRazasIn
 Route::get('mostarRazasHabilitadas', [RazaController::class, 'mostrarRazasHabilitadas']);
 Route::put('/actualizarRaza/{id}', [RazaController::class, 'actualizarRaza']);
 Route::put('/eliminarRaza/{id}', [RazaController::class, 'inahabilitarRaza']);
-//Certificados
-Route::post('crearCertificado', [CertificadoController::class, 'crearCertificado']);
