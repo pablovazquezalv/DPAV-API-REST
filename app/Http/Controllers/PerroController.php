@@ -193,24 +193,51 @@ class PerroController extends Controller
         }
     }
 
-    public function mostrarPerros()
-    {
-        $perros = Perro::all();
+    public function mostrarPerros(Request $request)
+{
+    $user = $request->user();
 
-        if($perros)
-        {
-            return response()->json([
-                'message' => 'Perros encontrados',
-                'perros' => $perros
-            ], 200);
-        }
-        else
-        {
-            return response()->json([
-                'message' => 'Perros no encontrados'
-            ], 404);
-        }
+    if ($user->role_id == 1) { // Si es administrador
+        $perros = Perro::with('raza', 'user')->get(); // Puedes incluir relaciones con raza o user
+    } else if ($user->role_id == 3) { // Si es usuario normal
+        $perros = Perro::with('raza')->where('user_id', $user->id)->get();
+    } else {
+        return response()->json([
+            'message' => 'No tienes permiso para ver esta información',
+        ], 403);
     }
+
+    if ($perros->isEmpty()) {
+        return response()->json([
+            'message' => 'No se encontraron perros',
+        ], 404);
+    }
+
+    return response()->json([
+        'message' => 'Perros encontrados',
+        'perros' => $perros
+    ], 200);
+}
+
+
+    // public function mostrarPerros()
+    // {
+    //     $perros = Perro::all();
+
+    //     if($perros)
+    //     {
+    //         return response()->json([
+    //             'message' => 'Perros encontrados',
+    //             'perros' => $perros
+    //         ], 200);
+    //     }
+    //     else
+    //     {
+    //         return response()->json([
+    //             'message' => 'Perros no encontrados'
+    //         ], 404);
+    //     }
+    // }
 
     public function inhabilitarPerro($id)
     {

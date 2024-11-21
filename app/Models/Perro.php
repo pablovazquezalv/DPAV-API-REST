@@ -14,7 +14,7 @@ class Perro extends Model
 
     protected $table = 'perros';
 
-   
+
 
 
     protected $fillable = [
@@ -25,7 +25,6 @@ class Perro extends Model
         'altura',
         'tamaño',
         'peso',
-
         'sexo',
         'esterilizado',
         'vacunado',
@@ -34,12 +33,8 @@ class Perro extends Model
         'estatus',
         'esterilizado',
         'fecha_nacimiento',
-        'chip',
-        'tipo',
         'user_id',
         'id_raza',
-        'padre_id',
-        'madre_id',
     ];
 
     public function user()
@@ -47,7 +42,15 @@ class Perro extends Model
         return $this->belongsTo(User::class);
     }
 
+    public function raza()
+    {
+        return $this->belongsTo(Raza::class, 'id_raza');
+    }
 
 
-    
+    public function perroUser()
+    {
+        return $this->hasMany(PerroUser::class);
+    }
+
 }

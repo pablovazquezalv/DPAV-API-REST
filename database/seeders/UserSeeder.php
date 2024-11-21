@@ -32,5 +32,17 @@ class UserSeeder extends Seeder
             'role_id' => 3,
             'codigo' => rand(100000, 999999),
         ]);
+
+        User::create([
+            'nombre' => 'Admin',
+            'apellido_paterno' => 'admin',
+            'telefono' => '1234567890',
+            'email' => 'admin@gmail.com',
+            'password' => Hash::make('password123'),
+            'activo' => 1,
+            'role_id' => 1,
+            'codigo' => rand(100000, 999999),
+        ]);
+
     }
 }
