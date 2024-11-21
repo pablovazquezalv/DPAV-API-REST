@@ -42,6 +42,11 @@ class Perro extends Model
         return $this->belongsTo(User::class);
     }
 
+    public function usuarios()
+    {
+        return $this->hasMany(PerroUser::class, 'perro_id');
+    }
+
     public function raza()
     {
         return $this->belongsTo(Raza::class, 'id_raza');
@@ -52,5 +57,4 @@ class Perro extends Model
     {
         return $this->hasMany(PerroUser::class);
     }
-
 }

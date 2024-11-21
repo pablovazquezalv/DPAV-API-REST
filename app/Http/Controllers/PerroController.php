@@ -30,7 +30,6 @@ class PerroController extends Controller
             'tamaño' =>  Rule::in(['Pequeño','Mediano','Grande'],'required'),           //pequeño, mediano, grande
             'altura' => 'required',
             'estatus' => 'sometimes', //1 = Activo, 0 = Inactivo
-
             'esterilizado' => Rule::in(['Si','No'],'required'),
             'fecha_nacimiento' => 'required|date',
             'id_raza' => 'required|int',
@@ -197,24 +196,20 @@ class PerroController extends Controller
     {
         $perro = Perro::find($id);
 
-        if($perro)
-        {
-            $perro->delete();
-
-            return response()->json([
-                'message' => 'Perro eliminado',
-                'perro' => $perro
-            ], 200);
-        }
-        else
-        {
+        if (!$perro) {
             return response()->json([
                 'message' => 'Perro no encontrado'
             ], 404);
         }
+
+        $perro->usuarios()->delete();
+
+        $perro->delete();
+
+        return response()->json([
+            'message' => 'Perro eliminado correctamente'
+        ], 200);
     }
-
-
 
     public function mostrarPerros(Request $request)
 {
