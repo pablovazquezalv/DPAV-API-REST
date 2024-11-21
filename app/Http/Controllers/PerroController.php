@@ -29,7 +29,8 @@ class PerroController extends Controller
             'peso' => 'required',
             'tamaño' =>  Rule::in(['Pequeño','Mediano','Grande'],'required'),           //pequeño, mediano, grande
             'altura' => 'required',
-            'estatus' => 'required',
+            'estatus' => 'sometimes', //1 = Activo, 0 = Inactivo
+
             'esterilizado' => Rule::in(['Si','No'],'required'),
             'fecha_nacimiento' => 'required|date',
             'id_raza' => 'required|int',
@@ -43,7 +44,6 @@ class PerroController extends Controller
             'peso.required' => 'El peso es requerido',
             'tamaño.required' => 'El tamaño es requerido',
             'altura.required' => 'La altura es requerida',
-            'estatus.required' => 'El estatus es requerido',
             'esterilizado.required' => 'La esterilización es requerida',
             'fecha_nacimiento.required' => 'La fecha de nacimiento es requerida',
             'tamaño.invalid' => 'El tamaño no es válido',
@@ -63,7 +63,7 @@ class PerroController extends Controller
             'peso' => $request->peso,
             'tamaño' => $request->tamaño,
             'altura' => $request->altura,
-            'estatus' => $request->estatus,
+            'estatus' => $request->estatus ?? 1,
             'esterilizado' => $request->esterilizado,
             'fecha_nacimiento' => $request->fecha_nacimiento,
             'id_raza' => $request->id_raza,
@@ -148,7 +148,7 @@ class PerroController extends Controller
         $perro->peso = $request->peso;
         $perro->tamaño = $request->tamaño;
         $perro->altura = $request->altura;
-        $perro->estatus = $request->estatus;
+        $perro->estatus = $request->estatus ?? 1;
         $perro->esterilizado = $request->esterilizado;
         $perro->fecha_nacimiento = $request->fecha_nacimiento;
         $perro->id_raza = $request->id_raza;
@@ -192,6 +192,29 @@ class PerroController extends Controller
             ], 404);
         }
     }
+
+    public function eliminarPerro($id)
+    {
+        $perro = Perro::find($id);
+
+        if($perro)
+        {
+            $perro->delete();
+
+            return response()->json([
+                'message' => 'Perro eliminado',
+                'perro' => $perro
+            ], 200);
+        }
+        else
+        {
+            return response()->json([
+                'message' => 'Perro no encontrado'
+            ], 404);
+        }
+    }
+
+
 
     public function mostrarPerros(Request $request)
 {

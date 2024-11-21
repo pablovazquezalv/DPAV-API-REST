@@ -25,6 +25,8 @@ Route::get('mostrarPerros', [PerroController::class, 'mostrarPerros'])->middlewa
 Route::put('inhabilitarPerro/{id}', [PerroController::class, 'inhabilitarPerro'])->middleware('auth:sanctum');
 Route::put('habilitarPerro/{id}', [PerroController::class, 'habilitarPerro'])->middleware('auth:sanctum');
 Route::put('actualizarPerro/{id}', [PerroController::class, 'actualizarPerro']);
+//Eliminar Perro
+Route::delete('eliminarPerro/{id}', [PerroController::class, 'eliminarPerro'])->middleware('auth:sanctum');
 //Razas
 Route::post('/crearRaza', [RazaController::class, 'crearRaza']);
 
