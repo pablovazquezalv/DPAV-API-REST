@@ -33,45 +33,44 @@ class UserController extends Controller
             'password.min' => 'La contraseña debe tener al menos 8 caracteres',
             'telefono.required' => 'El teléfono es requerido',
             'telefono.max' => 'El teléfono debe tener 10 dígitos',
-          
             'apellido_paterno.required' => 'El apellido paterno es requerido',
             'apellido_materno.required' => 'El apellido materno es requerido',
         ]);
 
-        if ($validator->fails()) 
+        if ($validator->fails())
         {
             return response()->json($validator->errors(), 400);
         }
 
         $user = User::create([
             'nombre' => $request->nombre,
-            'usuario' => explode('@', $request->email)[0], 
+            'usuario' => explode('@', $request->email)[0],
             'apellido_paterno' => $request->apellido_paterno,
             'telefono' => $request->telefono,
             'email' => $request->email,
-            
+
             'password' => Hash::make($request->password),
-            'activo' => 1, // '0' es el estado 'inactivo
+            'activo' => 1,
             'role_id' => 3, // '1' es el id del rol 'user
             'numero' => $request->numero,
             'codigo'=> rand(100000, 999999), //genera un código aleatorio de 6 dígitos (opcional
-           
+
         ]);
 
         $user->save();
 
-      
+
         if($user->save())
         {
             $url = URL::temporarySignedRoute('enviarSMS', now()->addMinutes(5), ['id' => $user->id]);
 
             Mail::to($user->email)->send(new RegisterMail($user, $url));
-            
+
             return response()->json([
                 'message' => 'Usuario registrado',
                 'user' => $user,
                 'url' => $url
-            
+
             ]);
         }
         else
@@ -79,7 +78,7 @@ class UserController extends Controller
             return response()->json('Error al registrar usuario', 400);
         }
     }
-    
+
     public function login(Request $request)
     {
         $validator = Validator::make($request->all(), [
@@ -91,7 +90,7 @@ class UserController extends Controller
             'password.required' => 'La contraseña es requerida',
             'email.email' => 'El email no es válido',
             'password.min' => 'La contraseña debe tener al menos 8 caracteres',
-            
+
         ]);
 
             if ($validator->fails()) {
@@ -99,7 +98,7 @@ class UserController extends Controller
             }
 
             $user = User::where('email', $request->email)->first();
-            
+
 
             if($user && Hash::check($request->password, $user->password))
             {
@@ -108,7 +107,7 @@ class UserController extends Controller
                     return response()->json([
                         'message' => 'Usuario inactivo',
                         'user' => $user
-                    
+
                     ], 400);
                 }
                 else
@@ -144,7 +143,7 @@ class UserController extends Controller
     //         'codigo.required' => 'El código es requerido',
     //         'email.email' => 'El email no es válido',
     //         'codigo.max' => 'El código debe tener 6 caracteres',
-            
+
     //     ]);
 
     //         if ($validator->fails()) {
@@ -153,7 +152,7 @@ class UserController extends Controller
 
     //         $user = User::where('email', $request->email)->first();
 
-            
+
     //         if($user->codigo == $request->codigo)
     //         {
     //            # $user->codigo = null;
@@ -214,7 +213,7 @@ class UserController extends Controller
     //         'email.email' => 'El email no es válido',
     //         'password.required' => 'La contraseña es requerida',
     //         'password.min' => 'La contraseña debe tener al menos 8 caracteres',
-            
+
     //     ]);
 
     //     if ($validator->fails()) {
@@ -238,6 +237,6 @@ class UserController extends Controller
 
     // }
 
-   
-    
+
+
 }
