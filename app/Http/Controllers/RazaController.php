@@ -8,35 +8,37 @@ use Illuminate\Support\Facades\Validator;
 
 class RazaController extends Controller
 {
-   
-    //MOSTRAR TODAS LAS RAZAS
+   /*
+    * Muestra todas las razas
+    */
     public function mostrarRazas()
     {
-        $raza = Raza::all();
-
-        return response()->json($raza);
+        $razas = Raza::all();
+        return response()->json($razas);
     }
 
-    //MOSTRAR RAZA POR ID
+    /*
+    * Muestra una raza en específico
+    */
     public function mostrarRaza($id)
     {
         $raza = Raza::find($id);
 
-        if($raza == null)
-        {
-            return response()->json(['message' => 'No se encontro la raza'], 404);
+        if (is_null($raza)) {
+            return response()->json(['message' => 'No se encontró la raza'], 404);
         }
 
         return response()->json($raza, 200);
     }
 
-    
-    //CREAR RAZA
+    /*
+    * Crea una raza
+    */
     public function crearRaza(Request $request)
     {
         $validate = Validator::make($request->all(), [
             'nombre' => 'required|string|max:255',
-        ],[
+        ], [
             'nombre.required' => 'El nombre es requerido',
         ]);
 
@@ -44,38 +46,27 @@ class RazaController extends Controller
             return response()->json($validate->errors(), 400);
         }
 
-        $raza = Raza::create(
-            [
-                'nombre' => $request->nombre,
-            ]
-        );
+        $raza = Raza::create([
+            'nombre' => $request->nombre,
+        ]);
 
-        $raza->save();
-
-        if($raza->save())
-        {
-            return response()->json($raza, 201);
-        }
-        else
-        {
-            return response()->json($raza, 400);
-        }
-    
+        return response()->json($raza, 201);
     }
 
-    //ACTUALIZAR RAZA
-    public function actualizarRaza(Request $request,$id)
+    /*
+    * Actualiza una raza
+    */
+    public function actualizarRaza(Request $request, $id)
     {
         $raza = Raza::find($id);
 
-        if($raza == null)
-        {
-            return response()->json(['message' => 'No se encontro la raza'], 404);
+        if (is_null($raza)) {
+            return response()->json(['message' => 'No se encontró la raza'], 404);
         }
 
         $validate = Validator::make($request->all(), [
             'nombre' => 'required|string|max:255',
-        ],[
+        ], [
             'nombre.required' => 'El nombre es requerido',
         ]);
 
@@ -86,25 +77,18 @@ class RazaController extends Controller
         $raza->nombre = $request->nombre;
         $raza->save();
 
-        if($raza->save())
-        {
-            return response()->json($raza, 200);
-        }
-        else
-        {
-            return response()->json($raza, 400);
-        }
-
+        return response()->json($raza, 200);
     }
-    
-    //ELIMINAR RAZA
-    public function inahabilitarRaza($id)
+
+    /*
+    * Eliminar una raza
+    */
+    public function inhabilitarRaza($id)
     {
         $raza = Raza::find($id);
 
-        if($raza == null)
-        {
-            return response()->json(['message' => 'No se encontro la raza'], 404);
+        if (is_null($raza)) {
+            return response()->json(['message' => 'No se encontró la raza'], 404);
         }
 
         $raza->estado = 0;
@@ -113,14 +97,15 @@ class RazaController extends Controller
         return response()->json($raza, 200);
     }
 
-    //HABILITAR RAZA
+    /*
+    * Habilitar una raza
+    */
     public function habilitarRaza($id)
     {
         $raza = Raza::find($id);
 
-        if($raza == null)
-        {
-            return response()->json(['message' => 'No se encontro la raza'], 404);
+        if (is_null($raza)) {
+            return response()->json(['message' => 'No se encontró la raza'], 404);
         }
 
         $raza->estado = 1;
@@ -129,17 +114,21 @@ class RazaController extends Controller
         return response()->json($raza, 200);
     }
 
+    /*
+    * Mostrar razas habilitadas
+    */
     public function mostrarRazasHabilitadas()
     {
-        $raza = Raza::where('estado',1)->get();
-
-        return response()->json($raza);
+        $razas = Raza::where('estado', 1)->get();
+        return response()->json($razas);
     }
 
+    /*
+    * Mostrar razas inhabilitadas
+    */
     public function mostrarRazasInhabilitadas()
     {
-        $raza = Raza::where('estado',0)->get();
-
-        return response()->json($raza);
+        $razas = Raza::where('estado', 0)->get();
+        return response()->json($razas);
     }
 }

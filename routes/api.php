@@ -9,7 +9,7 @@ use App\Http\Controllers\CertificadoController;
 
 
 
-Route::post('/registrar', [UserController::class, 'registrarUsuario']);
+Route::post('/registrar', [UserController::class, 'registerUser']);
 Route::post('/login', [UserController::class, 'login']);
 Route::post('/logout', [UserController::class, 'logout']);
 Route::post('/olvideContraseña', [UserController::class, 'olvideContraseña']);

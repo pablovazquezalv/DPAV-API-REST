@@ -61,4 +61,25 @@ class User extends Authenticatable
     }
 
 
+    /**
+     * Relación con el modelo Rol (un usuario pertenece a un rol).
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function rol()
+    {
+        return $this->belongsTo(Rol::class);
+    }
+    
+    /**
+     * Relación con el modelo Perro (un usuario puede tener muchos perros).
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function perros()
+    {
+        return $this->hasMany(Perro::class);
+    }
+
+
 }

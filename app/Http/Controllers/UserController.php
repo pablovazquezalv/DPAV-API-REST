@@ -15,8 +15,11 @@ use Illuminate\Support\Facades\Crypt;
 
 class UserController extends Controller
 {
-    public function registrarUsuario(Request $request)
-    {
+        /*
+        * Crear usuario
+        */
+        public function registerUser(Request $request)
+        {
         $validator = Validator::make($request->all(), [
             'nombre' => 'required|string|max:255',
             'apellido_paterno' => 'required|string|max:255',
@@ -24,6 +27,7 @@ class UserController extends Controller
             'email' => 'required|string|email|max:255|unique:users',
             'password' => 'required|string|min:8',
         ],
+        //mensajes de error
         [
             'nombre.required' => 'El nombre es requerido',
             'email.required' => 'El email es requerido',
@@ -37,11 +41,18 @@ class UserController extends Controller
             'apellido_materno.required' => 'El apellido materno es requerido',
         ]);
 
+        /*
+        * Validar errores
+        */
         if ($validator->fails())
         {
             return response()->json($validator->errors(), 400);
         }
 
+
+        /*
+        * Crear usuario
+        */
         $user = User::create([
             'nombre' => $request->nombre,
             'usuario' => explode('@', $request->email)[0],
@@ -79,12 +90,16 @@ class UserController extends Controller
         }
     }
 
+    /*
+    * Iniciar sesión de usuario
+    */
     public function login(Request $request)
     {
         $validator = Validator::make($request->all(), [
             'email' => 'required|string|email|max:255',
             'password' => 'required|string|min:8',
         ],
+        //mensajes de error
         [
             'email.required' => 'El email es requerido',
             'password.required' => 'La contraseña es requerida',
@@ -93,13 +108,16 @@ class UserController extends Controller
 
         ]);
 
+            // Validar errores
             if ($validator->fails()) {
                 return response()->json($validator->errors(), 400);
             }
 
+            // Buscar usuario en la base de datos
             $user = User::where('email', $request->email)->first();
 
 
+            // Verificar si el usuario existe y la contraseña es correcta
             if($user && Hash::check($request->password, $user->password))
             {
                 if($user->activo == 0)
@@ -131,112 +149,5 @@ class UserController extends Controller
         $request->user()->currentAccessToken()->delete();
         return response()->json('Sesión cerrada', 200);
     }
-
-    // public function verificarCodigo(Request $request)
-    // {
-    //     $validator = Validator::make($request->all(), [
-    //         'email' => 'required|string|email|max:255',
-    //         'codigo' => 'required|string|max:6',
-    //     ],
-    //     [
-    //         'email.required' => 'El email es requerido',
-    //         'codigo.required' => 'El código es requerido',
-    //         'email.email' => 'El email no es válido',
-    //         'codigo.max' => 'El código debe tener 6 caracteres',
-
-    //     ]);
-
-    //         if ($validator->fails()) {
-    //             return response()->json($validator->errors(), 400);
-    //         }
-
-    //         $user = User::where('email', $request->email)->first();
-
-
-    //         if($user->codigo == $request->codigo)
-    //         {
-    //            # $user->codigo = null;
-    //             $user->activo = 1;
-    //             $user->save();
-
-    //             return response()->json('Código correcto', 200);
-    //         }
-    //         else
-    //         {
-    //             return response()->json('Código incorrecto', 400);
-    //         }
-    // }
-
-    // public function olvideContraseña(Request $request)
-    // {
-    //     $validator = Validator::make($request->all(), [
-    //         'email' => 'required|string|email|max:255',
-    //     ],
-    //     [
-    //         'email.required' => 'El email es requerido',
-    //         'email.email' => 'El email no es válido',
-    //     ]);
-
-    //     if ($validator->fails()) {
-    //         return response()->json($validator->errors(), 400);
-    //     }
-
-    //     $user = User::where('email', $request->email)->first();
-
-    //     if($user)
-    //     {
-    //         $url = URL::temporarySignedRoute('restablecerContraseña', now()->addMinutes(5), ['id' => $user->id]);
-
-    //         Mail::to($user->email)->send(new OlvideContraseña($user, $url));
-
-    //         return response()->json([
-    //             'message' => 'Correo enviado',
-    //             'user' => $user,
-    //             'url' => $url
-    //         ]);
-    //     }
-    //     else
-    //     {
-    //         return response()->json('Usuario no encontrado', 400);
-    //     }
-
-    // }
-
-    // public function restablecerContraseña(Request $request)
-    // {
-    //     $validator = Validator::make($request->all(), [
-    //         'email' => 'required|string|email|max:255',
-    //         'password' => 'required|string|min:8',
-    //     ],
-    //     [
-    //         'email.required' => 'El email es requerido',
-    //         'email.email' => 'El email no es válido',
-    //         'password.required' => 'La contraseña es requerida',
-    //         'password.min' => 'La contraseña debe tener al menos 8 caracteres',
-
-    //     ]);
-
-    //     if ($validator->fails()) {
-    //         return response()->json($validator->errors(), 400);
-    //     }
-
-    //     $user = User::where('email', $request->email)->first();
-
-    //     if($user)
-    //     {
-    //         $user->password = Hash::make($request->password);
-    //         $user->save();
-
-    //         return response()->json('Contraseña restablecida', 200);
-    //     }
-    //     else
-    //     {
-    //         return response()->json('Usuario no encontrado', 400);
-    //     }
-
-
-    // }
-
-
 
 }
