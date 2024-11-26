@@ -38,8 +38,10 @@ Route::get('/razas/{id}', [RazaController::class, 'mostrarRaza']);
 Route::get('/razas', [RazaController::class, 'mostrarRazas']);
 
 
+
 Route::middleware('auth:sanctum')->group(function () {
     Route::get('/perros', [PerroController::class, 'mostrarPerros']);
+
 
 });
 
