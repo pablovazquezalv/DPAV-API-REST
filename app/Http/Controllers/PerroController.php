@@ -7,42 +7,15 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use App\Models\PerroUser;
 use Illuminate\Validation\Rule;
+use App\Http\Requests\PerroRequest;
+use Inertia\Inertia;
 
 class PerroController extends Controller
 {
     
     // Crear perro
-    public function crearPerro(Request $request)
+    public function crearPerro(PerroRequest $request)
     {
-        $validator = Validator::make($request->all(), [
-            'nombre' => 'required|string|max:255',
-            'color' => 'required|string|max:255',
-            'edad' => 'required|int',
-            'sexo' => 'required|in:Macho,Hembra',
-            'peso' => 'required',
-            'tamaño' => 'required|in:Pequeño,Mediano,Grande',
-            'altura' => 'required',
-            'estatus' => 'sometimes|in:0,1',
-            'esterilizado' => 'required|in:Si,No',
-            'fecha_nacimiento' => 'required|date',
-            'id_raza' => 'required|int',
-        ], [
-            'nombre.required' => 'El nombre es requerido',
-            'color.required' => 'El color es requerido',
-            'edad.required' => 'La edad es requerida',
-            'sexo.required' => 'El sexo es requerido',
-            'peso.required' => 'El peso es requerido',
-            'tamaño.required' => 'El tamaño es requerido',
-            'altura.required' => 'La altura es requerida',
-            'esterilizado.required' => 'La esterilización es requerida',
-            'fecha_nacimiento.required' => 'La fecha de nacimiento es requerida',
-            'tamaño.in' => 'El tamaño no es válido',
-        ]);
-
-        if ($validator->fails()) {
-            return response()->json($validator->errors(), 400);
-        }
-
         $user = $request->user();
         
         $perro = Perro::create([
@@ -72,34 +45,13 @@ class PerroController extends Controller
         ], 201);
     }
 
-
     // Actualizar perro
-    public function actualizarPerro(Request $request, $id)
+    public function actualizarPerro(PerroRequest $request, $id)
     {
         $perro = Perro::find($id);
 
         if (!$perro) {
             return response()->json(['message' => 'Perro no encontrado'], 404);
-        }
-
-        $validator = Validator::make($request->all(), [
-            'nombre' => 'sometimes|string|max:255',
-            'color' => 'sometimes|string|max:255',
-            'edad' => 'sometimes|int',
-            'sexo' => 'sometimes|in:Macho,Hembra',
-            'peso' => 'sometimes',
-            'tamaño' => 'sometimes|in:Pequeño,Mediano,Grande',
-            'altura' => 'sometimes',
-            'estatus' => 'sometimes|in:0,1',
-            'esterilizado' => 'sometimes|in:Si,No',
-            'fecha_nacimiento' => 'sometimes|date',
-            'id_raza' => 'sometimes|int',
-        ], [
-            'tamaño.in' => 'El tamaño no es válido',
-        ]);
-
-        if ($validator->fails()) {
-            return response()->json($validator->errors(), 400);
         }
 
         $perro->update($request->only([
@@ -111,7 +63,6 @@ class PerroController extends Controller
             'perro' => $perro
         ], 200);
     }
-
     // Mostrar perro por ID
     public function mostrarPerro($id)
     {
@@ -199,5 +150,11 @@ class PerroController extends Controller
             'message' => 'Perro habilitado',
             'perro' => $perro
         ], 200);
+    }
+    public function index()
+    {
+        return Inertia::render('Perros', [
+            'dato' => 'valor', // Este dato es lo que recibirás en tu componente React
+        ]);
     }
 }
