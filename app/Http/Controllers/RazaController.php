@@ -8,18 +8,14 @@ use Illuminate\Support\Facades\Validator;
 
 class RazaController extends Controller
 {
-   /*
-    * Muestra todas las razas
-    */
+   
     public function mostrarRazas()
     {
         $razas = Raza::all();
         return response()->json($razas);
     }
 
-    /*
-    * Muestra una raza en específico
-    */
+  
     public function mostrarRaza($id)
     {
         $raza = Raza::find($id);

@@ -5,7 +5,6 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\RazaController;
 use App\Http\Controllers\PerroController;
-use App\Http\Controllers\CertificadoController;
 
 
 
@@ -18,15 +17,14 @@ Route::post('restablecerContraseña', [UserController::class, 'restablecerContra
 Route::get('/enviarSMS', [UserController::class, 'enviarSMS'])->name('enviarSMS');
 Route::post('/verificarCodigo', [UserController::class, 'verificarCodigo'])->name('verificarCodigo');
 
-//Perros
-Route::post('crearPerro', [PerroController::class, 'crearPerro'])->middleware('auth:sanctum');
-Route::get('mostrarPerro/{id}', [PerroController::class, 'mostrarPerro'])->middleware('auth:sanctum');
-Route::get('mostrarPerros', [PerroController::class, 'mostrarPerros'])->middleware('auth:sanctum');
+
+Route::post('/crearPerro', [PerroController::class, 'crearPerro'])->name('crearPerro');
+Route::get('/perros/{id}/edit', [PerroController::class, 'mostrarPerro']);
+Route::get('/mostrarPerros', [PerroController::class, 'mostrarPerros']);
 Route::put('inhabilitarPerro/{id}', [PerroController::class, 'inhabilitarPerro'])->middleware('auth:sanctum');
 Route::put('habilitarPerro/{id}', [PerroController::class, 'habilitarPerro'])->middleware('auth:sanctum');
-Route::put('actualizarPerro/{id}', [PerroController::class, 'actualizarPerro']);
-//Eliminar Perro
-Route::delete('eliminarPerro/{id}', [PerroController::class, 'eliminarPerro'])->middleware('auth:sanctum');
+Route::put('/perros/{id}/edit', [PerroController::class, 'actualizarPerro']);
+Route::delete('/perros/{id}', [PerroController::class, 'eliminarPerro'])->name('perros.destroy');
 //Razas
 Route::post('/crearRaza', [RazaController::class, 'crearRaza']);
 
@@ -38,8 +36,7 @@ Route::get('/razas/{id}', [RazaController::class, 'mostrarRaza']);
 Route::get('/razas', [RazaController::class, 'mostrarRazas']);
 
 
-Route::middleware('auth:sanctum')->group(function () {
-    Route::get('/perros', [PerroController::class, 'mostrarPerros']);
 
-});
+
+
 

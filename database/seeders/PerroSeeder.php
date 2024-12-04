@@ -17,18 +17,16 @@ class PerroSeeder extends Seeder
         foreach ($usuarios as $user) {
             foreach ($razas as $raza) {
                 Perro::create([
-                    'nombre' => 'Perro de ' . $user->nombre,
-                    'color' => 'Marrón',
-                    'edad' => rand(1, 10),
-                    'sexo' => rand(0, 1) ? 'Macho' : 'Hembra',
-                    'peso' => rand(5, 30),
-                    'tamaño' => ['Pequeño', 'Mediano', 'Grande'][rand(0, 2)],
-                    'altura' => rand(20, 60),
-                    'estatus' => 1,
-                    'esterilizado' => rand(0, 1) ? 'Si' : 'No',
-                    'fecha_nacimiento' => now()->subYears(rand(1, 10))->toDateString(),
-                    'id_raza' => $raza->id,
-                    'user_id' => $user->id,
+                    'nombre' => 'Perro de ' . $user->name,
+                    'color' => 'negro',
+                    'sexo'=>'Macho',
+                    'peso'=> '30',
+                    'estatus'=>1,
+                    'tamaño'=> 'Pequeño',
+                    'fecha_nacimiento'=>'05/10/23',
+                    'edad'=> 4,
+                    'id_raza'=> 1,
+                    'user_id'=>1
                 ]);
             }
         }
