@@ -53,26 +53,7 @@ class Perro extends Model
         self::ID_RAZA,
     ];
 
-    /**
-     * Relación con el modelo User (un perro pertenece a un usuario).
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
-     */
-    public function user(): BelongsTo
-    {
-        return $this->belongsTo(User::class);
-    }
-
-    /**
-     * Relación con el modelo PerroUser (un perro puede tener muchos registros en PerroUser).
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
-     */
-    public function usuarios(): HasMany
-    {
-        return $this->hasMany(PerroUser::class, 'perro_id');
-    }
-
+  
     /**
      * Relación con el modelo Raza (un perro pertenece a una raza).
      *
@@ -83,13 +64,5 @@ class Perro extends Model
         return $this->belongsTo(Raza::class, 'id_raza');
     }
 
-    /**
-     * Relación con el modelo PerroUser (un perro puede tener muchos registros de usuario).
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
-     */
-    public function perroUser(): HasMany
-    {
-        return $this->hasMany(PerroUser::class);
-    }
+   
 }

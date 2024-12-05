@@ -87,7 +87,6 @@ class PerroController extends Controller
             'tamaño' => $request->tamaño,
             'fecha_nacimiento' => $request->fecha_nacimiento,
             'id_raza' => $request->id_raza,
-            'user_id' => 1
             
         ]);
 
@@ -117,43 +116,6 @@ class PerroController extends Controller
         return view('editar-perro', ['perro' => $perro]);
     }
 
-
-      // Inhabilitar perro
-    // public function inhabilitarPerro($id)
-    // {
-    //     $perro = Perro::find($id);
-
-    //     if (!$perro) {
-    //         return response()->json(['message' => 'Perro no encontrado'], 404);
-    //     }
-
-    //     $perro->estatus = 0;
-    //     $perro->save();
-
-    //     return response()->json([
-    //         'message' => 'Perro inhabilitado',
-    //         'perro' => $perro
-    //     ], 200);
-    // }
-
-    // Habilitar perro
-
-    // public function habilitarPerro($id)
-    // {
-    //     $perro = Perro::find($id);
-
-    //     if (!$perro) {
-    //         return response()->json(['message' => 'Perro no encontrado'], 404);
-    //     }
-
-    //     $perro->estatus = 1;
-    //     $perro->save();
-
-    //     return response()->json([
-    //         'message' => 'Perro habilitado',
-    //         'perro' => $perro
-    //     ], 200);
-    // }
 
     
 }

@@ -60,6 +60,7 @@
                                 <button type="submit" class="text-red-500 hover:underline">Eliminar</button>
                             </form>
                             
+                            
                         </td>
                     </tr>
                 @empty
