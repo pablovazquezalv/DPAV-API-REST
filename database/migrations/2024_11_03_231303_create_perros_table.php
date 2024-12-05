@@ -22,7 +22,6 @@ return new class extends Migration
             $table->enum('tamaño',['Pequeño','Mediano','Grande']);
             $table->date('fecha_nacimiento');
             $table->foreignId('id_raza')->constrained('razas');
-            $table->foreignId('user_id')->constrained('users');
             $table->timestamps();
         });
     }

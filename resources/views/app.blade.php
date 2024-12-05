@@ -27,6 +27,7 @@
         {{ session('error') }}
     </div>
 @endif
+<x-navbar />
 
 
     <div class="container mx-auto p-6">

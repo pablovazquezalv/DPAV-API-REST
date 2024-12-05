@@ -9,10 +9,15 @@ use Illuminate\Support\Facades\Validator;
 class RazaController extends Controller
 {
    
-    public function mostrarRazas()
+    public function IndexRazasView()
     {
         $razas = Raza::all();
-        return response()->json($razas);
+        return view('inicio-raza', ['razas' => $razas]);
+    }
+
+    public function CreateRazasView()
+    {
+        return view('crear-raza');
     }
 
   
@@ -27,9 +32,7 @@ class RazaController extends Controller
         return response()->json($raza, 200);
     }
 
-    /*
-    * Crea una raza
-    */
+   
     public function crearRaza(Request $request)
     {
         $validate = Validator::make($request->all(), [
@@ -46,7 +49,7 @@ class RazaController extends Controller
             'nombre' => $request->nombre,
         ]);
 
-        return response()->json($raza, 201);
+        return view('inicio-raza', ['razas' => Raza::all()]);
     }
 
     /*
@@ -110,18 +113,27 @@ class RazaController extends Controller
         return response()->json($raza, 200);
     }
 
-    /*
-    * Mostrar razas habilitadas
-    */
+  
+    public function eliminarRaza($id)
+    {
+        try {
+            $raza = Raza::findOrFail($id);
+            $raza->delete();
+    
+            return redirect()->back()->with('success', 'Raza eliminada exitosamente.');
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', 'Ocurrió un error al intentar eliminar la raza.');
+        }
+    }
+    
+
     public function mostrarRazasHabilitadas()
     {
         $razas = Raza::where('estado', 1)->get();
         return response()->json($razas);
     }
 
-    /*
-    * Mostrar razas inhabilitadas
-    */
+   
     public function mostrarRazasInhabilitadas()
     {
         $razas = Raza::where('estado', 0)->get();
