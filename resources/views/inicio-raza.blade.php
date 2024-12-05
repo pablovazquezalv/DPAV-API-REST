@@ -53,7 +53,7 @@
                         <td class="px-4 py-2">{{ $raza->nombre }}</td>
                         <td class="px-4 py-2">
                             <!-- Enlace para editar -->
-                            <a href="/razas/{{ $raza->id }}" class="text-blue-500 hover:underline">Editar</a> |
+                            <a href="/razas/{{ $raza->id }}/edit" class="text-blue-500 hover:underline">Editar</a> |
 
                             <!-- Botón para eliminar -->
                             <form action="/razas/{{ $raza->id }}" method="POST" class="inline" onsubmit="confirmarEliminacion(event, this)">

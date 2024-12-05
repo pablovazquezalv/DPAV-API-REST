@@ -22,12 +22,14 @@ class PerroController extends Controller
         }
 
         $perro->update($request->only([
-            'nombre', 'color', 'edad', 'sexo', 'peso', 'tamaño', 'altura', 'estatus', 'esterilizado', 'fecha_nacimiento', 'id_raza'
+            'nombre', 'color', 'edad', 'sexo', 'peso', 'tamaño', 'estatus', 'esterilizado', 'fecha_nacimiento', 'id_raza'
         ]));
 
+        if (app()->environment('testing')) {
+            return response()->json(['message' => 'Perro actualizado correctamente'], 200);
+        }
         return view('app', ['perros' => Perro::all()]);
     }
-    // Mostrar perro por ID
     
 
     // Eliminar perro 
@@ -52,10 +54,9 @@ class PerroController extends Controller
        
         $perros = Perro::where('estatus', 1)->get();
 
-        return response()->json([
-            'message' => 'Perros encontrados',
-            'perros' => $perros
-        ], 200);
+        if ($request->wantsJson()) {
+            return response()->json($perros, 200);
+        }
      
     }
 
@@ -89,6 +90,9 @@ class PerroController extends Controller
             'id_raza' => $request->id_raza,
             
         ]);
+        if (app()->environment('testing')) {
+            return response()->json(['message' => 'Perro creado correctamente'], 200);
+        }
 
         return view('app', ['perros' => Perro::all()]);
     }

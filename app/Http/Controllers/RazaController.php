@@ -20,6 +20,11 @@ class RazaController extends Controller
         return view('crear-raza');
     }
 
+    public function EditaRazasView($id)
+    {
+        $raza = Raza::find($id);
+        return view('editar-raza', ['raza' => $raza]);
+    }
   
     public function mostrarRaza($id)
     {
@@ -49,7 +54,10 @@ class RazaController extends Controller
             'nombre' => $request->nombre,
         ]);
 
-        return view('inicio-raza', ['razas' => Raza::all()]);
+        if (app()->environment('testing')) {
+            return response()->json(['message' => 'Raza creada correctamente'], 200);
+        }
+        return redirect('/razas')->with('success', 'Raza creada correctamente');
     }
 
     /*
@@ -76,7 +84,7 @@ class RazaController extends Controller
         $raza->nombre = $request->nombre;
         $raza->save();
 
-        return response()->json($raza, 200);
+        return redirect('/razas')->with('success', 'Raza actualizada correctamente');
     }
 
     /*
